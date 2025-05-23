@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// Correct component imports based on folder structure
-import MainContent from "../../components/MainContent.jsx";
-import ProductCard from "../../components/shared/ProductCard.jsx";
-import LoadingSpinner from "../../components/shared/LoadingSpinner.jsx";
+// ✅ Correct import paths
+import MainContent from "../components/MainContent.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
 const Home = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
@@ -72,7 +72,7 @@ const Home = ({ searchTerm }) => {
         {filteredProducts.length === 0 ? (
           <p className="text-center text-lg text-gray-300 italic mt-12">
             No products found for{" "}
-            <span className="font-semibold text-purple-400">"{searchTerm}</span>
+            <span className="font-semibold text-purple-400">"{searchTerm}"</span>
           </p>
         ) : (
           <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
