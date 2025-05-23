@@ -33,12 +33,14 @@ app.use((req, res, next) => {
 });
 
 // CORS Configuration
-app.use(cors({
-  origin: "https://dressin-bgrnb6uac-hyrahs-projects.vercel.app ",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    origin: "https://dressin-bgrnb6uac-hyrahs-projects.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // Body parser middleware
 app.use(express.json({ limit: "10mb" }));
@@ -53,15 +55,12 @@ app.use("/assets", express.static(assetsPath));
    🚀 MongoDB Connection
 ================================ */
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: false,
-    useUnifiedTopology: false,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB connected successfully."))
   .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
 /* ================================
-   🚀 API Routes - Must come before wildcard route
+   🚀 API Routes
 ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -69,7 +68,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 
 /* ================================
-   🚶‍♂️ SPA Fallback Route - Should be last
+   🚶‍♂️ SPA Fallback Route
 ================================ */
 const distPath = path.join(__dirname, "../dist");
 app.use(express.static(distPath));
