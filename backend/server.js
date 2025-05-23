@@ -55,7 +55,9 @@ app.use("/assets", express.static(assetsPath));
    🚀 MongoDB Connection
 ================================ */
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    // No need to set useNewUrlParser or useUnifiedTopology as they're default in latest versions
+  })
   .then(() => console.log("✅ MongoDB connected successfully."))
   .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
