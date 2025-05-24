@@ -1,4 +1,5 @@
-import dotenv from "dotenv"; // ✅ Load .env early
+// ✅ Load .env early
+import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
@@ -32,7 +33,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "*", // Update to your frontend URL in production
+    origin: "*", // ✅ Update this for production use
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -66,8 +67,7 @@ app.use("/api/admin", adminRoutes);
 /* ================================
    🚀 Frontend SPA Fallback
 ================================ */
-// CHANGE THIS PATH TO YOUR ACTUAL FRONTEND DIST LOCATION
-const distPath = path.join(__dirname, "../../dist");
+const distPath = path.join(__dirname, "..", "dist"); // ✅ Corrected path
 app.use(express.static(distPath));
 
 app.get("*", (req, res) => {
@@ -81,7 +81,9 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });
 
-// Graceful shutdown handlers
+/* ================================
+   🛑 Graceful Shutdown
+================================ */
 process.on("SIGTERM", () => {
   console.log("⚠️ SIGTERM received: shutting down gracefully");
   process.exit(0);
