@@ -1,23 +1,19 @@
-import dotenv from "dotenv"; // ✅ Must be top, before process.env usage
+import dotenv from "dotenv"; // ✅ Load .env early
 import path from "path";
 import { fileURLToPath } from "url";
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 
 // Fix __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Explicitly load .env file located in backend folder
+// Load environment variables
 dotenv.config({ path: path.join(__dirname, ".env") });
-
-// DEBUG: Log loaded env variables to verify dotenv worked
 console.log("📦 Loaded MONGODB_URI:", process.env.MONGODB_URI);
 console.log("📦 Loaded PORT:", process.env.PORT);
 
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-
-// Import routes
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
@@ -36,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://dressin-bgrnb6uac-hyrahs-projects.vercel.app",
+    origin: "*", // Change this to your production frontend URL if needed
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -46,25 +42,18 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Serve static assets (images, etc.)
+// Static image files
 const assetsPath = path.join(__dirname, "public", "assets");
 console.log("🖼️ Serving static files from:", assetsPath);
 app.use("/assets", express.static(assetsPath));
 
 /* ================================
-   🚀 MongoDB Connection
+   🚀 MongoDB
 ================================ */
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB connected successfully."))
   .catch((err) => console.error("❌ MongoDB connection error:", err.message));
-
-/* ================================
-   🚀 Health Check Route
-================================ */
-app.get("/healthcheck", (req, res) => {
-  res.status(200).json({ status: "OK", message: "Backend is healthy!" });
-});
 
 /* ================================
    🚀 API Routes
@@ -75,9 +64,9 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 
 /* ================================
-   🚶‍♂️ SPA Fallback Route
+   🚀 Frontend SPA Fallback
 ================================ */
-const distPath = path.join(__dirname, "../dist");
+const distPath = path.join(__dirname, "../frontend/dist");
 app.use(express.static(distPath));
 
 app.get("*", (req, res) => {
@@ -90,12 +79,12 @@ app.get("*", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });
-process.on('SIGTERM', () => {
-  console.log('⚠️ SIGTERM received: shutting down gracefully');
+
+process.on("SIGTERM", () => {
+  console.log("⚠️ SIGTERM received: shutting down gracefully");
   process.exit(0);
 });
-
-process.on('SIGINT', () => {
-  console.log('⚠️ SIGINT received: shutting down gracefully');
+process.on("SIGINT", () => {
+  console.log("⚠️ SIGINT received: shutting down gracefully");
   process.exit(0);
 });
