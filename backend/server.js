@@ -26,14 +26,28 @@ const PORT = process.env.PORT || 5000;
 /* ================================
    🚀 Middleware
 ================================ */
+
+// Simple request logger
 app.use((req, res, next) => {
   console.log(`Request: ${req.method} ${req.path}`);
   next();
 });
 
+// CORS setup — replace with your actual frontend URL on Render
+const allowedOrigins = [
+  "https://shopstore-u8q8.onrender.com",  // Your frontend URL here
+  "http://localhost:5173",                // Optional for local dev
+];
+
 app.use(
   cors({
-    origin: "*", // ✅ Update this for production use
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS policy: This origin is not allowed"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -67,7 +81,7 @@ app.use("/api/admin", adminRoutes);
 /* ================================
    🚀 Frontend SPA Fallback
 ================================ */
-const distPath = path.join(__dirname, "..", "dist"); // ✅ Corrected path
+const distPath = path.join(__dirname, "..", "dist");
 app.use(express.static(distPath));
 
 app.get("*", (req, res) => {
