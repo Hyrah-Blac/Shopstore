@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dressin-production.up.railway.app/api", // ✅ NO trailing slash or space
+  baseURL: "https://your-backend-name.onrender.com/api", // ✅ Your actual Render backend
   headers: {
     "Content-Type": "application/json",
   },
