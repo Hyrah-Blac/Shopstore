@@ -37,6 +37,7 @@ lerna-debug.log*
 *.sw?
 
 # Optional: Ignore backend public assets (already uploaded/generated)
+# /backend/public/assets
 
 # Optional: Ignore scripts used locally
 /backend/scripts/reinsertProducts.js

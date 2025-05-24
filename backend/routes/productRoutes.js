@@ -1,4 +1,3 @@
-// backend/routes/productRoutes.js
 import express from "express";
 import Product from "../models/Product.js";
 import multer from "multer";
@@ -31,8 +30,17 @@ router.post("/", upload.single("image"), async (req, res) => {
   try {
     const { name, description, price } = req.body;
 
+    if (!name || !description || !price) {
+      return res.status(400).json({ message: "Name, description, and price are required." });
+    }
+
     if (!req.file) {
       return res.status(400).json({ message: "Image upload failed." });
+    }
+
+    const priceNumber = parseFloat(price);
+    if (isNaN(priceNumber)) {
+      return res.status(400).json({ message: "Price must be a valid number." });
     }
 
     const imageUrl = `/assets/${req.file.filename}`;
@@ -40,7 +48,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     const newProduct = new Product({
       name,
       description,
-      price,
+      price: priceNumber,
       imageUrl,
     });
 
@@ -48,7 +56,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     res.status(200).json({ message: "Product added successfully", product: newProduct });
 
   } catch (error) {
-    console.error("❌ Error adding product:", error.message);
+    console.error("❌ Error adding product:", error);
     res.status(500).json({ message: "Failed to add product" });
   }
 });
@@ -61,7 +69,7 @@ router.get("/", async (req, res) => {
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
-    console.error("Error fetching products:", error.message);
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: "Failed to fetch products" });
   }
 });
@@ -77,7 +85,7 @@ router.get("/:id", async (req, res) => {
     }
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error fetching product:", error.message);
+    console.error("Error fetching product:", error);
     res.status(500).json({ message: "Failed to fetch product" });
   }
 });
@@ -92,9 +100,14 @@ router.put("/:id", async (req, res) => {
       return res.status(400).json({ message: "Price is required" });
     }
 
+    const priceNumber = parseFloat(price);
+    if (isNaN(priceNumber)) {
+      return res.status(400).json({ message: "Price must be a valid number." });
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      { price },
+      { price: priceNumber },
       { new: true }
     );
 
@@ -105,7 +118,7 @@ router.put("/:id", async (req, res) => {
     res.status(200).json({ message: "Product price updated", product: updatedProduct });
 
   } catch (error) {
-    console.error("❌ Error updating product price:", error.message);
+    console.error("❌ Error updating product price:", error);
     res.status(500).json({ message: "Failed to update product price" });
   }
 });
@@ -121,7 +134,12 @@ router.delete("/:id", async (req, res) => {
     }
 
     // Delete image from filesystem
-    const imagePath = path.resolve(__dirname, "..", "public", product.imageUrl);
+    // Remove leading slash from imageUrl for path resolve
+    const imageUrlPath = product.imageUrl.startsWith("/")
+      ? product.imageUrl.slice(1)
+      : product.imageUrl;
+
+    const imagePath = path.resolve(__dirname, "..", "public", imageUrlPath);
     if (fs.existsSync(imagePath)) {
       fs.unlinkSync(imagePath);
     }
@@ -131,7 +149,7 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json({ message: "Product deleted successfully" });
 
   } catch (error) {
-    console.error("❌ Error deleting product:", error.message);
+    console.error("❌ Error deleting product:", error);
     res.status(500).json({ message: "Failed to delete product" });
   }
 });
