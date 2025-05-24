@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "*", // Change this to your production frontend URL if needed
+    origin: "*", // Update to your frontend URL in production
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -66,7 +66,8 @@ app.use("/api/admin", adminRoutes);
 /* ================================
    🚀 Frontend SPA Fallback
 ================================ */
-const distPath = path.join(__dirname, "../frontend/dist");
+// CHANGE THIS PATH TO YOUR ACTUAL FRONTEND DIST LOCATION
+const distPath = path.join(__dirname, "../../dist");
 app.use(express.static(distPath));
 
 app.get("*", (req, res) => {
@@ -80,6 +81,7 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });
 
+// Graceful shutdown handlers
 process.on("SIGTERM", () => {
   console.log("⚠️ SIGTERM received: shutting down gracefully");
   process.exit(0);
