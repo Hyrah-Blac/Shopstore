@@ -1,12 +1,11 @@
-// src/utils/axiosConfig.js
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dressin-backend.onrender.com/api", // ✅ Your actual Render backend
+  baseURL: "https://dressin-backend.onrender.com/api", // ✅ Backend hosted on Render
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // 🔒 Required for cookie/token-based authentication
+  withCredentials: true, // 🔐 Ensures cookies are sent with cross-origin requests
 });
 
 export default api;

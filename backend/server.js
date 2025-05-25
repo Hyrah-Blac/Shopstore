@@ -24,50 +24,52 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 /* ================================
+   ✅ CORS Configuration
+================================ */
+const allowedOrigins = [
+  "https://shopstore-u8q8.onrender.com", // ✅ Your frontend Render domain
+  "http://localhost:5173",               // ✅ Local development
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS policy: This origin is not allowed"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
+// ✅ Preflight handling
+app.options("*", cors(corsOptions));
+
+/* ================================
    🚀 Middleware
 ================================ */
 
-// Simple request logger
+// Request logger
 app.use((req, res, next) => {
   console.log(`Request: ${req.method} ${req.path}`);
   next();
 });
 
-// ✅ CORS configuration
-const allowedOrigins = [
-  "https://shopstore-u8q8.onrender.com", // Your frontend domain
-  "http://localhost:5173",               // Local dev
-];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS policy: This origin is not allowed"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// ✅ Handle preflight requests globally
-app.options("*", cors());
-
-// JSON body parsing
+// Body parser
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// ✅ Serve static files (images)
+// ✅ Static file serving
 const assetsPath = path.join(__dirname, "public", "assets");
 console.log("🖼️ Serving static files from:", assetsPath);
 app.use("/assets", express.static(assetsPath));
 
 /* ================================
-   🚀 MongoDB
+   🚀 MongoDB Connection
 ================================ */
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -75,7 +77,7 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
 /* ================================
-   🚀 API Routes
+   🚀 Routes
 ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -83,7 +85,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 
 /* ================================
-   🚀 Frontend SPA Fallback
+   🚀 Frontend SPA fallback
 ================================ */
 const distPath = path.join(__dirname, "..", "dist");
 app.use(express.static(distPath));
@@ -93,7 +95,7 @@ app.get("*", (req, res) => {
 });
 
 /* ================================
-   🚀 Start Server
+   🚀 Server Start
 ================================ */
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
