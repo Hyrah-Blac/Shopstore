@@ -33,15 +33,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// CORS setup — replace with your actual frontend URL on Render
+// ✅ CORS configuration
 const allowedOrigins = [
-  "https://shopstore-u8q8.onrender.com",  // Your frontend URL here
-  "http://localhost:5173",                // Optional for local dev
+  "https://shopstore-u8q8.onrender.com", // Your frontend domain
+  "http://localhost:5173",               // Local dev
 ];
 
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -49,15 +49,19 @@ app.use(
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// ✅ Handle preflight requests globally
+app.options("*", cors());
+
+// JSON body parsing
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Static image files
+// ✅ Serve static files (images)
 const assetsPath = path.join(__dirname, "public", "assets");
 console.log("🖼️ Serving static files from:", assetsPath);
 app.use("/assets", express.static(assetsPath));
@@ -94,4 +98,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });
-
