@@ -6,6 +6,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // 🔒 Required for cookie/token-based authentication
 });
 
 export default api;
