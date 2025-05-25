@@ -47,12 +47,15 @@ const corsOptions = {
 // ✅ Apply CORS before anything else
 app.use(cors(corsOptions));
 
-// ✅ Preflight requests handling
+// ✅ Handle preflight requests
 app.options("*", cors(corsOptions));
 
-// ✅ Manual CORS Headers — Required for Render sometimes
+// ✅ Manual CORS headers (especially for Render)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
