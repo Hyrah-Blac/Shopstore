@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api"; // use your centralized axios instance with correct baseURL
 
-// ✅ Correct import paths
 import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
@@ -15,7 +14,8 @@ const Home = ({ searchTerm }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/api/products");
+        // Use your custom axios instance with proper baseURL
+        const response = await api.get("/products");
         const data = Array.isArray(response.data) ? response.data : [];
         setProducts(data);
         setFilteredProducts(data);
