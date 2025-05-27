@@ -1,6 +1,6 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
-import api from "../utils/axiosConfig";
+import api from "../utils/axiosConfig"; // Make sure this path is correct
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,10 +26,14 @@ const Login = () => {
     }
 
     try {
+      console.log("📤 Sending login request to /auth/login");
+
       const res = await api.post("/auth/login", {
         email: trimmedEmail,
         password: trimmedPassword,
       });
+
+      console.log("✅ Login successful:", res.data);
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
@@ -46,9 +50,15 @@ const Login = () => {
         }
       }, 1600);
     } catch (err) {
+      const status = err.response?.status;
       const message =
-        err.response?.data?.message || "❌ Login failed. Try again.";
-      toast.error(message);
+        err.response?.data?.message ||
+        err.message ||
+        "❌ Login failed. Try again.";
+
+      console.error(`🚫 Login error [${status}]:`, message);
+
+      toast.error(`${message}`);
     } finally {
       setLoading(false);
     }
@@ -87,7 +97,8 @@ const Login = () => {
           </button>
         </form>
         <p>
-          Don't have an account? <a href="/signup">Sign up</a>
+          Don't have an account?{" "}
+          <a href="/signup">Sign up</a>
         </p>
       </div>
     </div>

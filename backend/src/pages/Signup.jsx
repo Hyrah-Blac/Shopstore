@@ -1,4 +1,3 @@
-// src/pages/Signup.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -22,6 +21,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { name, email, password, confirmPassword } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
@@ -42,49 +42,81 @@ const Signup = () => {
       });
 
       const text = await response.text();
+
       if (text.startsWith("<!DOCTYPE")) {
         throw new Error("Server returned HTML. Check if route exists.");
       }
 
       const data = JSON.parse(text);
+
       if (response.ok && data.token) {
-        toast.success("🎉 Signup successful! Redirecting to login...", {
-          autoClose: 3000,
-          position: "top-center",
-        });
+        toast.success(
+          <div>
+            <strong>🎉 Signup successful!</strong>
+            <div>Redirecting you to login...</div>
+          </div>,
+          {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
 
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       } else {
         toast.error(data.message || "❌ Signup failed", {
-          autoClose: 4000,
           position: "top-center",
+          autoClose: 4000,
+          theme: "colored",
         });
       }
     } catch (error) {
-      toast.error("⚠️ Something went wrong. Check console for details.");
-      console.error("Signup error:", error.message);
+      console.error("Error during signup:", error.message);
+      toast.error("⚠️ Something went wrong. Check console for details.", {
+        position: "top-center",
+        autoClose: 4000,
+        theme: "colored",
+      });
     }
   };
 
   return (
     <div className="signup-container">
-      <ToastContainer position="top-center" />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className="signup-form">
         <h2>Create Account</h2>
         <p>Sign up and start your journey</p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="input-group">
             <label htmlFor="name">Full Name</label>
             <input
               id="name"
+              type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
               required
+              autoComplete="name"
             />
           </div>
           <div className="input-group">
@@ -95,8 +127,9 @@ const Signup = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
               required
+              autoComplete="email"
             />
           </div>
           <div className="input-group">
@@ -107,8 +140,9 @@ const Signup = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Create a password"
+              placeholder="Enter a password"
               required
+              autoComplete="new-password"
             />
           </div>
           <div className="input-group">
@@ -121,14 +155,22 @@ const Signup = () => {
               onChange={handleChange}
               placeholder="Re-enter your password"
               required
+              autoComplete="new-password"
             />
           </div>
-          <button type="submit" className="btn">Sign Up</button>
+          <button type="submit" className="btn">
+            Sign Up
+          </button>
         </form>
 
-        <p>
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
+        <div className="login-link">
+          <p>
+            Already have an account?{" "}
+            <Link to="/login" className="login-link-text">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

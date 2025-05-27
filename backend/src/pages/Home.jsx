@@ -1,9 +1,10 @@
-// src/pages/Home.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MainContent from "../components/MainContent";
-import ProductCard from "../components/ProductCard";
-import LoadingSpinner from "../components/LoadingSpinner";
+
+// ✅ Correct import paths
+import MainContent from "../components/MainContent.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
 const Home = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
@@ -51,7 +52,10 @@ const Home = ({ searchTerm }) => {
   if (error) {
     return (
       <MainContent>
-        <div className="m-6 p-4 rounded-lg bg-red-700 text-red-100 text-center font-semibold shadow-md">
+        <div
+          role="alert"
+          className="m-6 p-4 rounded-lg bg-red-700 text-red-100 text-center font-semibold shadow-md"
+        >
           {error}
         </div>
       </MainContent>
