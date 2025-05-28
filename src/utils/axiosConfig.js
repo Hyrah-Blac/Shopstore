@@ -1,4 +1,5 @@
-// src/api/axiosConfig.js
+// src/utils/axiosConfig.js
+
 import axios from "axios";
 import { API_URL } from "./api";
 
@@ -7,7 +8,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true, // Important for cookies/session if needed
 });
 
 export default axiosInstance;
