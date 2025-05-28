@@ -1,12 +1,16 @@
+// axiosConfig.js
 import axios from "axios";
 
-// ✅ Backend hosted on Render — use full API base URL
-const api = axios.create({
-  baseURL: "https://backend-5za1.onrender.com/api", // <-- Use your actual backend URL
+// You can reuse the same logic for baseURL or import from api.js
+const API_URL =
+  import.meta.env.VITE_API_URL || "https://backend-5za1.onrender.com/api";
+
+const axiosInstance = axios.create({
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // 🔐 Ensures cookies are sent with cross-origin requests
+  withCredentials: true,
 });
 
-export default api;
+export default axiosInstance;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/api"; // use your centralized axios instance with correct baseURL
+import api from "../utils/api"; // Your axios instance with baseURL
 
 import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
@@ -14,7 +14,6 @@ const Home = ({ searchTerm }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Use your custom axios instance with proper baseURL
         const response = await api.get("/products");
         const data = Array.isArray(response.data) ? response.data : [];
         setProducts(data);

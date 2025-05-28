@@ -27,18 +27,23 @@ const PORT = process.env.PORT || 5000;
    ✅ CORS Configuration
 ================================ */
 const allowedOrigins = [
-  "https://shopstore-u8q8.onrender.com",              // Your deployed frontend on Render (if any)
-  "https://shopstore-j9nbt3pce-hyrahs-projects.vercel.app", // Your Vercel frontend domain
-  "http://localhost:5173",                            // Local dev
-  "http://localhost:3000",
+  "https://shopstore-dx0mli1kl-hyrahs-projects.vercel.app",
+  "https://shopstore-sooty.vercel.app",
+  "https://shopstore-git-main-hyrahs-projects.vercel.app"
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests like Postman
-    if (allowedOrigins.includes(origin)) {
+    if (!origin) return callback(null, true); // Allow Postman & server-to-server
+
+    const isAllowed =
+      allowedOrigins.includes(origin) ||
+      /^https:\/\/shopstore.*\.vercel\.app$/.test(origin); // wildcard for Vercel previews
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      console.error("❌ CORS blocked origin:", origin);
       callback(new Error("CORS policy: This origin is not allowed"));
     }
   },
@@ -47,9 +52,8 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// Apply CORS globally before routes
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("*", cors(corsOptions)); // Pre-flight support for all routes
 
 /* ================================
    🚀 Middleware
@@ -57,13 +61,14 @@ app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Request logger
 app.use((req, res, next) => {
   console.log(`📥 ${req.method} ${req.path}`);
   next();
 });
 
-// Static file serving for assets (images, etc)
+/* ================================
+   🖼️ Static File Serving
+================================ */
 const assetsPath = path.join(__dirname, "public", "assets");
 app.use("/assets", express.static(assetsPath));
 console.log("🖼️ Serving static files from:", assetsPath);
@@ -77,7 +82,7 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
 /* ================================
-   🚀 API Routes
+   🚀 Routes
 ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
