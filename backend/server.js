@@ -27,13 +27,16 @@ const PORT = process.env.PORT || 5000;
    ✅ CORS Configuration
 ================================ */
 const allowedOrigins = [
-  "https://shopstore-u8q8.onrender.com", // ✅ Frontend domain
-  "http://localhost:5173",               // ✅ Local dev
+  "https://shopstore-u8q8.onrender.com",              // Your deployed frontend on Render (if any)
+  "https://shopstore-j9nbt3pce-hyrahs-projects.vercel.app", // Your Vercel frontend domain
+  "http://localhost:5173",                            // Local dev
+  "http://localhost:3000",
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin) return callback(null, true); // allow non-browser requests like Postman
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("CORS policy: This origin is not allowed"));
@@ -44,23 +47,9 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// ✅ Apply CORS before anything else
+// Apply CORS globally before routes
 app.use(cors(corsOptions));
-
-// ✅ Handle preflight requests
 app.options("*", cors(corsOptions));
-
-// ✅ Manual CORS headers (especially for Render)
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
 
 /* ================================
    🚀 Middleware
@@ -74,7 +63,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Static file serving
+// Static file serving for assets (images, etc)
 const assetsPath = path.join(__dirname, "public", "assets");
 app.use("/assets", express.static(assetsPath));
 console.log("🖼️ Serving static files from:", assetsPath);
@@ -94,16 +83,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
-
-/* ================================
-   🚀 Frontend SPA fallback
-================================ */
-const distPath = path.join(__dirname, "..", "dist");
-app.use(express.static(distPath));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(distPath, "index.html"));
-});
 
 /* ================================
    🚀 Start Server
