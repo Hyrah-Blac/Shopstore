@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/api"; // Your axios instance with baseURL
+import api from "../utils/api"; // your axios instance with baseURL
 
 import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
