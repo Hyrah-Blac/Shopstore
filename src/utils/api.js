@@ -1,6 +1,7 @@
+// api.js
 import axios from "axios";
 
-// Use VITE_API_URL environment variable if defined, otherwise fallback to hardcoded backend URL
+// Use environment variable for API base URL if defined, else fallback to Render backend URL
 const API_URL =
   import.meta.env.VITE_API_URL || "https://backend-5za1.onrender.com/api";
 
@@ -9,7 +10,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // send cookies for cross-origin requests
+  withCredentials: true, // Send cookies/session info for cross-origin requests
 });
 
 export { API_URL };
