@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { useCart } from "../context/CartContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import api from "../utils/axiosConfig"; // ✅ Use centralized API config
+import { useCart } from "../context/CartContext";
 import "./ProductDetails.css";
 
 const ProductDetails = () => {
@@ -16,7 +17,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://backend-5za1.onrender.com/api/products/${id}`);
+        const response = await api.get(`/products/${id}`);
         if (response.data) {
           setProduct(response.data);
         } else {
@@ -24,7 +25,7 @@ const ProductDetails = () => {
         }
       } catch (err) {
         console.error("Error fetching product details:", err.message);
-        setError("Product not found!");
+        setError("Failed to load product. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -35,13 +36,12 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     if (product) {
-      const productData = {
+      addToCart({
         id: product._id,
         name: product.name,
         price: product.price,
-        image: product.image, // ✅ Keep as-is
-      };
-      addToCart(productData);
+        image: product.image,
+      });
 
       toast.success("🛒 Item Added to Cart!", {
         position: "top-center",
@@ -50,12 +50,16 @@ const ProductDetails = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading Product...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) {
+    return <div className="loading">Loading product...</div>;
+  }
 
-  // ✅ Properly construct image URL
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   const imageUrl = product.image
-    ? `https://backend-5za1.onrender.com/assets/${product.image.replace(/^\/+/, "")}`
+    ? `${import.meta.env.VITE_BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
     : "https://via.placeholder.com/300x300?text=No+Image";
 
   return (
