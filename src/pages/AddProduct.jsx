@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
+import api from '../utils/axiosConfig'; // Use the same API config as Home.jsx
 import './AddProduct.css';
-
-const API_URL = "/api/products";
 
 const AddProduct = () => {
   const [name, setName] = useState('');
@@ -33,25 +32,21 @@ const AddProduct = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        body: formData,
+      const response = await api.post('/products', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage('✅ Product added successfully!');
-        setName('');
-        setDescription('');
-        setPrice('');
-        setImage(null);
-        document.getElementById("imageInput").value = '';
-      } else {
-        setMessage(`❌ ${data.message || "Failed to add product"}`);
-      }
+      setMessage('✅ Product added successfully!');
+      setName('');
+      setDescription('');
+      setPrice('');
+      setImage(null);
+      document.getElementById("imageInput").value = '';
     } catch (error) {
-      setMessage(`❌ Failed to add product. ${error.message}`);
+      const errorMsg = error.response?.data?.message || error.message;
+      setMessage(`❌ Failed to add product. ${errorMsg}`);
     } finally {
       setLoading(false);
     }
@@ -74,7 +69,7 @@ const AddProduct = () => {
         />
         <input
           type="number"
-          placeholder="Price"
+          placeholder="Price (KSH)"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
@@ -85,7 +80,7 @@ const AddProduct = () => {
           onChange={handleImageChange}
         />
         <button type="submit" disabled={loading}>
-          {loading ? "Adding Product..." : "Add Product"}
+          {loading ? 'Adding Product...' : 'Add Product'}
         </button>
       </form>
       {message && <p className="form-message">{message}</p>}
