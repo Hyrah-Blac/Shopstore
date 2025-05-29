@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import api from "../utils/axiosConfig"; // ✅ Use centralized API config
+import api from "../utils/axiosConfig"; // Centralized Axios config
+import { BACKEND_URL } from "../utils/api"; // ✅ Use backend URL helper
 import { useCart } from "../context/CartContext";
 import "./ProductDetails.css";
 
@@ -59,28 +60,28 @@ const ProductDetails = () => {
   }
 
   const imageUrl = product.image
-    ? `${import.meta.env.VITE_BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
-    : "";
+    ? `${BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
+    : "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
     <div className="product-details">
       <ToastContainer />
       <div className="product-detail-container">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={product.name || "Product"}
-            className="product-image"
-            loading="lazy"
-            onError={(e) => {
-              e.target.style.display = "none"; // 👈 Hide image if it fails
-            }}
-          />
-        ) : null}
+        <img
+          src={imageUrl}
+          alt={product.name || "Product"}
+          className="product-image"
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/300x200?text=Image+Error";
+          }}
+        />
         <div className="product-info">
           <h2>{product.name}</h2>
           <p><strong>Description:</strong> {product.description}</p>
-          <p className="price"><strong>Price:</strong> KSh {product.price}</p>
+          <p className="price">
+            <strong>Price:</strong> KSh {parseInt(product.price).toLocaleString()}
+          </p>
           <button className="add-to-cart-button" onClick={handleAddToCart}>
             Add to Cart
           </button>
