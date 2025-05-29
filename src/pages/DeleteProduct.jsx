@@ -5,6 +5,7 @@ import "./DeleteProduct.css";
 const DeleteProduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,15 +24,18 @@ const DeleteProduct = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        await axios.delete(`/api/products/${id}`);
-        setProducts(products.filter((product) => product._id !== id));
-        alert("✅ Product deleted successfully!");
-      } catch (error) {
-        console.error("Error deleting product:", error.message);
-        alert("❌ Failed to delete product.");
-      }
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      setDeletingId(id);
+      await axios.delete(`/api/products/${id}`);
+      setProducts(products.filter((product) => product._id !== id));
+      alert("✅ Product deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting product:", error.message);
+      alert("❌ Failed to delete product.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -47,12 +51,11 @@ const DeleteProduct = () => {
           <p>No products found.</p>
         ) : (
           products.map((product) => {
-            // Build correct image URL
             const imageUrl = product.imageUrl
               ? product.imageUrl.startsWith("http")
                 ? product.imageUrl
                 : `/assets/${product.imageUrl.replace(/^\//, '')}`
-              : "https://via.placeholder.com/300x200?text=No+Image ";
+              : "https://via.placeholder.com/300x200?text=No+Image";
 
             return (
               <div key={product._id} className="product-card">
@@ -62,7 +65,7 @@ const DeleteProduct = () => {
                   className="product-image"
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x200?text=Image+Error ";
+                    e.target.src = "https://via.placeholder.com/300x200?text=Image+Error";
                   }}
                 />
                 <div className="product-info">
@@ -72,9 +75,9 @@ const DeleteProduct = () => {
                   <button
                     onClick={() => handleDelete(product._id)}
                     className="delete-button"
-                    disabled={loading}
+                    disabled={deletingId === product._id}
                   >
-                    {loading ? "Deleting..." : "Delete"}
+                    {deletingId === product._id ? "Deleting..." : "Delete"}
                   </button>
                 </div>
               </div>
