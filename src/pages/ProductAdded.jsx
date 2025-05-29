@@ -22,9 +22,7 @@ const ProductAdded = () => {
     fetchProducts();
   }, []);
 
-  if (loading) {
-    return <div className="loading">Loading Products...</div>;
-  }
+  if (loading) return <div className="loading">Loading Products...</div>;
 
   return (
     <div className="product-list">
@@ -36,11 +34,13 @@ const ProductAdded = () => {
               src={`${BACKEND_URL}${product.imageUrl}`}
               alt={product.name}
               loading="lazy"
+              onError={(e) =>
+                (e.target.src = "https://via.placeholder.com/150?text=Image+Error")
+              }
             />
             <div className="product-info">
               <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <span>KSh {product.price}</span>
+              <p>KSh {parseInt(product.price).toLocaleString()}</p>
             </div>
           </div>
         ))}

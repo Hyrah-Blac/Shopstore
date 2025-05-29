@@ -16,12 +16,11 @@ const Checkout = () => {
   const discountedPrice = totalPrice - (totalPrice * discount) / 100;
 
   const handlePayment = () => {
-    if (!phoneNumber || !/^07\d{8}$/.test(phoneNumber)) {
+    if (!/^07\d{8}$/.test(phoneNumber)) {
       setError("Please enter a valid Kenyan phone number starting with 07");
       return;
     }
 
-    setError("");
     alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
     clearCart();
     navigate("/home");
@@ -49,11 +48,9 @@ const Checkout = () => {
             <h2>Items in Cart</h2>
             <ul>
               {cartItems.map((item, index) => {
-                const imageUrl = item.image
-                  ? item.image.startsWith("http")
-                    ? item.image
-                    : `/assets/${item.image.replace(/^\//, '')}`
-                  : "https://via.placeholder.com/100?text=No+Image";
+                const imageUrl = item.image?.startsWith("http")
+                  ? item.image
+                  : `/assets/${item.image?.replace(/^\//, "")}` || "https://via.placeholder.com/100?text=No+Image";
 
                 return (
                   <li key={`${item.id}-${index}`} className="checkout-item">

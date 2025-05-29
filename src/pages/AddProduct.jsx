@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './AddProduct.css';
 
-// Use relative path for better deployment compatibility
 const API_URL = "/api/products";
 
 const AddProduct = () => {
@@ -19,7 +18,6 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!name || !description || !price || !image) {
       setMessage("⚠️ All fields are required.");
       return;
@@ -44,7 +42,6 @@ const AddProduct = () => {
 
       if (response.ok) {
         setMessage('✅ Product added successfully!');
-        // Clear form
         setName('');
         setDescription('');
         setPrice('');
@@ -54,7 +51,6 @@ const AddProduct = () => {
         setMessage(`❌ ${data.message || "Failed to add product"}`);
       }
     } catch (error) {
-      console.error("Error adding product:", error);
       setMessage(`❌ Failed to add product. ${error.message}`);
     } finally {
       setLoading(false);
@@ -65,28 +61,28 @@ const AddProduct = () => {
     <div className="add-product-form">
       <h2>Add New Product</h2>
       <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          placeholder="Product Name" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
+        <input
+          type="text"
+          placeholder="Product Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-        <textarea 
-          placeholder="Description" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)} 
+        <textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
-        <input 
-          type="number" 
-          placeholder="Price" 
-          value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
+        <input
+          type="number"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
         />
-        <input 
+        <input
           id="imageInput"
-          type="file" 
-          accept="image/*" 
-          onChange={handleImageChange} 
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
         />
         <button type="submit" disabled={loading}>
           {loading ? "Adding Product..." : "Add Product"}

@@ -22,11 +22,9 @@ const Cart = () => {
         <>
           <div className="cart-items-grid">
             {cartItems.map((item, index) => {
-              const imageUrl = item.image
-                ? item.image.startsWith("http")
-                  ? item.image
-                  : `/assets/${item.image.replace(/^\//, "")}`
-                : "https://via.placeholder.com/150?text=No+Image ";
+              const imageUrl = item.image?.startsWith("http")
+                ? item.image
+                : `/assets/${item.image?.replace(/^\//, "")}` || "https://via.placeholder.com/150?text=No+Image";
 
               return (
                 <div key={`${item.id}-${index}`} className="cart-item-card">
@@ -35,8 +33,7 @@ const Cart = () => {
                     alt={item.name || "Product"}
                     className="cart-item-image"
                     onError={(e) =>
-                      (e.target.src =
-                        "https://via.placeholder.com/150?text=Image+Error ")
+                      (e.target.src = "https://via.placeholder.com/150?text=Image+Error")
                     }
                   />
                   <div className="cart-item-info">
