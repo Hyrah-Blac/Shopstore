@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import api from '../utils/axiosConfig'; // Use the same API config as Home.jsx
+import React, { useState, useRef } from 'react';
+import api from '../utils/axiosConfig';
 import './AddProduct.css';
 
 const AddProduct = () => {
@@ -9,6 +9,7 @@ const AddProduct = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const fileInputRef = useRef();
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -19,6 +20,12 @@ const AddProduct = () => {
 
     if (!name || !description || !price || !image) {
       setMessage("⚠️ All fields are required.");
+      return;
+    }
+
+    const priceNumber = parseFloat(price);
+    if (isNaN(priceNumber) || priceNumber < 0) {
+      setMessage("⚠️ Price must be a valid positive number.");
       return;
     }
 
@@ -33,9 +40,7 @@ const AddProduct = () => {
 
     try {
       const response = await api.post('/products', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       setMessage('✅ Product added successfully!');
@@ -43,7 +48,7 @@ const AddProduct = () => {
       setDescription('');
       setPrice('');
       setImage(null);
-      document.getElementById("imageInput").value = '';
+      fileInputRef.current.value = '';
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message;
       setMessage(`❌ Failed to add product. ${errorMsg}`);
@@ -61,23 +66,28 @@ const AddProduct = () => {
           placeholder="Product Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          disabled={loading}
         />
         <textarea
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          disabled={loading}
         />
         <input
           type="number"
           placeholder="Price (KSH)"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          disabled={loading}
         />
         <input
           id="imageInput"
           type="file"
           accept="image/*"
           onChange={handleImageChange}
+          ref={fileInputRef}
+          disabled={loading}
         />
         <button type="submit" disabled={loading}>
           {loading ? 'Adding Product...' : 'Add Product'}
