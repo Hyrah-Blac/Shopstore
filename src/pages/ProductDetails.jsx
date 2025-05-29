@@ -60,21 +60,23 @@ const ProductDetails = () => {
 
   const imageUrl = product.image
     ? `${import.meta.env.VITE_BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
-    : "https://via.placeholder.com/300x300?text=No+Image";
+    : "";
 
   return (
     <div className="product-details">
       <ToastContainer />
       <div className="product-detail-container">
-        <img
-          src={imageUrl}
-          alt={product.name || "Product"}
-          className="product-image"
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = "https://via.placeholder.com/300x300?text=Image+Error";
-          }}
-        />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={product.name || "Product"}
+            className="product-image"
+            loading="lazy"
+            onError={(e) => {
+              e.target.style.display = "none"; // 👈 Hide image if it fails
+            }}
+          />
+        ) : null}
         <div className="product-info">
           <h2>{product.name}</h2>
           <p><strong>Description:</strong> {product.description}</p>
