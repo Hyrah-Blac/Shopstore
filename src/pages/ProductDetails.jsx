@@ -16,8 +16,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/api/products/${id}`);
-        
+        const response = await axios.get(`https://backend-5za1.onrender.com/api/products/${id}`);
         if (response.data) {
           setProduct(response.data);
         } else {
@@ -40,7 +39,7 @@ const ProductDetails = () => {
         id: product._id,
         name: product.name,
         price: product.price,
-        image: product.imageUrl.replace("/assets", ""),
+        image: product.image,
       };
       addToCart(productData);
 
@@ -51,20 +50,12 @@ const ProductDetails = () => {
     }
   };
 
-  if (loading) {
-    return <div className="loading">Loading Product...</div>;
-  }
+  if (loading) return <div className="loading">Loading Product...</div>;
+  if (error) return <div className="error">{error}</div>;
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
-
-  // Build image URL dynamically
-  const imageUrl = product.imageUrl
-    ? product.imageUrl.startsWith("http")
-      ? product.imageUrl
-      : `/assets/${product.imageUrl.replace(/^\//, '')}`
-    : "https://via.placeholder.com/300x300?text=No+Image ";
+  const imageUrl = product.image
+    ? `https://backend-5za1.onrender.com/assets/${product.image}`
+    : "https://via.placeholder.com/300x300?text=No+Image";
 
   return (
     <div className="product-details">
@@ -76,7 +67,7 @@ const ProductDetails = () => {
           className="product-image"
           loading="lazy"
           onError={(e) => {
-            e.target.src = "https://via.placeholder.com/300x300?text=Image+Error ";
+            e.target.src = "https://via.placeholder.com/300x300?text=Image+Error";
           }}
         />
         <div className="product-info">
