@@ -39,7 +39,7 @@ const ProductDetails = () => {
         id: product._id,
         name: product.name,
         price: product.price,
-        image: product.image,
+        image: product.image, // ✅ Keep as-is
       };
       addToCart(productData);
 
@@ -53,8 +53,9 @@ const ProductDetails = () => {
   if (loading) return <div className="loading">Loading Product...</div>;
   if (error) return <div className="error">{error}</div>;
 
+  // ✅ Properly construct image URL
   const imageUrl = product.image
-    ? `https://backend-5za1.onrender.com/assets/${product.image}`
+    ? `https://backend-5za1.onrender.com/assets/${product.image.replace(/^\/+/, "")}`
     : "https://via.placeholder.com/300x300?text=No+Image";
 
   return (
