@@ -6,7 +6,12 @@ import { BACKEND_URL } from "../utils/api"; // ✅ Import backend URL
 const ProductCard = ({ product }) => {
   const imageUrl = product.imageUrl
     ? `${BACKEND_URL}${product.imageUrl}`
-    : "https://via.placeholder.com/300x200?text=No+Image+Available";
+    : "/assets/placeholder.png"; // ✅ Use local placeholder
+
+  const handleImageError = (e) => {
+    console.warn("Image failed to load:", e.target.src);
+    e.target.src = "/assets/placeholder.png"; // ✅ Local fallback
+  };
 
   return (
     <div className="product-card w-full sm:w-auto">
@@ -15,9 +20,7 @@ const ProductCard = ({ product }) => {
         alt={product.name || "Product"}
         className="product-image"
         loading="lazy"
-        onError={(e) =>
-          (e.target.src = "https://via.placeholder.com/300x200?text=Image+Error")
-        }
+        onError={handleImageError}
       />
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
@@ -33,3 +36,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+6
