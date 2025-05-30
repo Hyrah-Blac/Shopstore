@@ -36,12 +36,19 @@
   gap: 1.4rem;
   align-items: center;
   position: relative;
+  height: 100%;
 }
 
 .navbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
 }
 
@@ -164,7 +171,9 @@
   }
 
   .navbar-icon {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
   }
 
   .profile-dropdown {
