@@ -5,28 +5,33 @@ import { BACKEND_URL } from "../utils/api";
 const ProductCard = ({ product }) => {
   const imageUrl = product.imageUrl
     ? `${BACKEND_URL}${product.imageUrl}`
-    : "/placeholder.png"; // ✅ Correct local reference
+    : "/placeholder.png";
 
   const handleImageError = (e) => {
-    e.target.onerror = null; // Prevent infinite loop
-    e.target.src = "/placeholder.png"; // ✅ Use local public placeholder
+    e.target.onerror = null; 
+    e.target.src = "/placeholder.png";
   };
 
   return (
-    <div className="product-card w-full sm:w-auto">
+    <div className="flex flex-col bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 min-h-[400px]">
       <img
         src={imageUrl}
         alt={product.name || "Product"}
-        className="product-image"
         loading="lazy"
         onError={handleImageError}
+        className="h-48 w-full object-cover rounded-md mb-4 flex-shrink-0"
       />
-      <div className="product-info">
-        <h3 className="product-name">{product.name}</h3>
-        <p className="product-price">
+      <div className="flex flex-col flex-grow">
+        <h3 className="product-name text-lg font-semibold mb-2 flex-grow">
+          {product.name}
+        </h3>
+        <p className="product-price text-indigo-600 font-semibold mb-4">
           KSh {parseInt(product.price).toLocaleString()}
         </p>
-        <Link to={`/product-details/${product._id}`} className="product-details-link">
+        <Link
+          to={`/product-details/${product._id}`}
+          className="mt-auto inline-block text-indigo-700 hover:text-indigo-900 font-medium"
+        >
           View Details
         </Link>
       </div>
