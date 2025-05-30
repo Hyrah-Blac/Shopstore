@@ -164,11 +164,10 @@ const Navbar = ({ onFilter }) => {
         )}
       </nav>
 
-      {isSidebarOpen && (
-        <div ref={sidebarRef}>
-          <Sidebar />
-        </div>
-      )}
+      {/* Sidebar with proper props */}
+      <div ref={sidebarRef}>
+        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      </div>
 
       {isSearchOpen && location.pathname === "/home" && (
         <div className="search-container">
