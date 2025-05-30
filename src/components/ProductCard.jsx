@@ -8,12 +8,20 @@ const ProductCard = ({ product }) => {
     : "/placeholder.png";
 
   const handleImageError = (e) => {
-    e.target.onerror = null; 
+    e.target.onerror = null;
     e.target.src = "/placeholder.png";
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 min-h-[400px]">
+    <div
+      className="
+        flex flex-col bg-white rounded-lg p-4
+        shadow-[0_0_8px_2px_#8a2be2,0_0_20px_6px_#7209b7]
+        hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
+        transition-shadow duration-300
+        min-h-[400px]
+      "
+    >
       <img
         src={imageUrl}
         alt={product.name || "Product"}
