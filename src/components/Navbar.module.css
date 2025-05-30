@@ -1,82 +1,76 @@
-/* ========== Navbar ========== */
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: rgba(28, 28, 28, 0.8);
-  backdrop-filter: blur(12px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.5rem;
-  z-index: 1000;
+  padding: 16px;
+  background: #1a1a1a;
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid rgba(138, 43, 226, 0.6);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* ========== Logo ========== */
 .logo-link {
-  font-size: 1.8rem;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
+  font-size: 1.5rem;
   text-decoration: none;
-  transition: color 0.3s ease;
+  color: white;
+  font-weight: bold;
 }
 
-.logo-link:hover {
-  color: #c084fc;
-  text-shadow: 0 0 8px #c084fc;
-}
-
-/* ========== Navbar Icons ========== */
 .navbar-icons {
   display: flex;
+  gap: 16px;
   align-items: center;
-  gap: 1.5rem;
-  position: relative;
+  margin-left: auto;
 }
 
 .navbar-icon {
-  font-size: 1.3rem;
-  cursor: pointer;
+  background: none;
+  border: none;
   color: white;
-  transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
-.navbar-icon:hover {
-  color: #c084fc;
-  transform: translateY(-2px) scale(1.1);
-  text-shadow: 0 0 6px #c084fc;
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 16px;
 }
 
-/* ========== Profile Dropdown ========== */
+.search-bar {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+}
+
+.search-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 .profile-dropdown {
   position: absolute;
-  top: 75px;
-  right: 0;
-  width: 180px;
-  background: rgba(36, 36, 36, 0.95);
-  border: 1px solid #8a2be2;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-  z-index: 1100;
-  animation: fadeIn 0.3s ease-in-out;
-  overflow: hidden;
+  top: 60px;
+  right: 16px;
+  background: #333;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 
 .profile-dropdown ul {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 .profile-dropdown li {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #444;
 }
 
 .profile-dropdown li:last-child {
@@ -86,113 +80,12 @@
 .profile-dropdown a,
 .profile-dropdown button {
   display: block;
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 0.95rem;
-  font-family: 'Poppins', sans-serif;
-  color: #eee;
+  padding: 10px 16px;
+  color: white;
+  text-decoration: none;
   background: none;
   border: none;
+  width: 100%;
   text-align: left;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.profile-dropdown a:hover,
-.profile-dropdown button:hover {
-  background-color: #5a189a;
-  color: #fff;
-}
-
-/* ========== Search Bar ========== */
-.search-container {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  background: rgba(28, 28, 28, 0.95);
-  padding: 12px 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 2px solid #8a2be2;
-  z-index: 1050;
-  backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.search-bar {
-  width: 100%;
-  max-width: 600px;
-  padding: 12px 16px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-  outline: none;
-  transition: box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.search-bar::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.search-bar:focus {
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 0 12px #8a2be2;
-}
-
-.search-close-btn {
-  margin-left: 12px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #fff;
   cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.search-close-btn:hover {
-  color: #f87171;
-}
-
-/* ========== Responsive Design ========== */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 1rem;
-  }
-
-  .logo-link {
-    font-size: 1.5rem;
-  }
-
-  .navbar-icons {
-    gap: 1rem;
-  }
-
-  .navbar-icon {
-    font-size: 1.1rem;
-  }
-
-  .profile-dropdown {
-    width: 160px;
-    right: 1rem;
-  }
-
-  .search-bar {
-    width: 85%;
-  }
-}
-
-/* ========== Animations ========== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
