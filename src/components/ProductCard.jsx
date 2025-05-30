@@ -16,7 +16,7 @@ const ProductCard = ({ product }) => {
     <div
       className="
         flex flex-col bg-white rounded-lg p-4
-        shadow-[0_0_8px_2px_#8a2be2,0_0_20px_6px_#7209b7]
+        shadow-md
         hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
         transition-shadow duration-300
         min-h-[400px]
