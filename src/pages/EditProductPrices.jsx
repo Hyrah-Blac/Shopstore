@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./EditProductPrices.css"; // You can add styles here or keep inline
+import api from "../utils/axiosConfig";
+import "./EditProductPrices.css";
 
 const EditProductPrices = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [newPrice, setNewPrice] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/api/products");
+        const response = await api.get("/products");
         setProducts(response.data);
       } catch (error) {
         console.error("Failed to fetch products:", error.message);
-        alert("❌ Failed to load products");
+        alert("❌ Failed to load products.");
       }
     };
 
@@ -27,19 +28,30 @@ const EditProductPrices = () => {
       return;
     }
 
-    try {
-      const response = await axios.put(`/api/products/${selectedProduct}`, {
-        price: newPrice,
-      });
+    const priceNumber = parseFloat(newPrice);
+    if (isNaN(priceNumber) || priceNumber < 0) {
+      alert("⚠️ Enter a valid positive number for the price.");
+      return;
+    }
 
+    setLoading(true);
+    try {
+      const response = await api.put(`/products/${selectedProduct}`, { price: priceNumber });
       if (response.status === 200) {
         alert("✅ Product price updated successfully.");
-        setNewPrice("");
+        setProducts((prev) =>
+          prev.map((product) =>
+            product._id === selectedProduct ? { ...product, price: priceNumber } : product
+          )
+        );
         setSelectedProduct("");
+        setNewPrice("");
       }
     } catch (error) {
-      console.error("Error updating product price:", error.message);
+      console.error("Error updating price:", error.message);
       alert("❌ Failed to update product price.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +67,7 @@ const EditProductPrices = () => {
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value)}
             className="product-select"
+            disabled={loading}
           >
             <option value="">Select a product</option>
             {products.map((product) => (
@@ -71,10 +84,11 @@ const EditProductPrices = () => {
             value={newPrice}
             onChange={(e) => setNewPrice(e.target.value)}
             className="price-input"
+            disabled={loading}
           />
 
-          <button onClick={handleUpdatePrice} className="update-btn">
-            Update Price
+          <button onClick={handleUpdatePrice} className="update-btn" disabled={loading}>
+            {loading ? "Updating..." : "Update Price"}
           </button>
         </>
       )}
