@@ -26,18 +26,20 @@ const Contacts = () => {
     setLoading(true);
 
     try {
-      // Use your actual backend URL deployed on Render
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+      // Use env variable or fallback to your deployed backend
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://backend-5za1.onrender.com";
 
       const response = await axios.post(`${API_BASE_URL}/api/contact`, formData);
 
       if (response.status === 200) {
         alert("✅ Message sent successfully!");
         setFormData({ name: "", email: "", message: "" });
+      } else {
+        alert("❌ Unexpected response from server.");
       }
     } catch (error) {
-      console.error("Error submitting form:", error.message);
-      alert(`❌ Failed to send message. ${error.message}`);
+      console.error("Error submitting form:", error);
+      alert(`❌ Failed to send message. ${error.response?.data?.error || error.message}`);
     } finally {
       setLoading(false);
     }
