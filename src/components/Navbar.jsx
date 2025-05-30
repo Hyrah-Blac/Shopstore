@@ -9,7 +9,8 @@ import {
 } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 
-import "./Navbar.module.css";
+// Import styles as CSS module
+import styles from "./Navbar.module.css";
 
 const Navbar = ({ onFilter }) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -76,7 +77,7 @@ const Navbar = ({ onFilter }) => {
       if (
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target) &&
-        !event.target.closest(".navbar-icon")
+        !event.target.closest(`.${styles["navbar-icon"]}`)
       ) {
         setIsSidebarOpen(false);
       }
@@ -91,18 +92,18 @@ const Navbar = ({ onFilter }) => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [styles]);
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/home" className="logo-link">
+      <nav className={styles.navbar}>
+        <Link to="/home" className={styles["logo-link"]}>
           Dressin
         </Link>
 
-        <div className="navbar-icons">
+        <div className={styles["navbar-icons"]}>
           <button
-            className="navbar-icon"
+            className={styles["navbar-icon"]}
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
             aria-expanded={isSidebarOpen}
@@ -112,7 +113,7 @@ const Navbar = ({ onFilter }) => {
 
           {location.pathname === "/home" && (
             <button
-              className="navbar-icon"
+              className={styles["navbar-icon"]}
               onClick={toggleSearchBar}
               aria-label="Toggle search bar"
               aria-expanded={isSearchOpen}
@@ -121,12 +122,12 @@ const Navbar = ({ onFilter }) => {
             </button>
           )}
 
-          <Link to="/cart" className="navbar-icon" aria-label="Cart">
+          <Link to="/cart" className={styles["navbar-icon"]} aria-label="Cart">
             <FaShoppingCart />
           </Link>
 
           <button
-            className="navbar-icon"
+            className={styles["navbar-icon"]}
             onClick={toggleProfileMenu}
             aria-label={isLoggedIn ? "Open profile menu" : "Login"}
           >
@@ -135,10 +136,17 @@ const Navbar = ({ onFilter }) => {
         </div>
 
         {isProfileMenuOpen && (
-          <div className="profile-dropdown" ref={profileMenuRef}>
+          <div className={styles["profile-dropdown"]} ref={profileMenuRef}>
             <ul>
               <li>
-                <span style={{ padding: "10px 16px", display: "block", color: "#fff", fontWeight: "bold" }}>
+                <span
+                  style={{
+                    padding: "10px 16px",
+                    display: "block",
+                    color: "#fff",
+                    fontWeight: "bold",
+                  }}
+                >
                   {localStorage.getItem("email") || "User"}
                 </span>
               </li>
@@ -155,32 +163,30 @@ const Navbar = ({ onFilter }) => {
                 </li>
               )}
               <li>
-                <button onClick={handleLogout}>
-                  Logout
-                </button>
+                <button onClick={handleLogout}>Logout</button>
               </li>
             </ul>
           </div>
         )}
       </nav>
 
-      {/* Sidebar with proper props */}
+      {/* Sidebar */}
       <div ref={sidebarRef}>
         <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       </div>
 
       {isSearchOpen && location.pathname === "/home" && (
-        <div className="search-container">
+        <div className={styles["search-container"]}>
           <input
             type="text"
-            className="search-bar"
+            className={styles["search-bar"]}
             placeholder="Search products..."
             value={searchTerm}
             onChange={handleSearchChange}
             autoFocus
           />
           <button
-            className="search-close-btn"
+            className={styles["search-close-btn"]}
             onClick={toggleSearchBar}
             aria-label="Close search"
           >

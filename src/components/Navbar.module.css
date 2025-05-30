@@ -5,6 +5,8 @@
   padding: 16px;
   background: #1a1a1a;
   color: white;
+  position: relative;
+  z-index: 100;
 }
 
 .logo-link {
@@ -18,7 +20,7 @@
   display: flex;
   gap: 16px;
   align-items: center;
-  margin-left: auto;
+  margin-left: auto; /* This pushes icons to the right */
 }
 
 .navbar-icon {
