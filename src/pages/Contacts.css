@@ -1,37 +1,69 @@
-/* Optional: Make black more dominant across all sections */
-.checkout-page {
+.contact-page {
   background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+  min-height: 100vh;
+  color: #e8e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Optional: Slightly darken the container background */
-.checkout-container {
-  background: rgba(15, 15, 15, 0.85);
-  border: 1px solid rgba(130, 130, 130, 0.15);
+.contact-container {
+  background: rgba(15, 15, 15, 0.9);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(130, 0, 255, 0.2);
+  max-width: 600px;
+  width: 100%;
+  backdrop-filter: blur(10px);
 }
 
-/* Inputs and promo fields darker for full black look */
-.shipping-payment input,
-.promo-section input {
-  background-color: rgba(12, 12, 12, 0.9);
+.contact-container h2 {
+  font-size: 32px;
+  color: #bb86fc;
+  text-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background-color: rgba(12, 12, 12, 0.95);
   color: #e8e8f0;
   border: 1px solid rgba(180, 180, 255, 0.2);
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  resize: none;
 }
 
-/* Hover state tweaks */
-.checkout-item:hover {
-  background-color: rgba(98, 0, 234, 0.15);
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #bb86fc;
+  box-shadow: 0 0 8px #bb86fc66;
 }
 
-/* Optional: Add dark-glow to hover buttons for luxury feel */
-.remove-btn:hover,
-.promo-section button:hover,
-.place-order-btn:hover {
-  box-shadow: 0 0 24px #bb86fc88;
+.contact-form button {
+  background-color: #7c4dff;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Reduce glow intensity if it feels too neon */
-h2,
-.order-summary h3,
-.shipping-payment h3 {
-  text-shadow: 0 0 5px rgba(187, 134, 252, 0.4);
+.contact-form button:hover {
+  background-color: #5a2dcc;
+  box-shadow: 0 0 18px #bb86fc88;
+  transform: translateY(-2px);
 }
