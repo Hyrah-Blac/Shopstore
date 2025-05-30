@@ -1,252 +1,37 @@
-/* Entire Page */
+/* Optional: Make black more dominant across all sections */
 .checkout-page {
-  background: linear-gradient(135deg, #1e1e2f, #121212);
-  color: #e0e0e0;
-  font-family: "Poppins", sans-serif;
-  min-height: 100vh;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
 }
 
-/* Headings */
-h2 {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px 0;
-  margin-bottom: 30px;
-  color: #d0d0ff;
-  text-align: center;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 2.2rem;
-  text-shadow: 0 0 8px #6200ea66;
-  letter-spacing: 1.2px;
-  box-shadow: 0 0 15px rgba(98, 0, 234, 0.4);
-}
-
-/* Checkout Container */
+/* Optional: Slightly darken the container background */
 .checkout-container {
-  display: flex;
-  gap: 40px;
-  margin: 0 auto;
-  max-width: 1100px;
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(30, 30, 47, 0.75);
-  box-shadow: 0 8px 30px rgba(98, 0, 234, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(98, 0, 234, 0.4);
+  background: rgba(15, 15, 15, 0.85);
+  border: 1px solid rgba(130, 130, 130, 0.15);
 }
 
-/* Order Summary */
-.order-summary {
-  flex: 1;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding-right: 30px;
-}
-
-.order-summary h3 {
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 15px;
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #bb86fc;
-  text-shadow: 0 0 5px #bb86fc88;
-}
-
-/* Checkout Item */
-.checkout-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px 0;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease;
-  border-radius: 12px;
-}
-
-.checkout-item:hover {
-  background-color: rgba(107, 33, 255, 0.1);
-  box-shadow: 0 0 15px #6b21ff44;
-}
-
-.checkout-image {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 14px;
-  box-shadow: 0 0 10px rgba(107, 33, 255, 0.3);
-  flex-shrink: 0;
-}
-
-.item-details {
-  flex: 1;
-  margin-left: 20px;
-  color: #dcd6f7;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-/* Remove Button */
-.remove-btn {
-  background: #7c4dff;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 0 8px #7c4dffaa;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.remove-btn:hover {
-  background: #5a2dcc;
-  box-shadow: 0 0 14px #5a2dcccc;
-}
-
-/* Shipping and Payment Section */
-.shipping-payment {
-  flex: 1;
-  padding-left: 30px;
-}
-
-.shipping-payment h3 {
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 15px;
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #bb86fc;
-  text-shadow: 0 0 5px #bb86fc88;
-}
-
-.shipping-payment input {
-  width: 100%;
-  padding: 14px 18px;
-  margin-bottom: 15px;
-  border: 1px solid rgba(107, 33, 255, 0.5);
-  border-radius: 16px;
-  background-color: rgba(30, 30, 47, 0.9);
-  color: #dcd6f7;
-  font-size: 1rem;
-  font-weight: 500;
-  box-shadow: inset 0 0 8px rgba(107, 33, 255, 0.3);
-  transition: border-color 0.3s ease;
-}
-
-.shipping-payment input:focus {
-  outline: none;
-  border-color: #bb86fc;
-  box-shadow: 0 0 12px #bb86fcaa;
-}
-
-/* Mpesa Instructions */
-.mpesa-instructions {
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 15px;
-  font-style: italic;
-  color: #a3a3ffcc;
-  font-size: 0.95rem;
-}
-
-/* Promo Section */
-.promo-section {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
+/* Inputs and promo fields darker for full black look */
+.shipping-payment input,
 .promo-section input {
-  flex: 1;
-  padding: 14px 18px;
-  border: 1px solid rgba(107, 33, 255, 0.5);
-  border-radius: 16px;
-  background-color: rgba(30, 30, 47, 0.9);
-  color: #dcd6f7;
-  font-size: 1rem;
-  font-weight: 500;
-  box-shadow: inset 0 0 8px rgba(107, 33, 255, 0.3);
-  transition: border-color 0.3s ease;
+  background-color: rgba(12, 12, 12, 0.9);
+  color: #e8e8f0;
+  border: 1px solid rgba(180, 180, 255, 0.2);
 }
 
-.promo-section input:focus {
-  outline: none;
-  border-color: #bb86fc;
-  box-shadow: 0 0 12px #bb86fcaa;
+/* Hover state tweaks */
+.checkout-item:hover {
+  background-color: rgba(98, 0, 234, 0.15);
 }
 
-.promo-section button {
-  background: linear-gradient(135deg, #7c4dff, #5a2dcc);
-  color: #fff;
-  border: none;
-  border-radius: 16px;
-  padding: 14px 30px;
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 1.1px;
-  box-shadow: 0 0 15px #7c4dffcc;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.promo-section button:hover {
-  background: linear-gradient(135deg, #5a2dcc, #3e1a9c);
-  box-shadow: 0 0 22px #5a2dccdd;
-}
-
-/* Place Order Button */
-.place-order-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #7c4dff, #5a2dcc);
-  border-radius: 16px;
-  border: none;
-  color: #fff;
-  padding: 18px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 1.1px;
-  box-shadow: 0 0 20px #7c4dffcc;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 10px;
-}
-
+/* Optional: Add dark-glow to hover buttons for luxury feel */
+.remove-btn:hover,
+.promo-section button:hover,
 .place-order-btn:hover {
-  background: linear-gradient(135deg, #5a2dcc, #3e1a9c);
-  box-shadow: 0 0 28px #5a2dccdd;
+  box-shadow: 0 0 24px #bb86fc88;
 }
 
-/* Grand Total Styling */
-.order-summary h4 {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 15px;
-  margin-top: 25px;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #bb86fc;
-  text-shadow: 0 0 7px #bb86fcaa;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .checkout-container {
-    flex-direction: column;
-    padding: 20px;
-    max-width: 90vw;
-  }
-
-  .order-summary {
-    border-right: none;
-    padding-right: 0;
-    margin-bottom: 30px;
-  }
-
-  .shipping-payment {
-    padding-left: 0;
-  }
+/* Reduce glow intensity if it feels too neon */
+h2,
+.order-summary h3,
+.shipping-payment h3 {
+  text-shadow: 0 0 5px rgba(187, 134, 252, 0.4);
 }
