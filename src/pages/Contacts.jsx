@@ -18,7 +18,6 @@ const Contacts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       alert("⚠️ All fields are required.");
       return;
@@ -27,7 +26,6 @@ const Contacts = () => {
     setLoading(true);
 
     try {
-      // Use relative path for production + local dev proxy
       const response = await axios.post("/api/contact", formData);
 
       if (response.status === 200) {
@@ -44,70 +42,95 @@ const Contacts = () => {
 
   return (
     <MainContent>
-      <div className="contacts-container">
-        <div className="contacts-info">
-          {/* ✅ Fixed mismatched tag */}
-          <h2>Contact Us</h2>
-          <p>We’d love to hear from you! Reach out anytime.</p>
+      <div className="max-w-5xl mx-auto p-6 md:p-12 bg-gradient-to-br from-[#3a0ca3] to-[#7209b7] rounded-xl shadow-2xl text-white font-poppins">
+        <div className="grid md:grid-cols-2 gap-10">
+          {/* Contact Info */}
+          <div className="flex flex-col justify-center space-y-6 p-6 bg-white/10 rounded-xl backdrop-blur-md shadow-lg border border-white/20">
+            <h2 className="text-4xl font-bold tracking-wide mb-2">Contact Us</h2>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              We’d love to hear from you! Reach out anytime.
+            </p>
 
-          <div className="contact-details">
-            <div>
-              <h3>Email</h3>
-              <a href="mailto:jblacccccc@gmail.com">jblacccccc@gmail.com</a>
-            </div>
-            <div>
-              <h3>Phone</h3>
-              <a href="tel:+254708892669">+254-708-892-669</a>
+            <div className="space-y-6 mt-6">
+              <div>
+                <h3 className="text-xl font-semibold mb-1">Email</h3>
+                <a
+                  href="mailto:jblacccccc@gmail.com"
+                  className="text-indigo-400 hover:text-indigo-600 transition-colors duration-300"
+                >
+                  jblacccccc@gmail.com
+                </a>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-1">Phone</h3>
+                <a
+                  href="tel:+254708892669"
+                  className="text-indigo-400 hover:text-indigo-600 transition-colors duration-300"
+                >
+                  +254-708-892-669
+                </a>
+              </div>
             </div>
           </div>
+
+          {/* Contact Form */}
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col bg-white/10 rounded-xl backdrop-blur-md shadow-lg border border-white/20 p-6 space-y-6"
+          >
+            <h2 className="text-3xl font-semibold text-white tracking-wide text-center">Send us a message</h2>
+
+            <label className="flex flex-col text-white font-medium">
+              Name
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your name"
+                required
+                disabled={loading}
+                className="mt-2 p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              />
+            </label>
+
+            <label className="flex flex-col text-white font-medium">
+              Email
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Your email"
+                required
+                disabled={loading}
+                className="mt-2 p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              />
+            </label>
+
+            <label className="flex flex-col text-white font-medium">
+              Message
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Your message"
+                rows="5"
+                required
+                disabled={loading}
+                className="mt-2 p-3 rounded-md bg-white/20 border border-white/30 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 transition-colors duration-300 font-semibold py-3 rounded-md shadow-md text-white"
+            >
+              {loading ? "Sending..." : "Send Message"}
+            </button>
+          </form>
         </div>
-
-        <form className="contact-form" onSubmit={handleSubmit}>
-          <h2>Send us a message</h2>
-
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Your name"
-              required
-              disabled={loading}
-            />
-          </label>
-
-          <label>
-            Email
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Your email"
-              required
-              disabled={loading}
-            />
-          </label>
-
-          <label>
-            Message
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Your message"
-              rows="5"
-              required
-              disabled={loading}
-            />
-          </label>
-
-          <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? "Sending..." : "Send Message"}
-          </button>
-        </form>
       </div>
     </MainContent>
   );
