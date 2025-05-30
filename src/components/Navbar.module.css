@@ -16,11 +16,12 @@
   color: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid rgba(138, 43, 226, 0.6);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .logo-link {
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: #fff;
   text-decoration: none;
@@ -28,7 +29,7 @@
 }
 
 .logo-link:hover {
-  color: #b47aff;
+  color: #c084fc;
 }
 
 .navbar-icons {
@@ -91,6 +92,7 @@
   border: none;
   text-align: left;
   transition: background 0.2s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 .profile-dropdown a:hover,
@@ -104,7 +106,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 12px 16px;
   background: rgba(28, 28, 28, 0.95);
   border-bottom: 2px solid #8a2be2;
   backdrop-filter: blur(10px);
@@ -122,11 +124,17 @@
   outline: none;
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-bar::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .search-bar:focus {
   box-shadow: 0 0 10px #8a2be2;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .search-close-btn {
