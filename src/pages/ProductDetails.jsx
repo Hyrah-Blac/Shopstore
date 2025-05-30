@@ -51,9 +51,10 @@ const ProductDetails = () => {
     }
   };
 
+  // Use your local fallback image in public folder
   const imageUrl = product?.image
     ? `${BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
-    : "https://via.placeholder.com/300x200?text=No+Image";
+    : "/placeholder.png";
 
   if (loading) {
     return <div className="product-details loading">Loading product...</div>;
@@ -74,7 +75,7 @@ const ProductDetails = () => {
           loading="lazy"
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = "https://via.placeholder.com/300x200?text=Image+Error";
+            e.target.src = "/placeholder.png"; // fallback on error
           }}
         />
         <div className="product-info">
