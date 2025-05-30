@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
-
 :root {
   --primary-purple: #8a2be2;
-  --dark-bg: #000000;
+  --dark-bg: #000;
   --card-bg: rgba(31, 31, 46, 0.6);
   --text-light: #e0e0e0;
   --glass-blur: blur(18px);
@@ -40,7 +38,6 @@
   font-size: 1.2rem;
   text-align: center;
   margin-top: 40px;
-  color: var(--text-light);
 }
 
 .continue-shopping-link {
@@ -49,12 +46,10 @@
   text-decoration: none;
   transition: color 0.3s ease;
 }
-
 .continue-shopping-link:hover {
   color: #ba68c8;
 }
 
-/* Responsive Grid */
 .cart-items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -86,7 +81,7 @@
 
 .cart-item-image {
   width: 100%;
-  height: 180px;
+  height: 220px;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 15px;
@@ -192,10 +187,10 @@
   }
 
   .cart-item-image {
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     margin-bottom: 0;
-    margin-right: 15px;
+    margin-right: 20px;
   }
 
   .cart-item-info {
@@ -215,7 +210,7 @@
 
   .cart-item-image {
     width: 100%;
-    height: 140px;
+    height: 180px;
     margin-right: 0;
   }
 
