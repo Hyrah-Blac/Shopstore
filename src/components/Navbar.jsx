@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 
-import "./Navbar.module.css"; // Optional: only if you're using CSS Modules
+import "./Navbar.css";
 
 const Navbar = ({ onFilter }) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -44,21 +44,6 @@ const Navbar = ({ onFilter }) => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        !event.target.closest(".navbar-icon")
-      ) {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const toggleProfileMenu = () => {
     if (isLoggedIn) {
       setIsProfileMenuOpen((prev) => !prev);
@@ -67,24 +52,13 @@ const Navbar = ({ onFilter }) => {
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
-        setIsProfileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const toggleSearchBar = () => {
     if (location.pathname === "/home") {
       setIsSearchOpen((prev) => {
         const newState = !prev;
         if (!newState) {
           setSearchTerm("");
-          if (onFilter) onFilter("");
+          onFilter?.("");
         }
         return newState;
       });
@@ -94,17 +68,40 @@ const Navbar = ({ onFilter }) => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    if (onFilter) onFilter(value);
+    onFilter?.(value);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !event.target.closest(".navbar-icon")
+      ) {
+        setIsSidebarOpen(false);
+      }
+
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <>
       <nav className="navbar">
-        <Link to="/home" className="logo-link">Dressin</Link>
+        <Link to="/home" className="logo-link">
+          Dressin
+        </Link>
 
         <div className="navbar-icons">
           <button
-            id="hamburger-icon"
             className="navbar-icon"
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
@@ -124,11 +121,7 @@ const Navbar = ({ onFilter }) => {
             </button>
           )}
 
-          <Link
-            to="/cart"
-            className="navbar-icon"
-            aria-label="Go to cart"
-          >
+          <Link to="/cart" className="navbar-icon" aria-label="Cart">
             <FaShoppingCart />
           </Link>
 
@@ -145,35 +138,24 @@ const Navbar = ({ onFilter }) => {
           <div className="profile-dropdown" ref={profileMenuRef}>
             <ul>
               <li>
-                <span className="block px-4 py-2 text-sm font-semibold text-white">
+                <span style={{ padding: "10px 16px", display: "block", color: "#fff", fontWeight: "bold" }}>
                   {localStorage.getItem("email") || "User"}
                 </span>
               </li>
               <li>
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 hover:bg-purple-600"
-                  onClick={() => setIsProfileMenuOpen(false)}
-                >
+                <Link to="/profile" onClick={() => setIsProfileMenuOpen(false)}>
                   My Profile
                 </Link>
               </li>
               {isAdmin && (
                 <li>
-                  <Link
-                    to="/admin"
-                    className="block px-4 py-2 hover:bg-purple-600"
-                    onClick={() => setIsProfileMenuOpen(false)}
-                  >
+                  <Link to="/admin" onClick={() => setIsProfileMenuOpen(false)}>
                     Admin Panel
                   </Link>
                 </li>
               )}
               <li>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left block px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-800"
-                >
+                <button onClick={handleLogout}>
                   Logout
                 </button>
               </li>
@@ -189,7 +171,7 @@ const Navbar = ({ onFilter }) => {
       )}
 
       {isSearchOpen && location.pathname === "/home" && (
-        <div className="search-container visible">
+        <div className="search-container">
           <input
             type="text"
             className="search-bar"
@@ -201,6 +183,7 @@ const Navbar = ({ onFilter }) => {
           <button
             className="search-close-btn"
             onClick={toggleSearchBar}
+            aria-label="Close search"
           >
             <FaTimes />
           </button>
