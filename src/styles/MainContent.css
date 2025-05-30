@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100vw;
   margin-top: 110px;
-  padding: 30px 16px;
+  padding: 30px 20px;
   min-height: calc(100vh - 110px);
   display: flex;
   flex-direction: column;
@@ -27,11 +27,14 @@
   padding: 20px;
   box-sizing: border-box;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(10px);
+  color: #fff;
 }
 
+/* Hover effect with neon glow */
 .product-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 25px rgba(144, 0, 255, 0.4);
+  box-shadow: 0 12px 25px rgba(144, 0, 255, 0.5);
 }
 
 /* Product image responsive styling */
@@ -40,12 +43,17 @@
   height: 220px;
   object-fit: cover;
   border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Extra responsive adjustments */
+/* Responsive tweaks */
 @media (max-width: 768px) {
   .product-image {
     height: 200px;
+  }
+
+  .product-card {
+    margin: 16px auto;
   }
 }
 
