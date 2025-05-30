@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-// Corrected import paths based on your folder structure
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/axiosConfig"; // ✅ Correct import path
+import api from "../utils/axiosConfig"; // Your configured Axios instance
 
 import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
@@ -15,6 +15,7 @@ const Home = ({ searchTerm }) => {
     const fetchProducts = async () => {
       try {
         const response = await api.get("/products");
+        // Ensure data is an array
         const data = Array.isArray(response.data) ? response.data : [];
         setProducts(data);
         setFilteredProducts(data);

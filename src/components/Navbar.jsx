@@ -9,7 +9,6 @@ import {
 } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 
-// Import styles as CSS module
 import styles from "./Navbar.module.css";
 
 const Navbar = ({ onFilter }) => {

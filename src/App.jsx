@@ -38,6 +38,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Layout wraps all routes that share common UI (navbar, sidebar) */}
         <Route element={<Layout onFilter={setSearchTerm} />}>
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home searchTerm={searchTerm} />} />
@@ -45,6 +46,8 @@ const App = () => {
           <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+
+          {/* Admin routes - protected */}
           <Route
             path="/admin"
             element={
@@ -87,8 +90,11 @@ const App = () => {
           />
         </Route>
 
+        {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
+        {/* Catch-all 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
