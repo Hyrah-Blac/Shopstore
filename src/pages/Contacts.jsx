@@ -26,7 +26,10 @@ const Contacts = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/contact", formData);
+      // Use your actual backend URL deployed on Render
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+      const response = await axios.post(`${API_BASE_URL}/api/contact`, formData);
 
       if (response.status === 200) {
         alert("✅ Message sent successfully!");
