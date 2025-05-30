@@ -48,17 +48,26 @@ const Checkout = () => {
             <h2>Items in Cart</h2>
             <ul>
               {cartItems.map((item, index) => {
-                const imageUrl = item.image?.startsWith("http")
-                  ? item.image
-                  : `/assets/${item.image?.replace(/^\//, "")}` || "https://via.placeholder.com/100?text=No+Image";
+                const imageUrl =
+                  item.image && !item.image.startsWith("http")
+                    ? `/assets/${item.image.replace(/^\//, "")}`
+                    : item.image || "/placeholder.png";
 
                 return (
                   <li key={`${item.id}-${index}`} className="checkout-item">
-                    <img src={imageUrl} alt={item.name} className="checkout-img" />
+                    <img
+                      src={imageUrl}
+                      alt={item.name || "Product"}
+                      className="checkout-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/placeholder.png";
+                      }}
+                    />
                     <div className="checkout-details">
-                      <p><strong>{item.name}</strong></p>
-                      <p>Price: KSh {parseInt(item.price).toLocaleString()}</p>
-                      <p>Qty: {item.quantity}</p>
+                      <p><strong>{item.name || "Unnamed Product"}</strong></p>
+                      <p>Price: KSh {parseInt(item.price || 0).toLocaleString()}</p>
+                      <p>Qty: {item.quantity || 1}</p>
                     </div>
                   </li>
                 );
