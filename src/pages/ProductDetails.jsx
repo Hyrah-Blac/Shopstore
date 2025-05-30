@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import api from "../utils/axiosConfig"; // Centralized Axios config
-import { BACKEND_URL } from "../utils/api"; // Use backend URL helper
+import api from "../utils/axiosConfig";
+import { BACKEND_URL } from "../utils/api";
 import { useCart } from "../context/CartContext";
 import "./ProductDetails.css";
 
@@ -59,7 +59,7 @@ const ProductDetails = () => {
     return <div className="error-message">{error}</div>;
   }
 
-  // Construct image URL same as homepage
+  // Construct image URL exactly as homepage expects
   const imageUrl = product.image
     ? `${BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
     : "https://via.placeholder.com/300x200?text=No+Image";
@@ -74,15 +74,13 @@ const ProductDetails = () => {
           className="product-image"
           loading="lazy"
           onError={(e) => {
-            e.target.onerror = null; // prevent looping
+            e.target.onerror = null; // prevent infinite loop if placeholder fails
             e.target.src = "https://via.placeholder.com/300x200?text=Image+Error";
           }}
         />
         <div className="product-info">
           <h2>{product.name}</h2>
-          <p>
-            <strong>Description:</strong> {product.description}
-          </p>
+          <p><strong>Description:</strong> {product.description}</p>
           <p className="price">
             <strong>Price:</strong> KSh {parseInt(product.price).toLocaleString()}
           </p>
