@@ -1,16 +1,15 @@
-// src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { BACKEND_URL } from "../utils/api"; // ✅ Import backend URL
+import { BACKEND_URL } from "../utils/api";
 
 const ProductCard = ({ product }) => {
   const imageUrl = product.imageUrl
     ? `${BACKEND_URL}${product.imageUrl}`
-    : "/assets/placeholder.png"; // ✅ Use local placeholder
+    : "/placeholder.png"; // ✅ Correct local reference
 
   const handleImageError = (e) => {
-    console.warn("Image failed to load:", e.target.src);
-    e.target.src = "/assets/placeholder.png"; // ✅ Local fallback
+    e.target.onerror = null; // Prevent infinite loop
+    e.target.src = "/placeholder.png"; // ✅ Use local public placeholder
   };
 
   return (
