@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 
-import "./Navbar.css";
+import "./Navbar.module.css";
 
 const Navbar = ({ onFilter }) => {
   const [isAdmin, setIsAdmin] = useState(false);
