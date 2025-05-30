@@ -51,18 +51,17 @@ const ProductDetails = () => {
     }
   };
 
+  const imageUrl = product?.image
+    ? `${BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
+    : "https://via.placeholder.com/300x200?text=No+Image";
+
   if (loading) {
-    return <div className="loading">Loading product...</div>;
+    return <div className="product-details loading">Loading product...</div>;
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return <div className="product-details error-message">{error}</div>;
   }
-
-  // Construct image URL exactly as homepage expects
-  const imageUrl = product.image
-    ? `${BACKEND_URL}/assets/${product.image.replace(/^\/+/, "")}`
-    : "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
     <div className="product-details">
@@ -74,7 +73,7 @@ const ProductDetails = () => {
           className="product-image"
           loading="lazy"
           onError={(e) => {
-            e.target.onerror = null; // prevent infinite loop if placeholder fails
+            e.target.onerror = null;
             e.target.src = "https://via.placeholder.com/300x200?text=Image+Error";
           }}
         />
