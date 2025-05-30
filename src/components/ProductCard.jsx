@@ -36,4 +36,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-6
