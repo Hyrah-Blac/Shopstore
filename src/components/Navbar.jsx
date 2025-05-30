@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -6,11 +5,11 @@ import {
   FaShoppingCart,
   FaUser,
   FaBars,
-  FaTimes
+  FaTimes,
 } from "react-icons/fa";
+import Sidebar from "./Sidebar";
 
-import "./Navbar.module.css";
-import Sidebar from "./Sidebar"; // ✅ Assumes Sidebar uses default export
+import "./Navbar.module.css"; // Optional: only if you're using CSS Modules
 
 const Navbar = ({ onFilter }) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -19,12 +18,12 @@ const Navbar = ({ onFilter }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
   const profileMenuRef = useRef(null);
   const sidebarRef = useRef(null);
 
-  // Check login status and role
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -33,7 +32,6 @@ const Navbar = ({ onFilter }) => {
     setIsAdmin(role === "admin");
   }, []);
 
-  // Handle logout
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -42,12 +40,10 @@ const Navbar = ({ onFilter }) => {
     navigate("/home");
   };
 
-  // Toggle sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  // Close sidebar if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -60,11 +56,9 @@ const Navbar = ({ onFilter }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Toggle profile menu
   const toggleProfileMenu = () => {
     if (isLoggedIn) {
       setIsProfileMenuOpen((prev) => !prev);
@@ -73,23 +67,17 @@ const Navbar = ({ onFilter }) => {
     }
   };
 
-  // Close profile dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(e.target)
-      ) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
         setIsProfileMenuOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Toggle search bar
   const toggleSearchBar = () => {
     if (location.pathname === "/home") {
       setIsSearchOpen((prev) => {
@@ -115,53 +103,44 @@ const Navbar = ({ onFilter }) => {
         <Link to="/home" className="logo-link">Dressin</Link>
 
         <div className="navbar-icons">
-          {/* Hamburger */}
           <button
             id="hamburger-icon"
             className="navbar-icon"
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
             aria-expanded={isSidebarOpen}
-            tabIndex={0}
           >
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
 
-          {/* Search Button */}
           {location.pathname === "/home" && (
             <button
               className="navbar-icon"
               onClick={toggleSearchBar}
               aria-label="Toggle search bar"
               aria-expanded={isSearchOpen}
-              tabIndex={0}
             >
               <FaSearch />
             </button>
           )}
 
-          {/* Cart Button */}
           <Link
             to="/cart"
             className="navbar-icon"
             aria-label="Go to cart"
-            tabIndex={0}
           >
             <FaShoppingCart />
           </Link>
 
-          {/* User Button */}
           <button
             className="navbar-icon"
             onClick={toggleProfileMenu}
             aria-label={isLoggedIn ? "Open profile menu" : "Login"}
-            tabIndex={0}
           >
             <FaUser />
           </button>
         </div>
 
-        {/* Profile Dropdown */}
         {isProfileMenuOpen && (
           <div className="profile-dropdown" ref={profileMenuRef}>
             <ul>
@@ -194,7 +173,6 @@ const Navbar = ({ onFilter }) => {
                 <button
                   onClick={handleLogout}
                   className="w-full text-left block px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-800"
-                  aria-label="Logout"
                 >
                   Logout
                 </button>
@@ -204,7 +182,12 @@ const Navbar = ({ onFilter }) => {
         )}
       </nav>
 
-      {/* Search Bar */}
+      {isSidebarOpen && (
+        <div ref={sidebarRef}>
+          <Sidebar />
+        </div>
+      )}
+
       {isSearchOpen && location.pathname === "/home" && (
         <div className="search-container visible">
           <input
@@ -214,12 +197,10 @@ const Navbar = ({ onFilter }) => {
             value={searchTerm}
             onChange={handleSearchChange}
             autoFocus
-            aria-label="Search products"
           />
           <button
             className="search-close-btn"
             onClick={toggleSearchBar}
-            aria-label="Close search"
           >
             <FaTimes />
           </button>
@@ -229,4 +210,4 @@ const Navbar = ({ onFilter }) => {
   );
 };
 
-export default Navbar; // ✅ This line fixes the error
+export default Navbar;
