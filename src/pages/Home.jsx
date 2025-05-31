@@ -5,7 +5,7 @@ import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
-const Home = ({ searchTerm = "" }) => {  // <-- default to empty string
+const Home = ({ searchTerm = "" }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);

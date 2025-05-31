@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import { BACKEND_URL } from "../utils/api";
 
 const ProductCard = ({ product }) => {
-  // Ensure BACKEND_URL ends with a slash to avoid URL errors
   const baseUrl = BACKEND_URL.endsWith("/") ? BACKEND_URL : BACKEND_URL + "/";
   const imageUrl = product.imageUrl
-    ? `${baseUrl}${product.imageUrl.replace(/^\/+/, "")}`  // remove leading slash if present
+    ? `${baseUrl}${product.imageUrl.replace(/^\/+/, "")}`
     : "/placeholder.png";
 
   const handleImageError = (e) => {
@@ -22,17 +21,21 @@ const ProductCard = ({ product }) => {
         hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
         transition-shadow duration-300
         min-h-[400px]
+        max-w-[280px]  // limit max width
+        mx-auto        // center horizontally if space available
       "
     >
-      {/* Use aspect-w-4 aspect-h-3 for 4:3 aspect ratio container */}
-      <div className="relative w-full rounded-md overflow-hidden mb-4 shadow-sm">
+      {/* Aspect ratio 4:3 container */}
+      <div
+        className="relative w-full rounded-md overflow-hidden mb-4 shadow-sm"
+        style={{ paddingTop: "75%" }} // 4:3 aspect ratio (height = 75% width)
+      >
         <img
           src={imageUrl}
           alt={product.name || "Product"}
           loading="lazy"
           onError={handleImageError}
-          className="w-full h-[240px] object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ borderRadius: "0.375rem" }} // rounded-md equivalent
+          className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-105 rounded-md"
         />
       </div>
 
