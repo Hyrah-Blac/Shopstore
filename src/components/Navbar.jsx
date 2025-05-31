@@ -42,11 +42,21 @@ const Navbar = ({ onFilter }) => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
+    // When opening sidebar, close profile menu and search
+    if (!isSidebarOpen) {
+      setIsProfileMenuOpen(false);
+      setIsSearchOpen(false);
+    }
   };
 
   const toggleProfileMenu = () => {
     if (isLoggedIn) {
       setIsProfileMenuOpen((prev) => !prev);
+      // Close sidebar and search when profile opens
+      if (!isProfileMenuOpen) {
+        setIsSidebarOpen(false);
+        setIsSearchOpen(false);
+      }
     } else {
       navigate("/login");
     }
@@ -56,7 +66,11 @@ const Navbar = ({ onFilter }) => {
     if (location.pathname === "/home") {
       setIsSearchOpen((prev) => {
         const newState = !prev;
-        if (!newState) {
+        if (newState) {
+          // When search opens, close sidebar and profile menu
+          setIsSidebarOpen(false);
+          setIsProfileMenuOpen(false);
+        } else {
           setSearchTerm("");
           onFilter?.("");
         }
@@ -71,27 +85,47 @@ const Navbar = ({ onFilter }) => {
     onFilter?.(value);
   };
 
+  // Click outside handler to close menus
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Sidebar close if click outside sidebar and outside sidebar button
       if (
+        isSidebarOpen &&
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target) &&
-        !event.target.closest(`.${styles["navbar-icon"]}`)
+        !event.target.closest(`.${styles["navbar-icon"]}`) // prevents close if click on toggle button
       ) {
         setIsSidebarOpen(false);
       }
 
+      // Profile menu close if click outside profile menu and outside profile icon
       if (
+        isProfileMenuOpen &&
         profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target)
+        !profileMenuRef.current.contains(event.target) &&
+        !event.target.closest(`.${styles["navbar-icon"]}`) // prevents close if click on profile icon button
       ) {
         setIsProfileMenuOpen(false);
+      }
+
+      // Close search bar if clicking outside search input or close button
+      if (
+        isSearchOpen &&
+        !event.target.closest(`.${styles["search-container"]}`) &&
+        !event.target.closest(`.${styles["navbar-icon"]}`)
+      ) {
+        setIsSearchOpen(false);
+        setSearchTerm("");
+        onFilter?.("");
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [styles]);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSidebarOpen, isProfileMenuOpen, isSearchOpen, onFilter, styles]);
 
   return (
     <>
