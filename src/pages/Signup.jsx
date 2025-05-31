@@ -16,22 +16,29 @@ const Signup = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const showToast = (type, message, options = {}) => {
+    const config = {
+      position: "top-center",
+      autoClose: 4000,
+      theme: "colored",
+      ...options,
+    };
+    type === "success" ? toast.success(message, config) : toast.error(message, config);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { name, email, password, confirmPassword } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
-      toast.error("⚠️ All fields are required.");
-      return;
+      return showToast("error", "⚠️ All fields are required.");
     }
 
     if (password !== confirmPassword) {
-      toast.error("🚫 Passwords do not match");
-      return;
+      return showToast("error", "🚫 Passwords do not match.");
     }
 
     try {
@@ -42,65 +49,33 @@ const Signup = () => {
       });
 
       const text = await response.text();
-
-      if (text.startsWith("<!DOCTYPE")) {
-        throw new Error("Server returned HTML. Check if route exists.");
-      }
+      if (text.startsWith("<!DOCTYPE")) throw new Error("Invalid response from server.");
 
       const data = JSON.parse(text);
 
       if (response.ok && data.token) {
-        toast.success(
-          <div>
+        showToast(
+          "success",
+          <>
             <strong>🎉 Signup successful!</strong>
-            <div>Redirecting you to login...</div>
-          </div>,
-          {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          }
+            <div>Redirecting to login...</div>
+          </>,
+          { autoClose: 3000 }
         );
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+        setTimeout(() => navigate("/login"), 3000);
       } else {
-        toast.error(data.message || "❌ Signup failed", {
-          position: "top-center",
-          autoClose: 4000,
-          theme: "colored",
-        });
+        showToast("error", data.message || "❌ Signup failed.");
       }
-    } catch (error) {
-      console.error("Error during signup:", error.message);
-      toast.error("⚠️ Something went wrong. Check console for details.", {
-        position: "top-center",
-        autoClose: 4000,
-        theme: "colored",
-      });
+    } catch (err) {
+      console.error("Signup error:", err);
+      showToast("error", "⚠️ Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="signup-container">
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer />
+
       <div className="signup-form">
         <h2>Create Account</h2>
         <p>Sign up and start your journey</p>
@@ -110,54 +85,58 @@ const Signup = () => {
             <label htmlFor="name">Full Name</label>
             <input
               id="name"
-              type="text"
               name="name"
+              type="text"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
-              required
               autoComplete="name"
+              required
             />
           </div>
+
           <div className="input-group">
             <label htmlFor="email">Email Address</label>
             <input
               id="email"
-              type="email"
               name="email"
+              type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email address"
-              required
+              placeholder="Enter your email"
               autoComplete="email"
+              required
             />
           </div>
+
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
               id="password"
-              type="password"
               name="password"
+              type="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter a password"
-              required
+              placeholder="Create a password"
               autoComplete="new-password"
+              required
             />
           </div>
+
           <div className="input-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               id="confirmPassword"
-              type="password"
               name="confirmPassword"
+              type="password"
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Re-enter your password"
-              required
               autoComplete="new-password"
+              required
             />
           </div>
+
           <button type="submit" className="btn">
             Sign Up
           </button>
