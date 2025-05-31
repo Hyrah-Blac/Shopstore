@@ -21,14 +21,14 @@ const ProductCard = ({ product }) => {
         hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
         transition-shadow duration-300
         min-h-[400px]
-        max-w-[280px]  // limit max width
-        mx-auto        // center horizontally if space available
+        max-w-[280px]
+        w-full
+        mx-auto
       "
     >
-      {/* Aspect ratio 4:3 container */}
       <div
         className="relative w-full rounded-md overflow-hidden mb-4 shadow-sm"
-        style={{ paddingTop: "75%" }} // 4:3 aspect ratio (height = 75% width)
+        style={{ paddingTop: "75%", maxHeight: "240px" }}
       >
         <img
           src={imageUrl}
