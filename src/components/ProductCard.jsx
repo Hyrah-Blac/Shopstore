@@ -16,19 +16,20 @@ const ProductCard = ({ product }) => {
   return (
     <div
       className="
-        flex flex-col bg-white rounded-lg p-3
+        flex flex-col bg-white rounded-lg p-4
         shadow-md
         hover:shadow-[0_0_10px_4px_#8a2be2,0_0_20px_8px_#7209b7]
         transition-shadow duration-300
-        min-h-[320px]
         max-w-[220px]
         w-full
         mx-auto
+        overflow-hidden
       "
+      style={{ minHeight: "350px" }}
     >
       {/* Aspect ratio ~3:2 container */}
       <div
-        className="relative w-full rounded-md overflow-hidden mb-3 shadow-sm"
+        className="relative w-full rounded-md overflow-hidden mb-3 shadow-sm bg-gray-100"
         style={{ paddingTop: "60%", maxHeight: "180px" }}
       >
         <img
@@ -41,7 +42,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="flex flex-col flex-grow">
-        <h3 className="text-base font-semibold mb-1 flex-grow text-gray-900">
+        <h3 className="text-base font-semibold mb-1 flex-grow text-gray-900 break-words">
           {product.name}
         </h3>
         <p className="text-indigo-600 font-semibold mb-3">

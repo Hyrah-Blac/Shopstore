@@ -74,7 +74,10 @@ const Home = ({ searchTerm = "" }) => {
             <span className="font-semibold text-purple-400">"{searchTerm}"</span>
           </p>
         ) : (
-          <div className="product-list grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div
+            className="product-list grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+            style={{ maxWidth: "1280px", margin: "0 auto", overflow: "visible" }}
+          >
             {filteredProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
