@@ -41,13 +41,12 @@ const Signup = () => {
         body: JSON.stringify({ name, email, password }),
       });
 
-      const text = await response.text();
-
-      if (text.startsWith("<!DOCTYPE")) {
-        throw new Error("Server returned HTML. Check if route exists.");
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Server returned invalid JSON or HTML instead of JSON");
       }
-
-      const data = JSON.parse(text);
 
       if (response.ok && data.token) {
         toast.success(
@@ -58,11 +57,6 @@ const Signup = () => {
           {
             position: "top-center",
             autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
             theme: "colored",
           }
         );
