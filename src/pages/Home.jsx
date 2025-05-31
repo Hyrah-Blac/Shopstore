@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/axiosConfig"; // Your configured Axios instance
+import api from "../utils/axiosConfig";
 
 import MainContent from "../components/MainContent.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
-const Home = ({ searchTerm }) => {
+const Home = ({ searchTerm = "" }) => {  // <-- default to empty string
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ const Home = ({ searchTerm }) => {
   }, []);
 
   useEffect(() => {
-    if (!searchTerm) {
+    if (!searchTerm.trim()) {
       setFilteredProducts(products);
     } else {
       const filtered = products.filter((product) =>

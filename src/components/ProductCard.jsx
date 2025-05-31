@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { BACKEND_URL } from "../utils/api";
 
 const ProductCard = ({ product }) => {
+  // Ensure BACKEND_URL ends with a slash to avoid URL errors
+  const baseUrl = BACKEND_URL.endsWith("/") ? BACKEND_URL : BACKEND_URL + "/";
   const imageUrl = product.imageUrl
-    ? `${BACKEND_URL}${product.imageUrl}`
+    ? `${baseUrl}${product.imageUrl.replace(/^\/+/, "")}`  // remove leading slash if present
     : "/placeholder.png";
 
   const handleImageError = (e) => {
@@ -34,7 +36,7 @@ const ProductCard = ({ product }) => {
           {product.name}
         </h3>
         <p className="product-price text-indigo-600 font-semibold mb-4">
-          KSh {parseInt(product.price).toLocaleString()}
+          KSh {parseInt(product.price, 10).toLocaleString()}
         </p>
         <Link
           to={`/product-details/${product._id}`}
