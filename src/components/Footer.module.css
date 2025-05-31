@@ -1,48 +1,32 @@
-/* src/components/Footer.module.css */
 .footer {
-  background-color: #1c1c1c;
-  color: white;
-  padding: 20px 10px;
-  text-align: center;
-  font-size: 12px;
-  border-top: 1px solid #333;
-  width: 100%;
   position: sticky;
   bottom: 0;
+  width: 100%;
+  background: #1c1c1c;
+  color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
   z-index: 10;
-  animation: fadeInUp 0.6s ease-out;
 }
 
 .content {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .socials {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .socials a {
-  color: #8a2be2;
-  font-size: 16px;
-  transition: transform 0.3s ease, color 0.3s ease;
+  color: #fff;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
 }
 
 .socials a:hover {
-  color: #b084f7;
-  transform: scale(1.2);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  color: #a855f7; /* Stylish purple hover */
 }
