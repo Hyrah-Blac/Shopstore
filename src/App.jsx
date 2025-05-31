@@ -18,7 +18,7 @@ import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 
 // Styles
-import "./App.css";
+
 import "./styles/MainContent.css";
 
 // ProtectedRoute Utility

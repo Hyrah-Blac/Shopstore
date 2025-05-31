@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { CartProvider } from "./context/CartContext";
-import "./index.css";              // Tailwind base + global styles
+             
 import "./styles/MainContent.css"; // Your custom CSS
 
 // Enable dark mode on document root
