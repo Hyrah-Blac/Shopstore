@@ -24,15 +24,20 @@ const ProductCard = ({ product }) => {
         min-h-[400px]
       "
     >
-      <img
-        src={imageUrl}
-        alt={product.name || "Product"}
-        loading="lazy"
-        onError={handleImageError}
-        className="h-48 w-full object-cover rounded-md mb-4 flex-shrink-0"
-      />
+      {/* Use aspect-w-4 aspect-h-3 for 4:3 aspect ratio container */}
+      <div className="relative w-full rounded-md overflow-hidden mb-4 shadow-sm">
+        <img
+          src={imageUrl}
+          alt={product.name || "Product"}
+          loading="lazy"
+          onError={handleImageError}
+          className="w-full h-[240px] object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+          style={{ borderRadius: "0.375rem" }} // rounded-md equivalent
+        />
+      </div>
+
       <div className="flex flex-col flex-grow">
-        <h3 className="product-name text-lg font-semibold mb-2 flex-grow">
+        <h3 className="product-name text-lg font-semibold mb-2 flex-grow text-gray-900">
           {product.name}
         </h3>
         <p className="product-price text-indigo-600 font-semibold mb-4">
