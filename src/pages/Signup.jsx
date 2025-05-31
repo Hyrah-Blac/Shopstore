@@ -4,6 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Signup.css";
 
+const BACKEND_URL = "https://your-render-backend.onrender.com"; // Replace with your actual backend URL
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -35,7 +37,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -50,10 +52,10 @@ const Signup = () => {
 
       if (response.ok && data.token) {
         toast.success(
-          <div>
+          <>
             <strong>🎉 Signup successful!</strong>
             <div>Redirecting you to login...</div>
-          </div>,
+          </>,
           {
             position: "top-center",
             autoClose: 3000,
