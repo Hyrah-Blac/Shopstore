@@ -1,0 +1,53 @@
+/* Home.css */
+
+.home-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem; /* Matches px-4 */
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; /* gap-6 */
+}
+
+@media (min-width: 640px) {
+  /* sm breakpoint */
+  .product-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  /* md breakpoint */
+  .product-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* lg breakpoint */
+  .product-list {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.product-list > * {
+  /* Ensure product cards do not overflow */
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.home-page p {
+  color: #d1d5db; /* text-gray-300 */
+  font-style: italic;
+  margin-top: 3rem; /* mt-12 */
+  text-align: center;
+}
+
+.home-page p span {
+  color: #a78bfa; /* text-purple-400 */
+  font-weight: 600;
+}
