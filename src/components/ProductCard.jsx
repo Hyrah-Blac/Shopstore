@@ -16,13 +16,15 @@ const ProductCard = ({ product }) => {
   return (
     <div
       className="
-        flex flex-col bg-white rounded-lg p-4
+        flex flex-col bg-white bg-opacity-10 rounded-lg p-4
         shadow-md
         hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
         transition-shadow duration-300
         min-h-[400px]
-        max-w-[280px]  // limit max width
-        mx-auto        // center horizontally if space available
+        max-w-[280px]
+        mx-auto
+        backdrop-filter backdrop-blur-lg
+        border border-purple-600 border-opacity-30
       "
     >
       {/* Aspect ratio 4:3 container */}
@@ -40,15 +42,15 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="flex flex-col flex-grow">
-        <h3 className="product-name text-lg font-semibold mb-2 flex-grow text-gray-900">
+        <h3 className="product-name text-lg font-semibold mb-2 flex-grow text-white drop-shadow-md">
           {product.name}
         </h3>
-        <p className="product-price text-indigo-600 font-semibold mb-4">
+        <p className="product-price text-indigo-400 font-semibold mb-4">
           KSh {parseInt(product.price, 10).toLocaleString()}
         </p>
         <Link
           to={`/product-details/${product._id}`}
-          className="mt-auto inline-block text-indigo-700 hover:text-indigo-900 font-medium"
+          className="mt-auto inline-block text-indigo-300 hover:text-indigo-600 font-medium transition-colors duration-200"
         >
           View Details
         </Link>
