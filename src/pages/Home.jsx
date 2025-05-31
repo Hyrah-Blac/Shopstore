@@ -15,7 +15,6 @@ const Home = ({ searchTerm }) => {
     const fetchProducts = async () => {
       try {
         const response = await api.get("/products");
-        // Ensure data is an array
         const data = Array.isArray(response.data) ? response.data : [];
         setProducts(data);
         setFilteredProducts(data);
@@ -68,7 +67,7 @@ const Home = ({ searchTerm }) => {
         Our Latest Collection
       </h2>
 
-      <div className="home-page w-full px-2 sm:px-6 md:px-10 max-w-[1440px] mx-auto">
+      <div className="home-page w-full px-4 sm:px-6 md:px-10 max-w-[1280px] mx-auto">
         {filteredProducts.length === 0 ? (
           <p className="text-center text-lg text-gray-300 italic mt-12">
             No products found for{" "}
