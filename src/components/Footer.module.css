@@ -1,29 +1,48 @@
-/* src/components/Footer.css */
-
+/* src/components/Footer.module.css */
 .footer {
-  background-color: #000000;
+  background-color: #1c1c1c;
   color: white;
+  padding: 20px 10px;
   text-align: center;
-  padding: 20px 0;
-  margin-top: 40px;
-  position: relative;
-  bottom: 0;
+  font-size: 12px;
+  border-top: 1px solid #333;
   width: 100%;
-  border-top: 1px solid #222;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
-  font-size: 15px;
-  z-index: 1000;
-  font-family: "Avenir", sans-serif;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  animation: fadeInUp 0.6s ease-out;
 }
 
-.footer a {
-  color: #6200ea;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: 500;
-  transition: color 0.3s ease;
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.footer a:hover {
-  color: #4e00b3;
+.socials {
+  display: flex;
+  gap: 16px;
+}
+
+.socials a {
+  color: #8a2be2;
+  font-size: 16px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.socials a:hover {
+  color: #b084f7;
+  transform: scale(1.2);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

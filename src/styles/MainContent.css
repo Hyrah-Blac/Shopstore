@@ -14,8 +14,8 @@ html {
 body {
   margin: 0;
   padding-top: 60px; /* Adjust if navbar height changes */
-  background-color: #000000;
-  color: #eee; /* slightly lighter than pure white for less eye strain */
+  background-color: #000;
+  color: #eee;
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
   line-height: 1.4;
@@ -28,23 +28,23 @@ body {
 ================================ */
 ::-webkit-scrollbar {
   width: 8px;
-  background-color: #121212; /* dark track */
+  background-color: #121212;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #333333;
+  background-color: #333;
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #555555;
+  background-color: #555;
 }
 
-/* For Firefox */
+/* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #333333 #121212;
+  scrollbar-color: #333 #121212;
 }
 
 /* ================================
@@ -63,7 +63,6 @@ body {
   color: #f0eaff;
   backdrop-filter: blur(8px);
   border-radius: 16px;
-  box-sizing: border-box;
   overflow-y: auto;
   box-shadow: 0 8px 30px rgba(114, 9, 183, 0.7);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -99,9 +98,9 @@ textarea {
   padding: 6px 10px;
   border-radius: 4px;
   border: 1px solid transparent;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   background-color: #1c1c1c;
   color: #eee;
+  transition: all 0.3s ease;
 }
 
 button {
@@ -161,10 +160,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   padding: 20px;
-  box-sizing: border-box;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   backdrop-filter: blur(10px);
   color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover,
@@ -176,13 +174,12 @@ h1, h2, h3, h4, h5, h6 {
 .product-image {
   width: 100%;
   max-height: 220px;
-  height: auto;
   object-fit: contain;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  user-select: none;
   display: block;
   margin: 0 auto;
+  user-select: none;
 }
 
 /* ================================
@@ -197,7 +194,7 @@ table {
 th,
 td {
   padding: 8px 10px;
-  border: 1px solid #333333;
+  border: 1px solid #333;
   font-size: 12px;
   text-align: left;
   color: #ddd;
@@ -221,7 +218,7 @@ input[type="password"],
 textarea {
   background-color: #1c1c1c;
   color: white;
-  border: 1px solid #333333;
+  border: 1px solid #333;
   padding: 8px 10px;
   border-radius: 6px;
   transition: border-color 0.3s ease;
@@ -265,7 +262,7 @@ a:focus {
 
 .sidebar ul li a:hover,
 .sidebar ul li a:focus {
-  background-color: #3a0ca3;
+  background-color: #04020a;
   color: white;
   outline: none;
 }
