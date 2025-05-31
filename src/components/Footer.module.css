@@ -1,32 +1,25 @@
+/* On the page container (e.g. #root or body) */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Your main content fills available space */
+.main-content {
+  flex: 1;
+}
+
+/* Footer at bottom */
 .footer {
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-  background: #1c1c1c;
+  background: #000000; /* Pitch black */
   color: #fff;
   padding: 1rem 2rem;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
-  z-index: 10;
-}
-
-.content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.socials {
-  display: flex;
-  gap: 1rem;
-}
-
-.socials a {
-  color: #fff;
-  font-size: 1.2rem;
-  transition: color 0.3s ease;
-}
-
-.socials a:hover {
-  color: #a855f7; /* Stylish purple hover */
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.7);
+  /* no position needed here */
 }
