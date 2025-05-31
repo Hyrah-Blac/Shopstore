@@ -4,7 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Signup.css";
 
-const BACKEND_URL = "https:backend-5za1.onrender.com"; // Replace with your actual backend URL
+// Make sure the URL starts with https:// or http://
+const BACKEND_URL = "https://backend-5za1.onrender.com"; // Corrected backend URL
 
 const Signup = () => {
   const [formData, setFormData] = useState({
