@@ -16,19 +16,20 @@ const ProductCard = ({ product }) => {
   return (
     <div
       className="
-        flex flex-col bg-white rounded-lg p-4
+        flex flex-col bg-white rounded-lg p-3
         shadow-md
-        hover:shadow-[0_0_15px_5px_#8a2be2,0_0_30px_10px_#7209b7]
+        hover:shadow-[0_0_10px_4px_#8a2be2,0_0_20px_8px_#7209b7]
         transition-shadow duration-300
-        min-h-[400px]
-        max-w-[280px]  // limit max width
-        mx-auto        // center horizontally if space available
+        min-h-[320px]
+        max-w-[220px]
+        w-full
+        mx-auto
       "
     >
-      {/* Aspect ratio 4:3 container */}
+      {/* Aspect ratio ~3:2 container */}
       <div
-        className="relative w-full rounded-md overflow-hidden mb-4 shadow-sm"
-        style={{ paddingTop: "75%" }} // 4:3 aspect ratio (height = 75% width)
+        className="relative w-full rounded-md overflow-hidden mb-3 shadow-sm"
+        style={{ paddingTop: "60%", maxHeight: "180px" }}
       >
         <img
           src={imageUrl}
@@ -40,10 +41,10 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="flex flex-col flex-grow">
-        <h3 className="product-name text-lg font-semibold mb-2 flex-grow text-gray-900">
+        <h3 className="text-base font-semibold mb-1 flex-grow text-gray-900">
           {product.name}
         </h3>
-        <p className="product-price text-indigo-600 font-semibold mb-4">
+        <p className="text-indigo-600 font-semibold mb-3">
           KSh {parseInt(product.price, 10).toLocaleString()}
         </p>
         <Link
