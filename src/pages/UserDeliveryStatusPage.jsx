@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import './UserDeliveryStatus.css';
 
 const UserDeliveryStatusPage = () => {
-  const { orderId } = useParams();
+  const params = useParams();
+  const orderId = params.orderId || localStorage.getItem("lastOrderId");
+
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
