@@ -101,23 +101,23 @@ const App = () => {
             }
           />
 
-          {/* User-only routes */}
-          <Route
-            path="/user-delivery-status"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/user-delivery-status/:orderId"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+  path="/user-delivery-status"
+  element={
+    <ProtectedRoute>
+      <UserDeliveryStatusPage />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/user-delivery-status/:orderId"
+  element={
+    <ProtectedRoute>
+      <UserDeliveryStatusPage />
+    </ProtectedRoute>
+  }
+/>
+
         </Route>
 
         {/* Public pages */}

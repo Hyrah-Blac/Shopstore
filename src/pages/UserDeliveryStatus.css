@@ -1,26 +1,27 @@
-/* Base page styles */
+/* Container for the page */
 .uds-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Title at top */
+/* Main title */
 .uds-title {
   text-align: center;
   color: #A5B4FC; /* indigo-300 */
   letter-spacing: 1px;
 }
 
-/* Loading and “no orders” messages */
+/* State messages */
 .uds-loading,
+.uds-no-id,
 .uds-no-orders,
-.uds-no-phone {
+.uds-error {
   text-align: center;
   font-size: 1.1rem;
   color: #9CA3AF; /* gray-400 */
   margin-top: 2rem;
 }
 
-/* Each order card */
+/* Individual order card */
 .uds-order-card {
   border: 1px solid #374151; /* gray-700 */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -30,18 +31,19 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Order header: ID + status */
+/* Order header (ID + status) */
 .uds-order-header {
   border-bottom: 1px solid #4B5563; /* gray-600 */
+  padding-bottom: 0.5rem;
 }
 .uds-order-id {
-  color: #FFFFFF; /* white */
+  color: #FFFFFF;
 }
 .uds-order-status {
   color: #6366F1; /* indigo-400 */
 }
 
-/* Products grid inside each order */
+/* Grid of products inside each order */
 .uds-products-grid {
   margin-top: 1rem;
 }
@@ -55,13 +57,15 @@
   background-color: #4F46E5; /* indigo-600 */
 }
 
-/* Product image */
+/* Product image styling */
 .uds-product-image {
   width: 80px;
   height: 80px;
+  object-fit: cover;
+  border-radius: 0.375rem; /* rounded */
 }
 
-/* “No Image” placeholder */
+/* Placeholder when no image is available */
 .uds-no-image {
   font-size: 0.85rem;
 }
@@ -75,7 +79,7 @@
   color: #D1D5DB; /* gray-300 */
 }
 
-/* Order total at bottom */
+/* Order total text */
 .uds-total {
   color: #818CF8; /* indigo-300 */
 }
