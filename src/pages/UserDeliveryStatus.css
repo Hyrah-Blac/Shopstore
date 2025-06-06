@@ -1,80 +1,37 @@
-.uds-container {
-  padding: 1rem 2rem;
-  background-color: #121212;
-  min-height: 100vh;
-  color: #eee;
+/* src/styles/UserDeliveryStatus.css */
+
+body {
+  background-color: #1a202c; /* dark blue-gray background */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e2e8f0; /* light gray text */
+  margin: 0;
+  padding: 0;
 }
 
-.uds-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #00ffff; /* neon cyan */
-  text-align: center;
+input:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6); /* Indigo focus ring */
+  transition: box-shadow 0.3s ease;
 }
 
-.uds-order-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 10px #00ffff88;
-  transition: transform 0.3s ease;
+img {
+  border-radius: 0.5rem; /* rounded corners for product images */
 }
 
-.uds-order-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 15px #00ffffcc;
+p, h1, h2, h3 {
+  margin: 0;
 }
 
-.uds-order-id {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+p {
+  line-height: 1.5;
 }
 
-.uds-total,
-.uds-status {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+button {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.uds-status-text {
-  font-weight: 700;
-  color: #00ff99;
-}
-
-.uds-products-list {
-  margin-top: 1rem;
-}
-
-.uds-products-title {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-  color: #00ffffcc;
-}
-
-.uds-product-item {
-  background: rgba(0, 255, 255, 0.1);
-  padding: 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  color: #b0fefe;
-}
-
-.uds-product-name {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-/* Loading and empty states */
-
-.uds-loading,
-.uds-no-orders {
-  color: #999;
-  font-size: 1.2rem;
-  padding: 2rem;
-  text-align: center;
+button:hover {
+  background-color: #4338ca; /* darker indigo hover */
 }

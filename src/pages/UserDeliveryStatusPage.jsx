@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/UserDeliveryStatus.css';
 
 const UserDeliveryStatus = () => {
   const [orders, setOrders] = useState([]);
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Fetch all orders on mount automatically
   useEffect(() => {
     setLoading(true);
-    fetch('https://backend-5za1.onrender.com/api/orders')  // fetch all orders
+    fetch('https://backend-5za1.onrender.com/api/orders')
       .then((res) => res.json())
       .then((data) => setOrders(data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
 
-  // Fetch orders by phone number on button click (optional)
   const fetchOrdersByPhone = () => {
-    if (!phone) return; // do nothing if no phone entered
+    if (!phone) return;
     setLoading(true);
     fetch(`https://backend-5za1.onrender.com/api/orders/user/${phone}`)
       .then((res) => res.json())
@@ -27,51 +26,82 @@ const UserDeliveryStatus = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Delivery Status</h1>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-4xl font-extrabold mb-8 text-gray-900 dark:text-white">
+        Delivery Status
+      </h1>
 
-      {/* Optional phone search */}
-      <div className="mb-4">
+      {/* Phone input */}
+      <div className="mb-8 flex flex-wrap gap-4 items-center">
         <input
           type="tel"
           placeholder="Enter your phone number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="border rounded px-2 py-1 mr-2"
+          className="flex-grow max-w-xs px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
           onClick={fetchOrdersByPhone}
-          className="bg-blue-500 text-white px-4 py-1 rounded"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
         >
           Check Status
         </button>
       </div>
 
-      {/* Loading */}
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
       ) : orders.length > 0 ? (
-        // Show orders in separate boxes instead of table for clearer UI
-        <div className="grid gap-4">
+        <div className="space-y-8">
           {orders.map((order) => (
             <div
               key={order._id}
-              className="border rounded p-4 bg-white shadow-md"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
             >
-              <p>
-                <strong>Order ID:</strong> {order._id}
-              </p>
-              <p>
-                <strong>Total Amount:</strong> KSh {order.totalAmount.toLocaleString()}
-              </p>
-              <p>
-                <strong>Status:</strong> {order.status}
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Order ID: {order._id}
+                </h2>
+                <p className="text-indigo-600 font-semibold mt-2 md:mt-0">
+                  Status: <span className="capitalize">{order.status}</span>
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {order.products?.map(({ product, quantity, price }, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-4 bg-gray-50 dark:bg-gray-700 rounded-lg p-4"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-20 h-20 object-cover rounded-md"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-700 dark:text-gray-300">
+                        Quantity: {quantity}
+                      </p>
+                      <p className="text-indigo-600 font-bold">
+                        KSh {(price * quantity).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-6 text-right font-semibold text-gray-900 dark:text-white text-lg">
+                Total: KSh {order.totalAmount.toLocaleString()}
               </p>
             </div>
           ))}
         </div>
       ) : (
-        <p>No orders found.</p>
+        <p className="text-center text-gray-700 dark:text-gray-300 text-lg">
+          No orders found.
+        </p>
       )}
     </div>
   );
