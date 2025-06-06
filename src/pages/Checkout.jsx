@@ -105,7 +105,8 @@ const Checkout = () => {
       }
 
       clearCart();
-      navigate("/delivery-status");
+      // Navigate to the correct delivery status page route
+      navigate("/user-delivery-status");
     } catch (err) {
       setError(err.message);
     } finally {
