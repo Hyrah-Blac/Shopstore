@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
+import UpdateDeliveryStatus from "./pages/UpdateDeliveryStatus"; // ✅ NEW
 
 // Styles
 import "./App.css";
@@ -48,6 +49,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+
           {/* Admin routes - protected */}
           <Route
             path="/admin"
@@ -86,6 +88,14 @@ const App = () => {
             element={
               <ProtectedRoute roleRequired="admin">
                 <EditProductPrices />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/update-delivery-status"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <UpdateDeliveryStatus />
               </ProtectedRoute>
             }
           />

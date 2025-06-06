@@ -1,4 +1,3 @@
-// src/pages/AdminDashboard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "./AdminDashboard.css";
@@ -18,7 +17,10 @@ const AdminDashboard = () => {
           <Link to="/delete-product">❌ Delete Product</Link>
         </li>
         <li>
-          <Link to="/edit-product-prices">✏️ Edit Product Prices</Link> {/* ✅ Fixed the link */}
+          <Link to="/edit-product-prices">✏️ Edit Product Prices</Link>
+        </li>
+        <li>
+          <Link to="/update-delivery-status">📦 Update Delivery Status</Link>
         </li>
       </ul>
     </div>
