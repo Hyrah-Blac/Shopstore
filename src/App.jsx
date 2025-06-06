@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
-// Pages & Components
+// Pages
 import Layout from "./components/Layout";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminOrders";
+import AdminDashboard from "./pages/AdminDashboard";
 import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import ProductAdded from "./pages/ProductAdded";
@@ -17,20 +17,18 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrders"; // make sure path is correct
-import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles
 import "./App.css";
 import "./styles/MainContent.css";
 
-// Protected route wrapper
+// ProtectedRoute Utility
 const ProtectedRoute = ({ children, roleRequired }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
   if (!token) return <Navigate to="/login" replace />;
-  if (roleRequired && role !== roleRequired) return <Navigate to="/home" replace />;
+  if (role !== roleRequired) return <Navigate to="/home" replace />;
 
   return children;
 };
@@ -41,7 +39,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Shared layout for navbar/sidebar pages */}
+        {/* Layout wraps all routes that share common UI (navbar, sidebar) */}
         <Route element={<Layout onFilter={setSearchTerm} />}>
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home searchTerm={searchTerm} />} />
@@ -50,8 +48,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
-
-          {/* Admin-only routes */}
+          {/* Admin routes - protected */}
           <Route
             path="/admin"
             element={
@@ -92,39 +89,13 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/admin-orders"
-            element={
-              <ProtectedRoute roleRequired="admin">
-                <AdminOrdersPage />
-              </ProtectedRoute>
-            }
-          />
-
-        <Route
-  path="/user-delivery-status"
-  element={
-    <ProtectedRoute>
-      <UserDeliveryStatusPage />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/user-delivery-status/:orderId"
-  element={
-    <ProtectedRoute>
-      <UserDeliveryStatusPage />
-    </ProtectedRoute>
-  }
-/>
-
         </Route>
 
-        {/* Public pages */}
+        {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* 404 fallback */}
+        {/* Catch-all 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
