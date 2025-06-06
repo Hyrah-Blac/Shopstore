@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/UserDeliveryStatus.css';
+import './UserDeliveryStatus.css';
 
 const UserDeliveryStatus = () => {
   const [orders, setOrders] = useState([]);
