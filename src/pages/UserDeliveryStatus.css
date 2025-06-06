@@ -1,37 +1,58 @@
-/* src/styles/UserDeliveryStatus.css */
-
-body {
-  background-color: #1a202c; /* dark blue-gray background */
+.status-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #e2e8f0; /* light gray text */
-  margin: 0;
-  padding: 0;
 }
 
-input:focus,
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6); /* Indigo focus ring */
-  transition: box-shadow 0.3s ease;
+.title {
+  text-align: center;
+  letter-spacing: 1.2px;
 }
 
-img {
-  border-radius: 0.5rem; /* rounded corners for product images */
+.loading,
+.no-orders {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #a0aec0;
 }
 
-p, h1, h2, h3 {
-  margin: 0;
+.order-card {
+  border: 1px solid #4a5568;
 }
 
-p {
-  line-height: 1.5;
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
-button {
-  cursor: pointer;
+.product-item {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #4338ca; /* darker indigo hover */
+.product-item:hover {
+  background-color: #5a67d8;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.product-no-image {
+  width: 80px;
+  height: 80px;
+  background-color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.product-name {
+  color: #e2e8f0;
+}
+
+.order-total {
+  font-size: 1.15rem;
+}
+
+.order-status {
+  font-size: 1rem;
 }

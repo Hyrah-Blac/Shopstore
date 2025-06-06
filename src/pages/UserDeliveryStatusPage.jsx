@@ -1,107 +1,64 @@
 import React, { useEffect, useState } from 'react';
-import './UserDeliveryStatus.css';
+import './UserDeliveryStatusPage.css';
 
 const UserDeliveryStatus = () => {
   const [orders, setOrders] = useState([]);
-  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Fetch all orders on mount (no phone input needed)
   useEffect(() => {
     setLoading(true);
-    fetch('https://backend-5za1.onrender.com/api/orders')
+    fetch('https://backend-5za1.onrender.com/api/orders') // Adjust API if needed
       .then((res) => res.json())
       .then((data) => setOrders(data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
 
-  const fetchOrdersByPhone = () => {
-    if (!phone) return;
-    setLoading(true);
-    fetch(`https://backend-5za1.onrender.com/api/orders/user/${phone}`)
-      .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  };
-
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-4xl font-extrabold mb-8 text-gray-900 dark:text-white">
+    <div className="status-page p-6 bg-gray-900 min-h-screen text-white">
+      <h1 className="title mb-8 text-3xl font-bold text-indigo-400">
         Delivery Status
       </h1>
 
-      {/* Phone input */}
-      <div className="mb-8 flex flex-wrap gap-4 items-center">
-        <input
-          type="tel"
-          placeholder="Enter your phone number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="flex-grow max-w-xs px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
-        <button
-          onClick={fetchOrdersByPhone}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
-        >
-          Check Status
-        </button>
-      </div>
-
       {loading ? (
-        <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
-      ) : orders.length > 0 ? (
-        <div className="space-y-8">
-          {orders.map((order) => (
-            <div
-              key={order._id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
-            >
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Order ID: {order._id}
-                </h2>
-                <p className="text-indigo-600 font-semibold mt-2 md:mt-0">
-                  Status: <span className="capitalize">{order.status}</span>
-                </p>
-              </div>
+        <p className="loading">Loading orders...</p>
+      ) : orders.length === 0 ? (
+        <p className="no-orders">You have no orders at the moment.</p>
+      ) : (
+        orders.map((order) => (
+          <div key={order._id} className="order-card mb-8 p-6 rounded-lg bg-gray-800 shadow-lg">
+            <h2 className="order-id mb-4 font-semibold text-xl">
+              Order ID: {order._id}
+            </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {order.products?.map(({ product, quantity, price }, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-4 bg-gray-50 dark:bg-gray-700 rounded-lg p-4"
-                  >
+            <div className="products-grid">
+              {order.products.map((product, index) => (
+                <div key={index} className="product-item flex items-center space-x-4 bg-gray-700 rounded p-3">
+                  {product.image ? (
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-20 h-20 object-cover rounded-md"
+                      className="product-image rounded object-cover"
                     />
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Quantity: {quantity}
-                      </p>
-                      <p className="text-indigo-600 font-bold">
-                        KSh {(price * quantity).toLocaleString()}
-                      </p>
+                  ) : (
+                    <div className="product-no-image rounded flex items-center justify-center text-gray-400">
+                      No Image
                     </div>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mt-6 text-right font-semibold text-gray-900 dark:text-white text-lg">
-                Total: KSh {order.totalAmount.toLocaleString()}
-              </p>
+                  )}
+                  <div className="product-name text-lg font-medium">{product.name}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-700 dark:text-gray-300 text-lg">
-          No orders found.
-        </p>
+
+            <p className="order-total mt-4 text-indigo-400 font-semibold text-lg">
+              Total: KSh {order.totalAmount.toLocaleString()}
+            </p>
+            <p className="order-status mt-1 text-gray-300">
+              Status: <span className="font-semibold">{order.status}</span>
+            </p>
+          </div>
+        ))
       )}
     </div>
   );
