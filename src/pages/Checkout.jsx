@@ -104,9 +104,11 @@ const Checkout = () => {
         throw new Error(data.error || "Failed to place order");
       }
 
+      const data = await res.json();
       clearCart();
-      // Navigate to the correct delivery status page route
-     navigate(`/delivery-status/${orderId}`);
+
+      // Navigate to delivery status page with returned order ID
+      navigate(`/user-delivery-status/${data.order._id}`);
 
     } catch (err) {
       setError(err.message);
