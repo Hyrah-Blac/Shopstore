@@ -1,0 +1,230 @@
+/* ================================
+   🚀 Base Layout & Reset
+================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding-top: 60px;
+  background-color: #0b0b0f;
+  color: #e0e0e0;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ================================
+   🚀 Scrollbar Styling
+================================ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+/* ================================
+   🚀 Main Content Styling
+================================ */
+.main-content {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #101014;
+  color: #e8e8e8;
+  font-size: 13px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ================================
+   🚀 Navbar & Sidebar
+================================ */
+.navbar,
+.sidebar ul li,
+.sidebar ul li a {
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #0d0d13;
+  box-shadow: 0 2px 10px rgba(138, 43, 226, 0.2);
+}
+
+.navbar .logo-link {
+  font-size: 14px;
+  font-weight: 700;
+  color: #8a2be2;
+}
+
+/* Sidebar Links */
+.sidebar ul li a {
+  display: block;
+  padding: 6px 12px;
+  margin-bottom: 6px;
+  color: #cccccc;
+  background-color: transparent;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+.sidebar ul li a:hover {
+  background-color: #1c1c24;
+  color: #ffffff;
+  border-left: 3px solid #8a2be2;
+  border-radius: 4px;
+}
+
+/* ================================
+   🚀 Typography
+================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fafafa;
+  margin-bottom: 10px;
+}
+p {
+  font-size: 13px;
+  color: #bbbbbb;
+}
+
+/* ================================
+   🚀 Links
+================================ */
+a {
+  color: #b084f7;
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #d6b7ff;
+}
+
+/* ================================
+   🚀 Buttons & Inputs
+================================ */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  outline: none;
+}
+
+button {
+  background: linear-gradient(145deg, #7b1ff7, #9c4dff);
+  color: white;
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+  transition: background 0.3s ease, transform 0.2s;
+}
+button:hover {
+  background: #a64cf5;
+  transform: translateY(-1px);
+}
+
+/* ================================
+   🚀 Form Styling
+================================ */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  background-color: #1c1c1c;
+  color: white;
+  border: 1px solid #333;
+  transition: border 0.3s;
+}
+input:focus,
+textarea:focus {
+  border-color: #8a2be2;
+}
+
+/* ================================
+   🚀 Cards
+================================ */
+.card {
+  background-color: #1a1a1f;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.1);
+  font-size: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+}
+.card h3 {
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+.card p {
+  font-size: 12px;
+  color: #bbbbbb;
+}
+
+/* ================================
+   🚀 Table Styling
+================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 12px;
+  background-color: #1b1b1f;
+  color: #ddd;
+}
+th, td {
+  padding: 8px 10px;
+  border: 1px solid #333;
+}
+th {
+  background-color: #23232a;
+}
+
+/* ================================
+   🚀 Footer
+================================ */
+footer {
+  background-color: #18181c;
+  color: #ccc;
+  text-align: center;
+  padding: 15px;
+  font-size: 12px;
+  border-top: 1px solid #2e2e2e;
+}

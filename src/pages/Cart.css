@@ -1,0 +1,135 @@
+.cart-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #000000;
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(128, 0, 255, 0.25);
+  font-family: 'Poppins', sans-serif;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cart-title {
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #d3bfff;
+  text-shadow: 0 0 10px rgba(211, 191, 255, 0.3);
+}
+
+.empty-cart-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.continue-shopping-link {
+  color: #a77eff;
+  text-decoration: underline;
+  margin-left: 5px;
+  font-weight: 500;
+}
+
+.cart-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.cart-item-card {
+  background: #1c1b29;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cart-item-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(128, 0, 255, 0.25);
+}
+
+.cart-item-image {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  border: 2px solid #3f3f5a;
+}
+
+.cart-item-info {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cart-item-name {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #f5eaff;
+}
+
+.cart-item-price,
+.cart-item-qty {
+  font-size: 1rem;
+  color: #e0c3fc;
+}
+
+.delete-icon-btn {
+  background: transparent;
+  border: none;
+  margin-top: 0.6rem;
+  cursor: pointer;
+  color: #ff4d4f;
+  font-size: 1.6rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.delete-icon-btn:hover {
+  color: #e60023;
+}
+
+.cart-summary {
+  margin-top: 3rem;
+  padding: 2rem;
+  text-align: center;
+  background: #1a1a2b;
+  border-radius: 20px;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.06);
+}
+
+.cart-total {
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
+  color: #c3aaff;
+}
+
+.checkout-button {
+  background: linear-gradient(135deg, #7f5af0, #6241d9);
+  color: white;
+  border: none;
+  padding: 0.9rem 2.4rem;
+  font-size: 1.05rem;
+  font-weight: bold;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(128, 0, 255, 0.3);
+}
+
+.checkout-button:hover {
+  background: #5c3dc2;
+  transform: translateY(-2px);
+}
