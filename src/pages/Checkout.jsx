@@ -1,3 +1,4 @@
+// src/pages/Checkout.jsx
 import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -48,78 +49,81 @@ const Checkout = () => {
     }
   };
 
-const handlePayment = async () => {
-  if (!name.trim() || !address.trim()) {
-    setError("Please enter your name and address.");
-    return;
-  }
+  const handlePayment = async () => {
+    if (!name.trim() || !address.trim()) {
+      setError("Please enter your name and address.");
+      return;
+    }
 
-  if (!/^07\d{8}$/.test(phoneNumber)) {
-    setError("Please enter a valid Kenyan phone number starting with 07");
-    return;
-  }
+    if (!/^07\d{8}$/.test(phoneNumber)) {
+      setError("Please enter a valid Kenyan phone number starting with 07");
+      return;
+    }
 
-  if (!userLocation.lat || !userLocation.lng) {
-    setError("Cannot get your location. Please allow location access.");
-    return;
-  }
+    if (!userLocation.lat || !userLocation.lng) {
+      setError("Cannot get your location. Please allow location access.");
+      return;
+    }
 
-  setError("");
-  setLoading(true);
+    setError("");
+    setLoading(true);
 
-  const orderData = {
-    user: {
-      name,
-      phone: phoneNumber,
-      address,
-      lat: userLocation.lat,
-      lng: userLocation.lng,
-    },
-    products: cartItems.map((item) => ({
-      id: item.id,
-      name: item.name,
-      image:
-        item.image && !item.image.startsWith("http")
-          ? `/assets/${item.image.replace(/^\//, "")}`
-          : item.image || "/placeholder.png",
-      price: Number(item.price),
-      quantity: Number(item.quantity),
-    })),
-    totalAmount: discountedPrice,
-    status: "Packaging",
-    createdAt: new Date().toISOString(),
+    const orderData = {
+      user: {
+        name,
+        phone: phoneNumber,
+        address,
+        lat: userLocation.lat,
+        lng: userLocation.lng,
+      },
+      products: cartItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        image:
+          item.image && !item.image.startsWith("http")
+            ? `/assets/${item.image.replace(/^\//, "")}`
+            : item.image || "/placeholder.png",
+        price: Number(item.price),
+        quantity: Number(item.quantity),
+      })),
+      totalAmount: discountedPrice,
+      status: "Packaging",
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      alert(
+        `Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`
+      );
+
+      const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to place order");
+
+      clearCart();
+
+      // Redirect to delivery status page with returned order ID
+      navigate(`/user-delivery-status/${data.orderId}`);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  try {
-    alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
-
-    const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to place order");
-
-    clearCart();
-
-    // ✅ Redirect to delivery status page with returned order ID
-    navigate(`/user-delivery-status/${data.orderId}`);
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
 
   return (
     <div className="checkout-page">
       <h1>Checkout</h1>
 
       {cartItems.length === 0 ? (
-        <p>Your cart is empty. Go back to <strong>Home</strong> and add items.</p>
+        <p>
+          Your cart is empty. Go back to <strong>Home</strong> and add items.
+        </p>
       ) : (
         <div className="checkout-container">
           <div className="checkout-items">
@@ -132,7 +136,10 @@ const handlePayment = async () => {
                     : item.image || "/placeholder.png";
 
                 return (
-                  <li key={`${item.id}-${index}`} className="checkout-item">
+                  <li
+                    key={`${item.id}-${index}`}
+                    className="checkout-item"
+                  >
                     <img
                       src={imageUrl}
                       alt={item.name || "Product"}
@@ -143,8 +150,15 @@ const handlePayment = async () => {
                       }}
                     />
                     <div className="checkout-details">
-                      <p><strong>{item.name || "Unnamed Product"}</strong></p>
-                      <p>Price: KSh {parseInt(item.price || 0).toLocaleString()}</p>
+                      <p>
+                        <strong>
+                          {item.name || "Unnamed Product"}
+                        </strong>
+                      </p>
+                      <p>
+                        Price: KSh{" "}
+                        {parseInt(item.price || 0).toLocaleString()}
+                      </p>
                       <p>Qty: {item.quantity || 1}</p>
                     </div>
                   </li>
@@ -177,7 +191,10 @@ const handlePayment = async () => {
 
             <label>Your Location:</label>
             {userLocation.lat && userLocation.lng ? (
-              <p>Lat: {userLocation.lat?.toFixed(5)}, Lng: {userLocation.lng?.toFixed(5)}</p>
+              <p>
+                Lat: {userLocation.lat?.toFixed(5)}, Lng:{" "}
+                {userLocation.lng?.toFixed(5)}
+              </p>
             ) : (
               <p>{locationError || "Fetching location..."}</p>
             )}
@@ -203,22 +220,37 @@ const handlePayment = async () => {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
               />
-              <button type="button" className="apply-btn" onClick={handlePromoCode}>
+              <button
+                type="button"
+                className="apply-btn"
+                onClick={handlePromoCode}
+              >
                 Apply
               </button>
             </div>
 
             <div className="total-section">
-              <p>Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong></p>
-              {discount > 0 && <p>Discount: <strong>{discount}%</strong></p>}
+              <p>
+                Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong>
+              </p>
+              {discount > 0 && (
+                <p>
+                  Discount: <strong>{discount}%</strong>
+                </p>
+              )}
               <p className="grand-total">
-                Total: <strong>KSh {discountedPrice.toLocaleString()}</strong>
+                Total:{" "}
+                <strong>KSh {discountedPrice.toLocaleString()}</strong>
               </p>
             </div>
 
             {error && <div className="checkout-error">{error}</div>}
 
-            <button className="pay-btn" onClick={handlePayment} disabled={loading}>
+            <button
+              className="pay-btn"
+              onClick={handlePayment}
+              disabled={loading}
+            >
               {loading ? "Processing..." : "Pay Now with Mpesa"}
             </button>
           </div>
