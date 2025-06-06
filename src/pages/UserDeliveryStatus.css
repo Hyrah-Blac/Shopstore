@@ -1,58 +1,81 @@
-.status-page {
+/* Base page styles */
+.uds-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.title {
+/* Title at top */
+.uds-title {
   text-align: center;
-  letter-spacing: 1.2px;
+  color: #A5B4FC; /* indigo-300 */
+  letter-spacing: 1px;
 }
 
-.loading,
-.no-orders {
+/* Loading and “no orders” messages */
+.uds-loading,
+.uds-no-orders,
+.uds-no-phone {
   text-align: center;
-  font-size: 1.2rem;
-  color: #a0aec0;
+  font-size: 1.1rem;
+  color: #9CA3AF; /* gray-400 */
+  margin-top: 2rem;
 }
 
-.order-card {
-  border: 1px solid #4a5568;
+/* Each order card */
+.uds-order-card {
+  border: 1px solid #374151; /* gray-700 */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.uds-order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+/* Order header: ID + status */
+.uds-order-header {
+  border-bottom: 1px solid #4B5563; /* gray-600 */
+}
+.uds-order-id {
+  color: #FFFFFF; /* white */
+}
+.uds-order-status {
+  color: #6366F1; /* indigo-400 */
 }
 
-.product-item {
-  transition: background-color 0.3s ease;
+/* Products grid inside each order */
+.uds-products-grid {
+  margin-top: 1rem;
 }
 
-.product-item:hover {
-  background-color: #5a67d8;
+/* Individual product item */
+.uds-product-item {
+  background-color: #374151; /* gray-700 */
+  transition: background-color 0.2s ease;
+}
+.uds-product-item:hover {
+  background-color: #4F46E5; /* indigo-600 */
 }
 
-.product-image {
+/* Product image */
+.uds-product-image {
   width: 80px;
   height: 80px;
-  object-fit: cover;
 }
 
-.product-no-image {
-  width: 80px;
-  height: 80px;
-  background-color: #2d3748;
-  font-size: 0.9rem;
+/* “No Image” placeholder */
+.uds-no-image {
+  font-size: 0.85rem;
 }
 
-.product-name {
-  color: #e2e8f0;
+/* Product name, quantity, and price */
+.uds-product-name {
+  color: #F3F4F6; /* gray-100 */
+}
+.uds-product-qty,
+.uds-product-price {
+  color: #D1D5DB; /* gray-300 */
 }
 
-.order-total {
-  font-size: 1.15rem;
-}
-
-.order-status {
-  font-size: 1rem;
+/* Order total at bottom */
+.uds-total {
+  color: #818CF8; /* indigo-300 */
 }
