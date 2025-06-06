@@ -17,8 +17,8 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrdersPage"; // ✅ Imported
-import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage"; // ✅ Added import
+import AdminOrdersPage from "./pages/AdminOrdersPage"; // ✅ Admin orders
+import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage"; // ✅ User delivery status
 
 // Styles
 import "./App.css";
@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children, roleRequired }) => {
   const role = localStorage.getItem("role");
 
   if (!token) return <Navigate to="/login" replace />;
-  if (role !== roleRequired) return <Navigate to="/home" replace />;
+  if (roleRequired && role !== roleRequired) return <Navigate to="/home" replace />;
 
   return children;
 };
@@ -93,10 +93,20 @@ const App = () => {
             }
           />
           <Route
-            path="/admin-orders" // ✅ New route added
+            path="/admin-orders"
             element={
               <ProtectedRoute roleRequired="admin">
                 <AdminOrdersPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* User-only route (just needs login) */}
+          <Route
+            path="/user-delivery-status"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
               </ProtectedRoute>
             }
           />

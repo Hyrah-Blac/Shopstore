@@ -20,7 +20,7 @@ const AdminDashboard = () => {
           <Link to="/edit-product-prices">✏️ Edit Product Prices</Link>
         </li>
         <li>
-          <Link to="/update-delivery-status">📦 Update Delivery Status</Link>
+          <Link to="/Admin-Orders-Page">📦 Update Delivery Status</Link>
         </li>
       </ul>
     </div>
