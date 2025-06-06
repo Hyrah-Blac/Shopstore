@@ -33,13 +33,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             </Link>
           </li>
           <li>
-           <Link
-  to="/user-delivery-status"
-  className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
->
-  <FaTruck /> Delivery Status
-</Link>
-
+            <Link
+              to="/user-delivery-status"
+              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
+            >
+              <FaTruck /> Delivery Status
+            </Link>
           </li>
         </ul>
       </div>
