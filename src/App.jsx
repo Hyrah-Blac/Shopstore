@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Layout from "./components/Layout";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard"; // corrected import (was AdminOrders)
+import AdminDashboard from "./pages/AdminOrders";
 import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import ProductAdded from "./pages/ProductAdded";
@@ -17,7 +17,7 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrders"; // added correct import path
+import AdminOrdersPage from "./pages/AdminOrdersPage"; // make sure path is correct
 import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles
@@ -101,7 +101,15 @@ const App = () => {
             }
           />
 
-          {/* User-only route (order tracking) */}
+          {/* User-only routes */}
+          <Route
+            path="/user-delivery-status"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/user-delivery-status/:orderId"
             element={

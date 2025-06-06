@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaEnvelope, FaCogs, FaTruck } from 'react-icons/fa';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaEnvelope, FaCogs, FaTruck } from "react-icons/fa";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleSidebarClick = (e) => {
@@ -10,7 +10,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <aside
       className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white transform transition-transform duration-300 z-50 ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
       onClick={toggleSidebar}
     >
