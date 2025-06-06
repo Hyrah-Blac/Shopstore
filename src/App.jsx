@@ -17,7 +17,7 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrdersPage"; // make sure path is correct
+import AdminOrdersPage from "./pages/AdminOrders"; // make sure path is correct
 import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles
