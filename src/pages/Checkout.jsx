@@ -48,74 +48,71 @@ const Checkout = () => {
     }
   };
 
-  const handlePayment = async () => {
-    if (!name.trim() || !address.trim()) {
-      setError("Please enter your name and address.");
-      return;
-    }
+const handlePayment = async () => {
+  if (!name.trim() || !address.trim()) {
+    setError("Please enter your name and address.");
+    return;
+  }
 
-    if (!/^07\d{8}$/.test(phoneNumber)) {
-      setError("Please enter a valid Kenyan phone number starting with 07");
-      return;
-    }
+  if (!/^07\d{8}$/.test(phoneNumber)) {
+    setError("Please enter a valid Kenyan phone number starting with 07");
+    return;
+  }
 
-    if (!userLocation.lat || !userLocation.lng) {
-      setError("Cannot get your location. Please allow location access.");
-      return;
-    }
+  if (!userLocation.lat || !userLocation.lng) {
+    setError("Cannot get your location. Please allow location access.");
+    return;
+  }
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    const orderData = {
-      user: {
-        name,
-        phone: phoneNumber,
-        address,
-        lat: userLocation.lat,
-        lng: userLocation.lng,
-      },
-      products: cartItems.map((item) => ({
-        id: item.id,
-        name: item.name,
-        image:
-          item.image && !item.image.startsWith("http")
-            ? `/assets/${item.image.replace(/^\//, "")}`
-            : item.image || "/placeholder.png",
-        price: Number(item.price),
-        quantity: Number(item.quantity),
-      })),
-      totalAmount: discountedPrice,
-      status: "Packaging",
-      createdAt: new Date().toISOString(),
-    };
-
-    try {
-      alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
-
-      const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to place order");
-      }
-
-      const data = await res.json();
-      clearCart();
-
-      // Navigate to delivery status page with returned order ID
-      navigate(`/user-delivery-status/${data.order._id}`);
-
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const orderData = {
+    user: {
+      name,
+      phone: phoneNumber,
+      address,
+      lat: userLocation.lat,
+      lng: userLocation.lng,
+    },
+    products: cartItems.map((item) => ({
+      id: item.id,
+      name: item.name,
+      image:
+        item.image && !item.image.startsWith("http")
+          ? `/assets/${item.image.replace(/^\//, "")}`
+          : item.image || "/placeholder.png",
+      price: Number(item.price),
+      quantity: Number(item.quantity),
+    })),
+    totalAmount: discountedPrice,
+    status: "Packaging",
+    createdAt: new Date().toISOString(),
   };
+
+  try {
+    alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
+
+    const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to place order");
+
+    clearCart();
+
+    // ✅ Redirect to delivery status page with returned order ID
+    navigate(`/user-delivery-status/${data.orderId}`);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="checkout-page">
