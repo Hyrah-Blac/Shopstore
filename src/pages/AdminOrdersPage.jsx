@@ -41,6 +41,20 @@ const AdminOrdersPage = () => {
     }
   };
 
+  const deleteOrder = async (orderId) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
+    try {
+      const res = await fetch(`https://backend-5za1.onrender.com/api/orders/${orderId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete order");
+      // Remove deleted order from local state
+      setOrders((prev) => prev.filter((order) => order._id !== orderId));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   if (loading) return <p>Loading orders...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (orders.length === 0) return <p>No orders found.</p>;
@@ -49,7 +63,11 @@ const AdminOrdersPage = () => {
     <div className="admin-orders-container">
       <h1>All Orders</h1>
       {orders.map((order) => (
-        <div key={order._id} className="order-card" style={{border:"1px solid #ccc", margin:"1rem", padding:"1rem"}}>
+        <div
+          key={order._id}
+          className="order-card"
+          style={{ border: "1px solid #ccc", margin: "1rem", padding: "1rem" }}
+        >
           <h3>Order ID: {order._id}</h3>
           <p>
             <strong>User:</strong> {order.user.name} <br />
@@ -60,7 +78,10 @@ const AdminOrdersPage = () => {
           <div>
             <h4>Products:</h4>
             {order.products.map((prod) => (
-              <div key={prod.id} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
+              <div
+                key={prod.id}
+                style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}
+              >
                 <img
                   src={prod.image}
                   alt={prod.name}
@@ -84,8 +105,8 @@ const AdminOrdersPage = () => {
             <strong>Status:</strong> {order.status}
           </p>
 
-          <div>
-            <label>Update Status:</label>
+          <div style={{ marginBottom: "1rem" }}>
+            <label>Update Status:</label>{" "}
             <select
               value={order.status}
               onChange={(e) => updateStatus(order._id, e.target.value)}
@@ -95,6 +116,20 @@ const AdminOrdersPage = () => {
               <option value="Delivered">Delivered</option>
             </select>
           </div>
+
+          <button
+            onClick={() => deleteOrder(order._id)}
+            style={{
+              backgroundColor: "#e53e3e",
+              color: "white",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Delete Order
+          </button>
         </div>
       ))}
     </div>

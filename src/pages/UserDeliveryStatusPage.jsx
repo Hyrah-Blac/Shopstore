@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";  // import useParams
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const UserDeliveryStatusPage = () => {
-  const { orderId } = useParams(); // get orderId from URL params
+  const { orderId } = useParams();  // get orderId from route params
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

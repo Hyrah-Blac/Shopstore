@@ -101,9 +101,9 @@ const App = () => {
             }
           />
 
-          {/* User-only route (just needs login) */}
+          {/* User-only route with orderId param */}
           <Route
-            path="/user-delivery-status"
+            path="/user-delivery-status/:orderId"
             element={
               <ProtectedRoute>
                 <UserDeliveryStatusPage />
