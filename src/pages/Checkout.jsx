@@ -107,6 +107,9 @@ const Checkout = () => {
 
       clearCart();
 
+      // Save order ID to localStorage for sidebar access
+      localStorage.setItem("lastOrderId", data.orderId);
+
       // Redirect to delivery status page with returned order ID
       navigate(`/user-delivery-status/${data.orderId}`);
     } catch (err) {
@@ -136,10 +139,7 @@ const Checkout = () => {
                     : item.image || "/placeholder.png";
 
                 return (
-                  <li
-                    key={`${item.id}-${index}`}
-                    className="checkout-item"
-                  >
+                  <li key={`${item.id}-${index}`} className="checkout-item">
                     <img
                       src={imageUrl}
                       alt={item.name || "Product"}
@@ -151,13 +151,10 @@ const Checkout = () => {
                     />
                     <div className="checkout-details">
                       <p>
-                        <strong>
-                          {item.name || "Unnamed Product"}
-                        </strong>
+                        <strong>{item.name || "Unnamed Product"}</strong>
                       </p>
                       <p>
-                        Price: KSh{" "}
-                        {parseInt(item.price || 0).toLocaleString()}
+                        Price: KSh {parseInt(item.price || 0).toLocaleString()}
                       </p>
                       <p>Qty: {item.quantity || 1}</p>
                     </div>
@@ -220,11 +217,7 @@ const Checkout = () => {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
               />
-              <button
-                type="button"
-                className="apply-btn"
-                onClick={handlePromoCode}
-              >
+              <button type="button" className="apply-btn" onClick={handlePromoCode}>
                 Apply
               </button>
             </div>
@@ -239,18 +232,13 @@ const Checkout = () => {
                 </p>
               )}
               <p className="grand-total">
-                Total:{" "}
-                <strong>KSh {discountedPrice.toLocaleString()}</strong>
+                Total: <strong>KSh {discountedPrice.toLocaleString()}</strong>
               </p>
             </div>
 
             {error && <div className="checkout-error">{error}</div>}
 
-            <button
-              className="pay-btn"
-              onClick={handlePayment}
-              disabled={loading}
-            >
+            <button className="pay-btn" onClick={handlePayment} disabled={loading}>
               {loading ? "Processing..." : "Pay Now with Mpesa"}
             </button>
           </div>
