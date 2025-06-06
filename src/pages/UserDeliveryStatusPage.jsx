@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './UserDeliveryStatus.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "./UserDeliveryStatus.css";
 
 const UserDeliveryStatusPage = () => {
-  const params = useParams();
-  const orderId = params.orderId || localStorage.getItem("lastOrderId");
-
+  const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Helper: get last orderId from localStorage
+  const getLastOrderId = () => {
+    return localStorage.getItem("lastOrderId");
+  };
+
   useEffect(() => {
-    if (!orderId) {
+    // Determine which orderId to use:
+    // Prefer route param, else fallback to last saved orderId in localStorage
+    const idToFetch = orderId || getLastOrderId();
+
+    if (!idToFetch) {
       setLoading(false);
       return;
     }
 
     setLoading(true);
-    fetch(`https://backend-5za1.onrender.com/api/orders/${orderId}`)
+    fetch(`https://backend-5za1.onrender.com/api/orders/${idToFetch}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch order");
         return res.json();
@@ -37,7 +44,7 @@ const UserDeliveryStatusPage = () => {
     <div className="uds-page p-6 bg-gray-900 min-h-screen text-white">
       <h1 className="uds-title text-3xl font-bold mb-6">Delivery Status</h1>
 
-      {!orderId ? (
+      {!orderId && !getLastOrderId() ? (
         <p className="uds-no-id">
           No order ID provided. Please complete a checkout first to view status.
         </p>
@@ -52,7 +59,7 @@ const UserDeliveryStatusPage = () => {
           <div className="uds-order-header flex flex-col md:flex-row md:justify-between md:items-center mb-6">
             <h2 className="uds-order-id text-xl font-semibold">Order ID: {order._id}</h2>
             <p className="uds-order-status mt-2 md:mt-0 text-indigo-400 font-semibold">
-              Status: <span className="capitalize">{order.status || 'pending'}</span>
+              Status: <span className="capitalize">{order.status || "pending"}</span>
             </p>
           </div>
 
