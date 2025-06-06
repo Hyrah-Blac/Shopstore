@@ -17,7 +17,8 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import UpdateDeliveryStatus from "./pages/UpdateDeliveryStatus"; // ✅ NEW
+import AdminOrdersPage from "./pages/AdminOrdersPage"; // ✅ Imported
+import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage"; // ✅ Added import
 
 // Styles
 import "./App.css";
@@ -92,10 +93,10 @@ const App = () => {
             }
           />
           <Route
-            path="/update-delivery-status"
+            path="/admin-orders" // ✅ New route added
             element={
               <ProtectedRoute roleRequired="admin">
-                <UpdateDeliveryStatus />
+                <AdminOrdersPage />
               </ProtectedRoute>
             }
           />
