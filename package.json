@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",                               
-    "start": "node backend/server.js",                  
-    "dev": "vite",                                      
+    "build": "vite build",
+    "start": "node backend/server.js",
+    "dev": "vite",
     "preview": "vite preview",
     "lint": "eslint ."
   },
@@ -21,7 +21,9 @@
     "mongoose": "^8.14.2",
     "multer": "^1.4.5-lts.2",
     "nodemailer": "^7.0.3",
-    "path-to-regexp": "6.2.0"
+    "path-to-regexp": "6.2.0",
+    "react-leaflet": "^4.2.1",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",
