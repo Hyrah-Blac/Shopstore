@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import "./Checkout.css";
 import { useNavigate } from "react-router-dom";
@@ -7,24 +7,41 @@ const Checkout = () => {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const navigate = useNavigate();
 
+  // Delivery info
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
+
+  // Location (lat/lng)
+  const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
+  const [locationError, setLocationError] = useState("");
+
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const totalPrice = getTotalPrice();
   const discountedPrice = totalPrice - (totalPrice * discount) / 100;
 
-  const handlePayment = () => {
-    if (!/^07\d{8}$/.test(phoneNumber)) {
-      setError("Please enter a valid Kenyan phone number starting with 07");
+  // Get user location on mount
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation not supported by your browser.");
       return;
     }
-
-    alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
-    clearCart();
-    navigate("/home");
-  };
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      () => {
+        setLocationError("Unable to retrieve your location.");
+      }
+    );
+  }, []);
 
   const handlePromoCode = () => {
     if (promoCode === "DRESSIN10") {
@@ -33,6 +50,75 @@ const Checkout = () => {
     } else {
       setDiscount(0);
       setError("Invalid promo code");
+    }
+  };
+
+  const handlePayment = async () => {
+    // Validate inputs
+    if (!name.trim() || !address.trim()) {
+      setError("Please enter your name and address.");
+      return;
+    }
+
+    if (!/^07\d{8}$/.test(phoneNumber)) {
+      setError("Please enter a valid Kenyan phone number starting with 07");
+      return;
+    }
+
+    if (!userLocation.lat || !userLocation.lng) {
+      setError("Cannot get your location. Please allow location access.");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    // Prepare order data
+    const orderData = {
+      user: {
+        name,
+        phone: phoneNumber,
+        address,
+        lat: userLocation.lat,
+        lng: userLocation.lng,
+      },
+      products: cartItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        image:
+          item.image && !item.image.startsWith("http")
+            ? `/assets/${item.image.replace(/^\//, "")}`
+            : item.image || "/placeholder.png",
+        price: Number(item.price),
+        quantity: Number(item.quantity),
+      })),
+      totalAmount: discountedPrice,
+      status: "Packaging",
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      // Simulate Mpesa payment alert
+      alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
+
+      // Send order to backend
+      const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to place order");
+      }
+
+      clearCart();
+      navigate("/delivery-status"); // or wherever you want to send user after order
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,6 +162,34 @@ const Checkout = () => {
           </div>
 
           <div className="payment-form">
+            <h2>Delivery Details</h2>
+
+            <label htmlFor="name">Full Name:</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+
+            <label htmlFor="address">Address:</label>
+            <textarea
+              id="address"
+              placeholder="Delivery address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+
+            <label>Your Location:</label>
+            {userLocation.lat && userLocation.lng ? (
+              <p>Lat: {userLocation.lat.toFixed(5)}, Lng: {userLocation.lng.toFixed(5)}</p>
+            ) : (
+              <p>{locationError || "Fetching location..."}</p>
+            )}
+
             <h2>Mpesa Payment</h2>
 
             <label htmlFor="phone">Mpesa Number:</label>
@@ -112,8 +226,8 @@ const Checkout = () => {
 
             {error && <div className="checkout-error">{error}</div>}
 
-            <button className="pay-btn" onClick={handlePayment}>
-              Pay Now with Mpesa
+            <button className="pay-btn" onClick={handlePayment} disabled={loading}>
+              {loading ? "Processing..." : "Pay Now with Mpesa"}
             </button>
           </div>
         </div>
