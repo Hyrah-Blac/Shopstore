@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
+import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles
 import "./App.css";
@@ -28,7 +30,7 @@ const ProtectedRoute = ({ children, roleRequired }) => {
   const role = localStorage.getItem("role");
 
   if (!token) return <Navigate to="/login" replace />;
-  if (role !== roleRequired) return <Navigate to="/home" replace />;
+  if (roleRequired && role !== roleRequired) return <Navigate to="/home" replace />;
 
   return children;
 };
@@ -48,12 +50,21 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+
           {/* Admin routes - protected */}
           <Route
             path="/admin"
             element={
               <ProtectedRoute roleRequired="admin">
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin-orders"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <AdminOrdersPage />
               </ProtectedRoute>
             }
           />
@@ -86,6 +97,24 @@ const App = () => {
             element={
               <ProtectedRoute roleRequired="admin">
                 <EditProductPrices />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* User delivery status */}
+          <Route
+            path="/user-delivery-status/:orderId"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-delivery-status"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
               </ProtectedRoute>
             }
           />
