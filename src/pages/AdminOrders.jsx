@@ -2,24 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch('https://backend-5za1.onrender.com/api/orders')
       .then((res) => {
-        if (!res.ok) throw new Error(`Error ${res.status}`);
+        if (!res.ok) throw new Error('Failed to fetch orders');
         return res.json();
       })
-      .then((data) => {
-        console.log("Fetched orders:", data);
-        setOrders(data);
-        setLoading(false);
-      })
+      .then((data) => setOrders(data))
       .catch((err) => {
-        console.error("Fetch orders error:", err);
-        setError("Could not load orders.");
-        setLoading(false);
+        console.error('Fetch orders error:', err);
+        setOrders([]);
       });
   }, []);
 
@@ -29,10 +22,7 @@ const AdminOrders = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Error ${res.status}`);
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
@@ -43,44 +33,54 @@ const AdminOrders = () => {
       .catch((err) => console.error(err));
   };
 
-  if (loading) return <div className="p-4">Loading orders...</div>;
-  if (error) return <div className="p-4 text-red-600">{error}</div>;
-
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Admin Orders</h1>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2">Order ID</th>
-            <th className="py-2">User</th>
-            <th className="py-2">Total Amount</th>
-            <th className="py-2">Status</th>
-            <th className="py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6">Admin Orders</h1>
+      {orders.length === 0 ? (
+        <p className="text-red-500">No orders found.</p>
+      ) : (
+        <div className="space-y-6">
           {orders.map((order) => (
-            <tr key={order._id} className="text-center">
-              <td className="py-2">{order._id}</td>
-              <td className="py-2">{order.user?.name || "N/A"}</td>
-              <td className="py-2">KSh {order.totalAmount.toLocaleString()}</td>
-              <td className="py-2">{order.status}</td>
-              <td className="py-2">
+            <div key={order._id} className="bg-gray-900 text-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold mb-2">Order ID: {order._id}</h2>
+              <p><strong>User:</strong> {order.user?.name}</p>
+              <p><strong>Address:</strong> {order.user?.address || 'N/A'}</p>
+              <p className="mb-4"><strong>Total Amount:</strong> KSh {order.totalAmount.toLocaleString()}</p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                {order.products.map((product) => (
+                  <div key={product.id} className="bg-gray-800 p-4 rounded-lg">
+                    <img
+                      src={product.image || '/default-product.jpg'}
+                      alt={product.name}
+                      className="w-full h-40 object-cover rounded mb-2"
+                    />
+                    <h3 className="text-lg font-semibold">{product.name}</h3>
+                    <p>Qty: {product.quantity}</p>
+                    <p>Price: KSh {product.price.toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-2">
+                <label htmlFor={`status-${order._id}`} className="mr-2 font-medium">
+                  Status:
+                </label>
                 <select
+                  id={`status-${order._id}`}
                   value={order.status}
                   onChange={(e) => updateStatus(order._id, e.target.value)}
-                  className="border rounded px-2 py-1"
+                  className="bg-gray-700 text-white px-3 py-1 rounded"
                 >
                   <option value="Packaging">Packaging</option>
                   <option value="InTransit">InTransit</option>
                   <option value="Delivered">Delivered</option>
                 </select>
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   );
 };
