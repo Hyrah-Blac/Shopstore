@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Layout from "./components/Layout";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminOrders";
 import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import ProductAdded from "./pages/ProductAdded";
@@ -17,7 +17,7 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrdersPage";
+import AdminOrdersPage from "./pages/";
 import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles

@@ -1,20 +1,18 @@
-// src/components/Sidebar.jsx
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaEnvelope, FaCogs, FaTruck } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaEnvelope, FaCogs, FaTruck } from 'react-icons/fa';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleSidebarClick = (e) => {
-    // Prevent sidebar from closing when clicking inside the sidebar content
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent closing when clicking inside
   };
 
   return (
     <aside
       className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white transform transition-transform duration-300 z-50 ${
-        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
-      onClick={toggleSidebar} // Clicking outside will close
+      onClick={toggleSidebar}
     >
       <div onClick={handleSidebarClick} className="h-full">
         <ul className="mt-20 space-y-4 px-6">
@@ -36,10 +34,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           </li>
           <li>
             <Link
-              to="/user-delivery-status" // Optional: could route to a tracking page prompt
+              to="/user-delivery-status"
               className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
             >
-              <FaTruck /> Track Order
+              <FaTruck /> Delivery Status
             </Link>
           </li>
         </ul>
