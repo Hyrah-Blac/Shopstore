@@ -5,7 +5,19 @@ const UserDeliveryStatus = () => {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const fetchOrders = () => {
+  // Fetch all orders on mount automatically
+  useEffect(() => {
+    setLoading(true);
+    fetch('https://backend-5za1.onrender.com/api/orders')  // fetch all orders
+      .then((res) => res.json())
+      .then((data) => setOrders(data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Fetch orders by phone number on button click (optional)
+  const fetchOrdersByPhone = () => {
+    if (!phone) return; // do nothing if no phone entered
     setLoading(true);
     fetch(`https://backend-5za1.onrender.com/api/orders/user/${phone}`)
       .then((res) => res.json())
@@ -17,6 +29,8 @@ const UserDeliveryStatus = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Delivery Status</h1>
+
+      {/* Optional phone search */}
       <div className="mb-4">
         <input
           type="tel"
@@ -25,33 +39,39 @@ const UserDeliveryStatus = () => {
           onChange={(e) => setPhone(e.target.value)}
           className="border rounded px-2 py-1 mr-2"
         />
-        <button onClick={fetchOrders} className="bg-blue-500 text-white px-4 py-1 rounded">
+        <button
+          onClick={fetchOrdersByPhone}
+          className="bg-blue-500 text-white px-4 py-1 rounded"
+        >
           Check Status
         </button>
       </div>
+
+      {/* Loading */}
       {loading ? (
         <p>Loading...</p>
       ) : orders.length > 0 ? (
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2">Order ID</th>
-              <th className="py-2">Total Amount</th>
-              <th className="py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id} className="text-center">
-                <td className="py-2">{order._id}</td>
-                <td className="py-2">KSh {order.totalAmount.toLocaleString()}</td>
-                <td className="py-2">{order.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        // Show orders in separate boxes instead of table for clearer UI
+        <div className="grid gap-4">
+          {orders.map((order) => (
+            <div
+              key={order._id}
+              className="border rounded p-4 bg-white shadow-md"
+            >
+              <p>
+                <strong>Order ID:</strong> {order._id}
+              </p>
+              <p>
+                <strong>Total Amount:</strong> KSh {order.totalAmount.toLocaleString()}
+              </p>
+              <p>
+                <strong>Status:</strong> {order.status}
+              </p>
+            </div>
+          ))}
+        </div>
       ) : (
-        <p>No orders found for this phone number.</p>
+        <p>No orders found.</p>
       )}
     </div>
   );
