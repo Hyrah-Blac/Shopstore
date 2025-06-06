@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
-// Pages
+// Pages & Components
 import Layout from "./components/Layout";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -17,14 +17,14 @@ import NotFound from "./pages/NotFound";
 import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
-import AdminOrdersPage from "./pages/AdminOrdersPage"; // ✅ Admin orders
-import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage"; // ✅ User delivery status
+import AdminOrdersPage from "./pages/AdminOrdersPage";
+import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
 
 // Styles
 import "./App.css";
 import "./styles/MainContent.css";
 
-// ProtectedRoute Utility
+// Protected route wrapper
 const ProtectedRoute = ({ children, roleRequired }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -41,7 +41,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Layout wraps all routes that share common UI (navbar, sidebar) */}
+        {/* Shared layout for navbar/sidebar pages */}
         <Route element={<Layout onFilter={setSearchTerm} />}>
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home searchTerm={searchTerm} />} />
@@ -51,7 +51,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
 
-          {/* Admin routes - protected */}
+          {/* Admin-only routes */}
           <Route
             path="/admin"
             element={
@@ -101,7 +101,7 @@ const App = () => {
             }
           />
 
-          {/* User-only route with orderId param */}
+          {/* User-only route (order tracking) */}
           <Route
             path="/user-delivery-status/:orderId"
             element={
@@ -112,11 +112,11 @@ const App = () => {
           />
         </Route>
 
-        {/* Public routes */}
+        {/* Public pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Catch-all 404 */}
+        {/* 404 fallback */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
