@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -15,7 +17,11 @@ const Checkout = () => {
   const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
   const [locationError, setLocationError] = useState("");
   const [error, setError] = useState("");
+  const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const totalPrice = getTotalPrice();
+  const discountedPrice = totalPrice - (totalPrice * discount) / 100;
 
   const currentUser = {
     _id: localStorage.getItem("userId") || "",
@@ -25,9 +31,6 @@ const Checkout = () => {
     lat: userLocation.lat,
     lng: userLocation.lng,
   };
-
-  const totalPrice = getTotalPrice();
-  const discountedPrice = totalPrice - (totalPrice * discount) / 100;
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -47,37 +50,42 @@ const Checkout = () => {
     );
   }, []);
 
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   const handlePromoCode = () => {
     if (promoCode.trim().toUpperCase() === "DRESSIN10") {
       setDiscount(10);
-      setError("");
+      setToast({ type: "success", message: "Promo code applied: 10% off!" });
     } else {
       setDiscount(0);
-      setError("Invalid promo code");
+      setToast({ type: "error", message: "Invalid promo code." });
     }
   };
 
   const handlePayment = async () => {
     if (!name.trim() || !address.trim()) {
-      setError("Please enter your name and address.");
+      setToast({ type: "error", message: "Please enter your name and address." });
       return;
     }
     if (!/^07\d{8}$/.test(phoneNumber)) {
-      setError("Please enter a valid Kenyan phone number starting with 07");
+      setToast({ type: "error", message: "Invalid Kenyan phone number. Start with 07." });
       return;
     }
     if (!userLocation.lat || !userLocation.lng) {
-      setError("Cannot get your location. Please allow location access.");
+      setToast({ type: "error", message: "Location not available. Please allow access." });
       return;
     }
     if (!currentUser._id) {
-      setError("User ID missing. Please login.");
+      setToast({ type: "error", message: "User ID missing. Please log in again." });
       return;
     }
 
-    setError("");
     setLoading(true);
-
     const orderData = {
       user: currentUser,
       products: cartItems.map((item) => ({
@@ -108,91 +116,99 @@ const Checkout = () => {
       clearCart();
       navigate(`/user-delivery-status/${data.orderId}`);
     } catch (err) {
-      setError(err.message || "Failed to place order");
+      setToast({ type: "error", message: err.message || "Failed to place order" });
+    } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <main className="checkout-container max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-6 border-b pb-2">Checkout</h1>
+  const markerIcon = new L.Icon({
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
 
-      <section className="user-info mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+  return (
+    <main className="checkout-container">
+      <h1>Checkout</h1>
+
+      {/* User Info */}
+      <section className="user-info">
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="input-field"
-          aria-label="Name"
         />
         <input
           type="text"
-          placeholder="Phone Number (e.g., 07XXXXXXXX)"
+          placeholder="Phone Number (07XXXXXXXX)"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           maxLength={10}
           className="input-field"
-          aria-label="Phone Number"
         />
         <input
           type="text"
           placeholder="Delivery Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          className="input-field col-span-1 md:col-span-3"
-          aria-label="Delivery Address"
+          className="input-field"
         />
       </section>
 
-      <section className="cart-preview mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Your Items</h2>
+      {/* Map */}
+      {userLocation.lat && userLocation.lng && (
+        <div className="map-preview mb-6 rounded-lg overflow-hidden">
+          <MapContainer
+            center={[userLocation.lat, userLocation.lng]}
+            zoom={13}
+            style={{ height: "250px", borderRadius: "12px" }}
+            scrollWheelZoom={false}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={[userLocation.lat, userLocation.lng]} icon={markerIcon} />
+          </MapContainer>
+        </div>
+      )}
+
+      {/* Cart Items */}
+      <section className="cart-preview">
+        <h2>Your Items</h2>
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
-          <div className="space-y-4 max-h-80 overflow-auto">
-            {cartItems.map((item, index) => (
-              <article
-                className="cart-item flex items-center gap-4 bg-gray-800 p-4 rounded-md shadow-md"
-                key={index}
-              >
-                <img
-                  src={item.image?.startsWith("http") ? item.image : `/assets/${item.image?.replace(/^\//, "")}`}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded"
-                  loading="lazy"
-                />
-                <div className="details flex flex-col justify-center">
-                  <p className="font-semibold text-lg">{item.name}</p>
-                  <p>Price: KSh {Number(item.price).toLocaleString()}</p>
-                  <p>Quantity: {item.quantity}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+          cartItems.map((item, index) => (
+            <article className="cart-item" key={index}>
+              <img
+                src={item.image?.startsWith("http") ? item.image : `/assets/${item.image?.replace(/^\//, "")}`}
+                alt={item.name}
+              />
+              <div className="details">
+                <p>{item.name}</p>
+                <p>Price: KSh {Number(item.price).toLocaleString()}</p>
+                <p>Quantity: {item.quantity}</p>
+              </div>
+            </article>
+          ))
         )}
       </section>
 
-      <section className="promo-code mb-6 flex gap-3 items-center">
+      {/* Promo Code */}
+      <section className="promo-code">
         <input
           type="text"
           placeholder="Enter promo code"
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
-          className="input-field flex-grow"
-          aria-label="Promo code"
+          className="input-field"
         />
-        <button
-          onClick={handlePromoCode}
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition"
-          aria-label="Apply promo code"
-        >
-          Apply
-        </button>
+        <button onClick={handlePromoCode}>Apply</button>
       </section>
-      {discount > 0 && <p className="text-green-400 mb-4">Promo code applied: {discount}% off</p>}
 
-      <section className="order-summary mb-6 text-lg">
+      {/* Totals */}
+      <section className="order-summary">
         <p>
           Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong>
         </p>
@@ -201,20 +217,30 @@ const Checkout = () => {
         </p>
       </section>
 
+      {/* Pay Button */}
       <button
-        className="pay-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded w-full disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="pay-btn"
         onClick={handlePayment}
         disabled={loading}
-        aria-busy={loading}
       >
-        {loading ? "Processing Payment..." : "Proceed to Pay"}
+        {loading ? (
+          <span className="flex justify-center items-center gap-2">
+            <span className="spinner"></span> Processing...
+          </span>
+        ) : (
+          "Proceed to Pay"
+        )}
       </button>
 
-      {(error || locationError) && (
-        <p className="error mt-4 text-red-500 font-semibold" role="alert">
-          {error || locationError}
-        </p>
+      {/* Toast Message */}
+      {toast && (
+        <div className={`toast ${toast.type}`}>
+          {toast.message}
+        </div>
       )}
+
+      {/* Error fallback */}
+      {locationError && <p className="error">{locationError}</p>}
     </main>
   );
 };

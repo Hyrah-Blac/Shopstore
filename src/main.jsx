@@ -4,6 +4,7 @@ import App from "./App";
 import { CartProvider } from "./context/CartContext";
 import "./index.css";              // Tailwind base + global styles
 import "./styles/MainContent.css"; // Your custom CSS
+import 'leaflet/dist/leaflet.css';
 
 // Enable dark mode on document root
 document.documentElement.classList.add("dark");
