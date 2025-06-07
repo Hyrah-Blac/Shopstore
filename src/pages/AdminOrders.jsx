@@ -34,6 +34,22 @@ const AdminOrders = () => {
       .catch((err) => console.error(err));
   };
 
+  const deleteOrder = (id) => {
+    if (!window.confirm('Are you sure you want to delete this order?')) return;
+
+    fetch(`https://backend-5za1.onrender.com/api/orders/${id}`, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to delete');
+        setOrders((prevOrders) => prevOrders.filter((order) => order._id !== id));
+      })
+      .catch((err) => {
+        console.error('Delete order error:', err);
+        alert('Failed to delete order. Please try again.');
+      });
+  };
+
   return (
     <div className="p-6 text-white bg-gray-900 min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Admin Orders</h1>
@@ -75,7 +91,7 @@ const AdminOrders = () => {
               </select>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
               {order.products.map((product) => (
                 <div
                   key={product.id}
@@ -93,6 +109,13 @@ const AdminOrders = () => {
                 </div>
               ))}
             </div>
+
+            <button
+              onClick={() => deleteOrder(order._id)}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+            >
+              Delete Order
+            </button>
           </div>
         ))
       )}
