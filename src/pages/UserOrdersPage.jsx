@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 const STATUS_STEPS = ['Packaging', 'In Transit', 'Delivered'];
 
+// Normalize both status and step for consistent comparison
+const normalize = (text) => text?.toLowerCase().replace(/\s+/g, '').trim();
+
 const getStatusIndex = (status) => {
   const idx = STATUS_STEPS.findIndex(
-    (step) => step.toLowerCase() === status?.toLowerCase()
+    (step) => normalize(step) === normalize(status)
   );
   return idx === -1 ? 0 : idx;
 };
