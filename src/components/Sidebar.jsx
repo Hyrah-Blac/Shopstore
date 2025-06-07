@@ -44,12 +44,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             </Link>
           </li>
           <li>
-            <Link
-              to="/user-orders"
-              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
-            >
-              <FaTruck /> Your Orders
-            </Link>
+          <Link to={`/user-orders/${userId}`} className="...">Your Orders</Link>
+
           </li>
         </ul>
       </div>
