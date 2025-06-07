@@ -1,6 +1,6 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
-import api from "../utils/axiosConfig"; // Make sure this path is correct
+import api from "../utils/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,15 +35,19 @@ const Login = () => {
 
       console.log("✅ Login successful:", res.data);
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
+      const { token, role, user } = res.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("user", JSON.stringify(user)); // ✅ Store user object
+      localStorage.setItem("userId", user._id); // ✅ Store user ID
 
       toast.success("🔓 Login successful!", {
         autoClose: 1500,
       });
 
       setTimeout(() => {
-        if (res.data.role === "admin") {
+        if (role === "admin") {
           navigate("/admin");
         } else {
           navigate("/home");
@@ -57,7 +61,6 @@ const Login = () => {
         "❌ Login failed. Try again.";
 
       console.error(`🚫 Login error [${status}]:`, message);
-
       toast.error(`${message}`);
     } finally {
       setLoading(false);
