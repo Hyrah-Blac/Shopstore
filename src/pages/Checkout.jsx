@@ -32,6 +32,12 @@ const Checkout = () => {
     lng: userLocation.lng,
   };
 
+  const markerIcon = new L.Icon({
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+
   useEffect(() => {
     if (!navigator.geolocation) {
       setLocationError("Geolocation not supported by your browser.");
@@ -39,16 +45,32 @@ const Checkout = () => {
     }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setUserLocation({
+        const coords = {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
-        });
+        };
+        setUserLocation(coords);
       },
       () => {
         setLocationError("Unable to retrieve your location. Please allow location access.");
       }
     );
   }, []);
+
+  // Reverse Geocode Address
+  useEffect(() => {
+    const { lat, lng } = userLocation;
+    if (lat && lng) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.display_name) {
+            setAddress(data.display_name);
+          }
+        })
+        .catch(() => console.log("Reverse geocoding failed"));
+    }
+  }, [userLocation]);
 
   useEffect(() => {
     if (toast) {
@@ -122,12 +144,6 @@ const Checkout = () => {
     }
   };
 
-  const markerIcon = new L.Icon({
-    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-  });
-
   return (
     <main className="checkout-container">
       <h1>Checkout</h1>
@@ -168,7 +184,17 @@ const Checkout = () => {
             scrollWheelZoom={false}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[userLocation.lat, userLocation.lng]} icon={markerIcon} />
+            <Marker
+              position={[userLocation.lat, userLocation.lng]}
+              icon={markerIcon}
+              draggable={true}
+              eventHandlers={{
+                dragend: (e) => {
+                  const { lat, lng } = e.target.getLatLng();
+                  setUserLocation({ lat, lng });
+                },
+              }}
+            />
           </MapContainer>
         </div>
       )}
@@ -218,11 +244,7 @@ const Checkout = () => {
       </section>
 
       {/* Pay Button */}
-      <button
-        className="pay-btn"
-        onClick={handlePayment}
-        disabled={loading}
-      >
+      <button className="pay-btn" onClick={handlePayment} disabled={loading}>
         {loading ? (
           <span className="flex justify-center items-center gap-2">
             <span className="spinner"></span> Processing...
@@ -232,14 +254,8 @@ const Checkout = () => {
         )}
       </button>
 
-      {/* Toast Message */}
-      {toast && (
-        <div className={`toast ${toast.type}`}>
-          {toast.message}
-        </div>
-      )}
-
-      {/* Error fallback */}
+      {/* Toast */}
+      {toast && <div className={`toast ${toast.type}`}>{toast.message}</div>}
       {locationError && <p className="error">{locationError}</p>}
     </main>
   );
