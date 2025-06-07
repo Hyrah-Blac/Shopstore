@@ -42,7 +42,7 @@ const Checkout = () => {
         });
       },
       () => {
-        setLocationError("Unable to retrieve your location.");
+        setLocationError("Unable to retrieve your location. Please allow location access.");
       }
     );
   }, []);
@@ -62,17 +62,14 @@ const Checkout = () => {
       setError("Please enter your name and address.");
       return;
     }
-
     if (!/^07\d{8}$/.test(phoneNumber)) {
       setError("Please enter a valid Kenyan phone number starting with 07");
       return;
     }
-
     if (!userLocation.lat || !userLocation.lng) {
       setError("Cannot get your location. Please allow location access.");
       return;
     }
-
     if (!currentUser._id) {
       setError("User ID missing. Please login.");
       return;
@@ -117,47 +114,108 @@ const Checkout = () => {
   };
 
   return (
-    <div className="checkout-container">
-      <h1>Checkout</h1>
+    <main className="checkout-container max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold mb-6 border-b pb-2">Checkout</h1>
 
-      <div className="user-info">
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input type="text" placeholder="Phone Number (e.g., 07XXXXXXXX)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} maxLength={10} />
-        <input type="text" placeholder="Delivery Address" value={address} onChange={(e) => setAddress(e.target.value)} />
-      </div>
+      <section className="user-info mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="input-field"
+          aria-label="Name"
+        />
+        <input
+          type="text"
+          placeholder="Phone Number (e.g., 07XXXXXXXX)"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          maxLength={10}
+          className="input-field"
+          aria-label="Phone Number"
+        />
+        <input
+          type="text"
+          placeholder="Delivery Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          className="input-field col-span-1 md:col-span-3"
+          aria-label="Delivery Address"
+        />
+      </section>
 
-      <div className="cart-preview">
-        <h2>Your Items</h2>
-        {cartItems.map((item, index) => (
-          <div className="cart-item" key={index}>
-            <img src={item.image?.startsWith("http") ? item.image : `/assets/${item.image?.replace(/^\//, "")}`} alt={item.name} />
-            <div className="details">
-              <p><strong>{item.name}</strong></p>
-              <p>Price: KSh {item.price.toLocaleString()}</p>
-              <p>Quantity: {item.quantity}</p>
-            </div>
+      <section className="cart-preview mb-8">
+        <h2 className="text-2xl font-semibold mb-4">Your Items</h2>
+        {cartItems.length === 0 ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <div className="space-y-4 max-h-80 overflow-auto">
+            {cartItems.map((item, index) => (
+              <article
+                className="cart-item flex items-center gap-4 bg-gray-800 p-4 rounded-md shadow-md"
+                key={index}
+              >
+                <img
+                  src={item.image?.startsWith("http") ? item.image : `/assets/${item.image?.replace(/^\//, "")}`}
+                  alt={item.name}
+                  className="w-20 h-20 object-cover rounded"
+                  loading="lazy"
+                />
+                <div className="details flex flex-col justify-center">
+                  <p className="font-semibold text-lg">{item.name}</p>
+                  <p>Price: KSh {Number(item.price).toLocaleString()}</p>
+                  <p>Quantity: {item.quantity}</p>
+                </div>
+              </article>
+            ))}
           </div>
-        ))}
-      </div>
+        )}
+      </section>
 
-      <div className="promo-code">
-        <input type="text" placeholder="Enter promo code" value={promoCode} onChange={(e) => setPromoCode(e.target.value)} />
-        <button onClick={handlePromoCode}>Apply</button>
-        {discount > 0 && <p className="success">Promo code applied: {discount}% off</p>}
-      </div>
+      <section className="promo-code mb-6 flex gap-3 items-center">
+        <input
+          type="text"
+          placeholder="Enter promo code"
+          value={promoCode}
+          onChange={(e) => setPromoCode(e.target.value)}
+          className="input-field flex-grow"
+          aria-label="Promo code"
+        />
+        <button
+          onClick={handlePromoCode}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition"
+          aria-label="Apply promo code"
+        >
+          Apply
+        </button>
+      </section>
+      {discount > 0 && <p className="text-green-400 mb-4">Promo code applied: {discount}% off</p>}
 
-      <div className="order-summary">
-        <p>Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong></p>
-        <p>Total after discount: <strong>KSh {discountedPrice.toLocaleString()}</strong></p>
-      </div>
+      <section className="order-summary mb-6 text-lg">
+        <p>
+          Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong>
+        </p>
+        <p>
+          Total after discount: <strong>KSh {discountedPrice.toLocaleString()}</strong>
+        </p>
+      </section>
 
-      <button className="pay-btn" onClick={handlePayment} disabled={loading}>
+      <button
+        className="pay-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded w-full disabled:opacity-50 disabled:cursor-not-allowed transition"
+        onClick={handlePayment}
+        disabled={loading}
+        aria-busy={loading}
+      >
         {loading ? "Processing Payment..." : "Proceed to Pay"}
       </button>
 
-      {error && <p className="error">{error}</p>}
-      {locationError && <p className="error">{locationError}</p>}
-    </div>
+      {(error || locationError) && (
+        <p className="error mt-4 text-red-500 font-semibold" role="alert">
+          {error || locationError}
+        </p>
+      )}
+    </main>
   );
 };
 
