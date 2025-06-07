@@ -62,3 +62,6 @@
 .font-poppins {
   font-family: 'Poppins', 'Segoe UI', 'Helvetica', sans-serif;
 }
+.neon-text {
+  text-shadow: 0 0 6px var(--neon-color), 0 0 12px var(--neon-color), 0 0 24px var(--neon-color);
+}
