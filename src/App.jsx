@@ -50,6 +50,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/user-orders/:userId" element={<UserOrdersPage />} />
 
           {/* Admin routes - protected */}
           <Route
