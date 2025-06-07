@@ -3,46 +3,48 @@ import React, { useEffect, useState } from 'react';
 const UserOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
-  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const userId = localStorage.getItem('userId'); // Replace with actual user ID source
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser._id);
+    if (!userId) {
+      setError('User not logged in.');
+      setLoading(false);
+      return;
     }
-  }, []);
-
-  useEffect(() => {
-    if (!userId) return;
 
     fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`)
       .then((res) => {
-        if (!res.ok) throw new Error(`Error ${res.status}`);
+        if (!res.ok) throw new Error('Failed to fetch orders');
         return res.json();
       })
       .then((data) => {
-        const filtered = data.filter((order) => order.status !== 'Delivered');
-        setOrders(filtered);
+        setOrders(data);
+        setLoading(false);
       })
       .catch((err) => {
-        console.error('Fetch user orders error:', err);
-        setError('Could not load orders. Please try again.');
+        console.error(err);
+        setError('Failed to load orders.');
+        setLoading(false);
       });
   }, [userId]);
 
   return (
-    <div className="p-6 text-white bg-gray-900 min-h-screen">
+    <div className="p-6 min-h-screen bg-gray-900 text-white">
       <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
-      {error ? (
+
+      {loading ? (
+        <p>Loading orders...</p>
+      ) : error ? (
         <p className="text-red-400">{error}</p>
       ) : orders.length === 0 ? (
-        <p className="text-gray-400">No current orders (all delivered or none placed yet).</p>
+        <p>You have not placed any orders yet.</p>
       ) : (
         orders.map((order) => (
           <div
             key={order._id}
-            className="bg-gray-800 p-4 mb-6 rounded-lg shadow-lg border border-gray-700"
+            className="bg-gray-800 p-4 mb-6 rounded-lg border border-gray-700 shadow-md"
           >
             <div className="mb-2">
               <span className="font-semibold text-purple-400">Order ID:</span>{' '}
@@ -52,32 +54,25 @@ const UserOrdersPage = () => {
               <span className="font-semibold text-purple-400">Status:</span>{' '}
               {order.status}
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <span className="font-semibold text-purple-400">Total:</span> KSh{' '}
               {order.totalAmount.toLocaleString()}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {order.products.map((product, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              {order.products.map((product) => (
                 <div
-                  key={index}
+                  key={product.id}
                   className="bg-gray-700 p-3 rounded shadow-md flex flex-col items-center"
                 >
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-24 h-24 object-cover rounded mb-2"
-                    />
-                  ) : (
-                    <div className="w-24 h-24 bg-gray-600 flex items-center justify-center rounded mb-2 text-sm text-gray-300">
-                      No Image
-                    </div>
-                  )}
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-24 h-24 object-cover rounded mb-2"
+                  />
                   <div className="text-center">
-                    <div className="font-semibold">{product.name}</div>
-                    <div>KSh {(product.price * product.quantity).toLocaleString()}</div>
-                    <div className="text-sm text-gray-300">Qty: {product.quantity}</div>
+                    <div className="font-semibold">{product.title}</div>
+                    <div>KSh {product.price.toLocaleString()}</div>
                   </div>
                 </div>
               ))}

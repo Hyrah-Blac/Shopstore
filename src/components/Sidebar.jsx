@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaEnvelope, FaCogs, FaTruck, FaBoxOpen } from "react-icons/fa";
+import { FaEnvelope, FaCogs, FaTruck } from "react-icons/fa";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleSidebarClick = (e) => {
     e.stopPropagation();
   };
 
+  // userId is here if needed for dynamic routes
   const userId = localStorage.getItem("userId") || "123"; // fallback for testing
 
   return (
@@ -42,15 +43,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               <FaTruck /> Delivery Status
             </Link>
           </li>
-         <li>
-  <Link
-    to="/user-orders"
-    className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
-  >
-    <FaTruck /> Your Orders
-  </Link>
-</li>
-
+          <li>
+            <Link
+              to="/user-orders"
+              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
+            >
+              <FaTruck /> Your Orders
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>
