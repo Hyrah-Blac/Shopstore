@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const STATUS_STEPS = ['Packaging', 'Shipped', 'Delivered'];
+const STATUS_STEPS = ['Packaging', 'In Transit', 'Shipped', 'Delivered'];
 
 const getStatusIndex = (status) => {
   const idx = STATUS_STEPS.findIndex(
@@ -30,8 +30,7 @@ const UserOrdersPage = () => {
         const data = await res.json();
         setOrders(data);
       } catch (err) {
-        console.error('Fetch user orders error:', err);
-        setError('Failed to load orders. Please try again later.');
+        setError('You currently have no orders.');
       } finally {
         setLoading(false);
       }
@@ -41,92 +40,100 @@ const UserOrdersPage = () => {
   }, [userId]);
 
   return (
-    <div className="uop-page p-6 min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white font-sans text-sm md:text-base">
-      <h1 className="uop-title text-3xl md:text-4xl font-extrabold mb-8 text-center tracking-wide text-teal-400 drop-shadow-lg">
-        Your Orders
-      </h1>
+    <main className="main-content">
+      <h1>Your Orders</h1>
 
       {loading ? (
-        <p className="uop-info text-teal-300 animate-pulse text-center">Loading orders...</p>
+        <p className="text-center neon-pulse" style={{color: 'var(--neon-color)'}}>
+          Loading orders...
+        </p>
       ) : error ? (
-        <p className="uop-error text-red-500 text-center font-semibold">{error}</p>
+        <p className="text-center" style={{ color: 'tomato' }}>{error}</p>
       ) : orders.length === 0 ? (
-        <p className="uop-info text-gray-400 text-center">You have not placed any orders yet.</p>
+        <p className="text-center" style={{ color: 'var(--text-color-light)' }}>
+          You have not placed any orders yet.
+        </p>
       ) : (
-        <div className="uop-orders-list space-y-8 max-w-7xl mx-auto">
+        <div className="w-full max-w-6xl mx-auto space-y-8">
           {orders.map((order) => {
             const currentStep = getStatusIndex(order.status);
 
             return (
-              <div
+              <section
                 key={order._id}
-                className="uop-order-card bg-gray-850 bg-opacity-80 border border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-teal-600 transition-shadow duration-300 animate-fadeIn"
+                className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-2xl p-6 backdrop-blur-lg shadow-lg hover:shadow-[0_0_30px_var(--neon-color)] transition-shadow duration-300"
               >
-                <div className="uop-order-header flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                  <div className="uop-order-id font-semibold text-lg md:text-xl text-teal-400 tracking-wide break-words">
-                    Order ID: <span className="font-mono text-indigo-300">{order._id}</span>
-                  </div>
-                  <div className="uop-total mt-3 md:mt-0 font-semibold text-teal-300 text-lg">
+                <header className="flex flex-col md:flex-row justify-between items-center mb-6">
+                  <p className="font-semibold text-lg text-[var(--neon-color)] tracking-wide break-all">
+                    Order ID: <span className="font-mono text-indigo-400">{order._id}</span>
+                  </p>
+                  <p className="font-semibold text-lg text-indigo-400 mt-3 md:mt-0">
                     Total: KSh {order.totalAmount?.toLocaleString()}
-                  </div>
-                </div>
+                  </p>
+                </header>
 
-                {/* Status progress bar */}
-                <div className="uop-status-bar relative flex justify-between items-center mb-6 max-w-xl mx-auto px-4">
+                {/* Status Progress Bar */}
+                <div className="relative flex justify-between items-center max-w-xl mx-auto mb-6 px-4">
                   {STATUS_STEPS.map((step, idx) => (
-                    <div key={step} className="uop-status-step flex flex-col items-center w-1/3 relative z-10">
+                    <div key={step} className="flex flex-col items-center w-1/4 relative z-10">
                       <div
-                        className={`status-circle mb-2 ${
+                        className={`status-circle ${
                           idx <= currentStep ? 'active' : ''
                         }`}
+                        aria-label={step}
                       >
                         {idx + 1}
                       </div>
                       <span
-                        className={`text-xs md:text-sm font-semibold ${
-                          idx <= currentStep ? 'text-teal-400' : 'text-gray-600'
+                        className={`mt-2 text-xs font-semibold ${
+                          idx <= currentStep ? 'text-[var(--neon-color)]' : 'text-gray-500'
                         }`}
                       >
                         {step}
                       </span>
                     </div>
                   ))}
-                  {/* Progress bar line */}
-                  <div className="uop-progress-line absolute top-5 left-8 right-8 h-1 bg-gray-700 rounded-full">
+
+                  {/* Line behind circles */}
+                  <div className="absolute top-5 left-[12%] right-[12%] h-1 rounded-full bg-gray-700">
                     <div
-                      className="uop-progress-line-fill h-1 bg-teal-400 rounded-full transition-width duration-700 ease-in-out"
-                      style={{ width: `${(currentStep / (STATUS_STEPS.length - 1)) * 100}%` }}
+                      className="h-1 rounded-full bg-[var(--neon-color)] transition-[width] duration-700 ease-in-out"
+                      style={{
+                        width: `${(currentStep / (STATUS_STEPS.length - 1)) * 100}%`,
+                      }}
                     />
                   </div>
                 </div>
 
-                <div className="uop-products grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {/* Products */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {order.products.map((product) => (
                     <div
                       key={product.id || product._id}
-                      className="uop-product-card bg-gray-800 rounded-xl p-4 flex flex-col items-center shadow-md hover:shadow-teal-500 transition-shadow duration-300 animate-fadeIn delay-100"
+                      className="product-card cursor-default"
+                      title={product.title}
                     >
                       <img
                         src={product.image || '/fallback.jpg'}
-                        alt={product.title || 'Product'}
-                        className="uop-product-image w-24 h-24 object-cover rounded-lg mb-3 border border-gray-700"
+                        alt={product.title || 'Product Image'}
+                        className="product-image"
                       />
-                      <div className="text-center">
-                        <h3 className="font-semibold text-sm md:text-base mb-1">{product.title || 'Unnamed Product'}</h3>
-                        <p className="text-indigo-300 font-mono mb-1 text-xs md:text-sm">
+                      <div className="p-2 text-center">
+                        <h3 className="font-semibold text-sm truncate">{product.title || 'Product'}</h3>
+                        <p className="font-mono text-indigo-400 text-xs">
                           KSh {product.price?.toLocaleString() || '0'}
                         </p>
-                        <p className="text-gray-400 text-xs md:text-sm">Qty: {product.quantity || 1}</p>
+                        <p className="text-gray-400 text-xs">Qty: {product.quantity || 1}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             );
           })}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

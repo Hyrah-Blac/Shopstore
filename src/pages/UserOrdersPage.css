@@ -1,155 +1,106 @@
-@layer utilities {
-  .bg-gray-850 {
-    background-color: #1a202c; /* slightly darker card bg */
-  }
-}
+/* UserOrdersPage Specific Styles */
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.uop-page {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #0f172a 0%, #01050b 100%);
-  min-height: 100vh;
-  padding-bottom: 4rem;
-}
-
-.uop-title {
-  text-shadow:
-    0 0 10px rgba(8, 212, 197, 0.7),
-    0 0 20px rgba(8, 212, 197, 0.6);
-}
-
-.uop-info {
-  font-size: 1rem;
-  color: #38bdf8;
-}
-
-.uop-error {
-  font-size: 1.1rem;
-}
-
-.uop-orders-list {
-  max-width: 1200px;
-}
-
-.uop-order-card {
-  border: 1px solid #2c313a;
-  background: #121926dd;
-  transition: box-shadow 0.3s ease;
-}
-
-.uop-order-card:hover {
-  box-shadow:
-    0 0 10px #06b6d4aa,
-    0 0 30px #0ff 50%;
-}
-
-.uop-order-header > div {
-  margin-bottom: 0.3rem;
-}
-
-.uop-total {
-  font-family: 'Segoe UI Mono', monospace;
-  letter-spacing: 0.05em;
-  text-shadow:
-    0 0 6px #06b6d4aa,
-    0 0 10px #0ff;
-}
-
-/* Status bar */
-
-.uop-status-bar {
-  position: relative;
-  height: 40px;
-}
-
-.uop-status-step {
-  position: relative;
-  text-align: center;
-  z-index: 10;
-}
-
+/* Progress Bar Circles */
 .status-circle {
   width: 28px;
   height: 28px;
   border-radius: 9999px;
-  background-color: #374151;
-  color: #4b5563;
+  background-color: var(--dark-surface);
+  color: #555;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  box-shadow: 0 0 4px #000;
   user-select: none;
+  box-shadow: 0 0 4px #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  z-index: 20;
+  position: relative;
+  cursor: default;
 }
 
 .status-circle.active {
-  background: #06b6d4;
-  color: #0f172a;
+  background-color: var(--neon-color);
+  color: var(--background-color);
   box-shadow:
-    0 0 8px #06b6d4,
-    0 0 15px #0ff;
+    0 0 10px var(--neon-color),
+    0 0 20px var(--neon-color);
 }
 
-.uop-progress-line {
-  top: 14px; /* center vertically relative to circles */
-  left: 12%;
-  right: 12%;
-  height: 6px;
-  background-color: #374151;
-  border-radius: 9999px;
-  position: absolute;
-  z-index: 5;
+/* Neon pulse animation for loading */
+.neon-pulse {
+  animation: neonPulse 3s ease-in-out infinite;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
-.uop-progress-line-fill {
-  height: 6px;
-  background-color: #06b6d4;
-  border-radius: 9999px;
-  width: 0%;
-  transition: width 0.7s ease-in-out;
+/* Product Card Overrides (in case you want separate styles) */
+.product-card {
+  background: var(--glass-bg);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(14px);
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
 }
 
-/* Products */
-
-.uop-product-card {
-  transition: box-shadow 0.3s ease;
-  font-size: 0.85rem;
-}
-
-.uop-product-card:hover {
+.product-card:hover {
+  transform: translateY(-5px);
   box-shadow:
-    0 0 12px #06b6d4aa,
-    0 0 24px #06b6d4cc;
+    0 0 18px var(--neon-color),
+    0 0 35px var(--neon-color);
 }
 
-.uop-product-image {
-  border-radius: 0.75rem;
-  border: 1px solid #334155;
+/* Product Image */
+.product-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  border-bottom: 1px solid var(--glass-border);
+  transition: transform 0.3s ease;
+  margin-bottom: 0.75rem;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
 }
 
 /* Responsive tweaks */
-
-@media (max-width: 768px) {
-  .uop-title {
-    font-size: 2.5rem;
+@media (max-width: 640px) {
+  .product-card {
+    padding: 0.75rem;
   }
-  .uop-product-card {
-    font-size: 0.75rem;
+  .product-image {
+    height: 140px;
+  }
+  .status-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+  .neon-pulse {
+    font-size: 1rem;
+  }
+}
+
+/* Neon glow keyframes */
+@keyframes neonPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 8px var(--neon-color),
+      0 0 16px var(--neon-color);
+  }
+  50% {
+    text-shadow:
+      0 0 12px var(--neon-color),
+      0 0 24px var(--neon-color);
   }
 }
