@@ -7,7 +7,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     e.stopPropagation(); // Prevent closing when clicking inside
   };
 
-  const userId = localStorage.getItem("userId"); // ✅ Get the user ID
+  // ✅ Get userId from localStorage (or wherever you're storing it after login)
+  const userId = localStorage.getItem("userId");
 
   return (
     <aside
@@ -42,10 +43,11 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               <FaTruck /> Delivery Status
             </Link>
           </li>
+          {/* ✅ New My Orders link */}
           {userId && (
             <li>
               <Link
-                to={`/user-orders/${userId}`} // ✅ My Orders link
+                to={`/user-orders/${userId}`}
                 className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
               >
                 <FaBoxOpen /> My Orders
