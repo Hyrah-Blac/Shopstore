@@ -30,7 +30,7 @@ const UserOrdersPage = () => {
       })
       .catch((err) => {
         console.error('Fetch user orders error:', err);
-        setError('Failed to load orders.');
+        setError('Failed to load orders. Please try again later.');
         setLoading(false);
       });
   }, [userId, token]);
@@ -57,11 +57,11 @@ const UserOrdersPage = () => {
             </div>
             <div className="mb-2">
               <span className="font-semibold text-purple-400">Status:</span>{' '}
-              {order.status}
+              {order.status || 'Pending'}
             </div>
             <div className="mb-2">
               <span className="font-semibold text-purple-400">Total:</span> KSh{' '}
-              {order.totalAmount.toLocaleString()}
+              {order.totalAmount?.toLocaleString() || 0}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -72,12 +72,12 @@ const UserOrdersPage = () => {
                 >
                   <img
                     src={product.image || '/fallback.jpg'}
-                    alt={product.title}
+                    alt={product.title || 'Product'}
                     className="w-24 h-24 object-cover rounded mb-2"
                   />
                   <div className="text-center">
-                    <div className="font-semibold">{product.title}</div>
-                    <div>KSh {product.price.toLocaleString()}</div>
+                    <div className="font-semibold">{product.title || 'Untitled'}</div>
+                    <div>KSh {product.price?.toLocaleString() || '0'}</div>
                   </div>
                 </div>
               ))}
