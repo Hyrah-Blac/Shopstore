@@ -1,7 +1,22 @@
 @layer utilities {
   .bg-gray-850 {
-    background-color: #1a202c; /* Slightly darker gray for card background */
+    background-color: #1a202c; /* slightly darker card bg */
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .uop-page {
@@ -18,12 +33,12 @@
 }
 
 .uop-info {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #38bdf8;
 }
 
 .uop-error {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
 
 .uop-orders-list {
@@ -46,47 +61,75 @@
   margin-bottom: 0.3rem;
 }
 
-.uop-status-text.delivered {
-  color: #34d399; /* green */
-  text-shadow: 0 0 8px #34d399aa;
+.uop-total {
+  font-family: 'Segoe UI Mono', monospace;
+  letter-spacing: 0.05em;
+  text-shadow:
+    0 0 6px #06b6d4aa,
+    0 0 10px #0ff;
 }
 
-.uop-status-text.pending {
-  color: #facc15; /* yellow */
-  text-shadow: 0 0 8px #facc15aa;
+/* Status bar */
+
+.uop-status-bar {
+  position: relative;
+  height: 40px;
 }
 
-.status-icon {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 0 4px);
+.uop-status-step {
+  position: relative;
+  text-align: center;
+  z-index: 10;
 }
 
-.status-icon.packaging {
-  color: #fbbf24; /* yellow */
-  filter: drop-shadow(0 0 8px #fbbf24);
+.status-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #374151;
+  color: #4b5563;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 0 4px #000;
+  user-select: none;
 }
 
-.status-icon.shipped {
-  color: #3b82f6; /* blue */
-  filter: drop-shadow(0 0 8px #3b82f6);
+.status-circle.active {
+  background: #06b6d4;
+  color: #0f172a;
+  box-shadow:
+    0 0 8px #06b6d4,
+    0 0 15px #0ff;
 }
 
-.status-icon.delivered {
-  color: #34d399; /* green */
-  filter: drop-shadow(0 0 8px #34d399);
+.uop-progress-line {
+  top: 14px; /* center vertically relative to circles */
+  left: 12%;
+  right: 12%;
+  height: 6px;
+  background-color: #374151;
+  border-radius: 9999px;
+  position: absolute;
+  z-index: 5;
 }
 
-.status-icon.pending {
-  color: #9ca3af; /* gray */
-  filter: drop-shadow(0 0 6px #9ca3af);
+.uop-progress-line-fill {
+  height: 6px;
+  background-color: #06b6d4;
+  border-radius: 9999px;
+  width: 0%;
+  transition: width 0.7s ease-in-out;
 }
 
-.uop-products {
-  margin-top: 1rem;
-}
+/* Products */
 
 .uop-product-card {
   transition: box-shadow 0.3s ease;
+  font-size: 0.85rem;
 }
 
 .uop-product-card:hover {
@@ -100,10 +143,13 @@
   border: 1px solid #334155;
 }
 
-.uop-total {
-  font-family: 'Segoe UI Mono', monospace;
-  letter-spacing: 0.05em;
-  text-shadow:
-    0 0 6px #06b6d4aa,
-    0 0 10px #0ff;
+/* Responsive tweaks */
+
+@media (max-width: 768px) {
+  .uop-title {
+    font-size: 2.5rem;
+  }
+  .uop-product-card {
+    font-size: 0.75rem;
+  }
 }
