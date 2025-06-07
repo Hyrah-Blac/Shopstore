@@ -1,140 +1,109 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "./UserDeliveryStatus.css";
 
-const STATUS_STEPS = ['Packaging', 'In Transit', 'Shipped', 'Delivered'];
-
-const getStatusIndex = (status) => {
-  const idx = STATUS_STEPS.findIndex(
-    (step) => step.toLowerCase() === status?.toLowerCase()
-  );
-  return idx === -1 ? 0 : idx;
-};
-
-const UserOrdersPage = () => {
-  const [orders, setOrders] = useState([]);
-  const [error, setError] = useState(null);
+const UserDeliveryStatusPage = () => {
+  const { orderId } = useParams();
+  const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const userId = localStorage.getItem('userId');
+  const getLastOrderId = () => localStorage.getItem("lastOrderId");
 
   useEffect(() => {
-    if (!userId) {
-      setError('User not logged in.');
+    const idToFetch = orderId || getLastOrderId();
+    if (!idToFetch) {
       setLoading(false);
       return;
     }
 
-    const fetchOrders = async () => {
-      try {
-        const res = await fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`);
-        if (!res.ok) throw new Error(`Error ${res.status}`);
-        const data = await res.json();
-        setOrders(data);
-      } catch (err) {
-        setError('You currently have no orders.');
-      } finally {
+    setLoading(true);
+    fetch(`https://backend-5za1.onrender.com/api/orders/${idToFetch}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch order");
+        return res.json();
+      })
+      .then((data) => {
+        setOrder(data);
         setLoading(false);
-      }
-    };
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Could not load order. Please check your link or try again.");
+        setLoading(false);
+      });
+  }, [orderId]);
 
-    fetchOrders();
-  }, [userId]);
+  const progressStages = ["Packaging", "In Transit", "Delivered"];
+  const currentStageIndex = progressStages.indexOf(order?.status);
 
   return (
-    <main className="main-content">
-      <h1>Your Orders</h1>
+    <div className="uds-page min-h-screen bg-gray-900 text-white px-6 py-10 font-poppins">
+      <h1 className="text-4xl font-bold mb-8 text-center neon-text">Delivery Status</h1>
 
-      {loading ? (
-        <p className="text-center neon-pulse" style={{color: 'var(--neon-color)'}}>
-          Loading orders...
-        </p>
+      {!orderId && !getLastOrderId() ? (
+        <p className="text-center text-gray-400">No order ID found. Please checkout first.</p>
+      ) : loading ? (
+        <p className="text-center text-blue-400">Loading order details…</p>
       ) : error ? (
-        <p className="text-center" style={{ color: 'tomato' }}>{error}</p>
-      ) : orders.length === 0 ? (
-        <p className="text-center" style={{ color: 'var(--text-color-light)' }}>
-          You have not placed any orders yet.
-        </p>
+        <p className="text-center text-red-500">{error}</p>
+      ) : !order ? (
+        <p className="text-center text-gray-400">Order not found. Verify your link.</p>
       ) : (
-        <div className="w-full max-w-6xl mx-auto space-y-8">
-          {orders.map((order) => {
-            const currentStep = getStatusIndex(order.status);
+        <div className="bg-gray-800 p-6 rounded-lg shadow-xl backdrop-blur-md border border-gray-700">
+          <div className="flex flex-col md:flex-row justify-between mb-6">
+            <h2 className="text-xl font-semibold text-purple-300">Order ID: {order._id}</h2>
+            <p className="text-indigo-400 font-medium capitalize">Status: {order.status}</p>
+          </div>
 
-            return (
-              <section
-                key={order._id}
-                className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-2xl p-6 backdrop-blur-lg shadow-lg hover:shadow-[0_0_30px_var(--neon-color)] transition-shadow duration-300"
-              >
-                <header className="flex flex-col md:flex-row justify-between items-center mb-6">
-                  <p className="font-semibold text-lg text-[var(--neon-color)] tracking-wide break-all">
-                    Order ID: <span className="font-mono text-indigo-400">{order._id}</span>
-                  </p>
-                  <p className="font-semibold text-lg text-indigo-400 mt-3 md:mt-0">
-                    Total: KSh {order.totalAmount?.toLocaleString()}
-                  </p>
-                </header>
-
-                {/* Status Progress Bar */}
-                <div className="relative flex justify-between items-center max-w-xl mx-auto mb-6 px-4">
-                  {STATUS_STEPS.map((step, idx) => (
-                    <div key={step} className="flex flex-col items-center w-1/4 relative z-10">
-                      <div
-                        className={`status-circle ${
-                          idx <= currentStep ? 'active' : ''
-                        }`}
-                        aria-label={step}
-                      >
-                        {idx + 1}
-                      </div>
-                      <span
-                        className={`mt-2 text-xs font-semibold ${
-                          idx <= currentStep ? 'text-[var(--neon-color)]' : 'text-gray-500'
-                        }`}
-                      >
-                        {step}
-                      </span>
-                    </div>
-                  ))}
-
-                  {/* Line behind circles */}
-                  <div className="absolute top-5 left-[12%] right-[12%] h-1 rounded-full bg-gray-700">
+          {/* Progress Bar */}
+          <div className="uds-progress-bar mb-10">
+            {progressStages.map((stage, index) => {
+              const isActive = index <= currentStageIndex;
+              return (
+                <div key={stage} className="uds-progress-step">
+                  <div
+                    className={`uds-circle ${isActive ? "active" : ""}`}
+                  ></div>
+                  <p className="uds-label">{stage}</p>
+                  {index < progressStages.length - 1 && (
                     <div
-                      className="h-1 rounded-full bg-[var(--neon-color)] transition-[width] duration-700 ease-in-out"
-                      style={{
-                        width: `${(currentStep / (STATUS_STEPS.length - 1)) * 100}%`,
-                      }}
-                    />
-                  </div>
+                      className={`uds-line ${index < currentStageIndex ? "active" : ""}`}
+                    ></div>
+                  )}
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Products */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {order.products.map((product) => (
-                    <div
-                      key={product.id || product._id}
-                      className="product-card cursor-default"
-                      title={product.title}
-                    >
-                      <img
-                        src={product.image || '/fallback.jpg'}
-                        alt={product.title || 'Product Image'}
-                        className="product-image"
-                      />
-                      <div className="p-2 text-center">
-                        <h3 className="font-semibold text-sm truncate">{product.title || 'Product'}</h3>
-                        <p className="font-mono text-indigo-400 text-xs">
-                          KSh {product.price?.toLocaleString() || '0'}
-                        </p>
-                        <p className="text-gray-400 text-xs">Qty: {product.quantity || 1}</p>
-                      </div>
-                    </div>
-                  ))}
+          {/* Products */}
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {order.products.map((product, idx) => (
+              <div key={idx} className="bg-gray-700 rounded-lg p-4 shadow-md flex items-center space-x-4 hover:scale-105 transition-all duration-300">
+                <img
+                  src={product.image || "/fallback.jpg"}
+                  alt={product.name}
+                  className="w-20 h-20 rounded object-cover border border-gray-600"
+                />
+                <div>
+                  <h3 className="font-semibold text-lg">{product.name}</h3>
+                  <p className="text-sm text-gray-300">Qty: {product.quantity}</p>
+                  <p className="text-sm text-indigo-300 font-semibold">
+                    KSh {(product.price * product.quantity).toLocaleString()}
+                  </p>
                 </div>
-              </section>
-            );
-          })}
+              </div>
+            ))}
+          </div>
+
+          {/* Total */}
+          <p className="text-right mt-6 text-lg font-bold text-indigo-400">
+            Total: KSh {order.totalAmount.toLocaleString()}
+          </p>
         </div>
       )}
-    </main>
+    </div>
   );
 };
 
-export default UserOrdersPage;
+export default UserDeliveryStatusPage;
