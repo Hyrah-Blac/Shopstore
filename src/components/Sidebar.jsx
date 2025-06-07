@@ -42,14 +42,15 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               <FaTruck /> Delivery Status
             </Link>
           </li>
-          <li>
-            <Link
-              to={`/user-orders/${userId}`}
-              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
-            >
-              <FaBoxOpen /> My Orders
-            </Link>
-          </li>
+         <li>
+  <Link
+    to="/user-orders"
+    className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
+  >
+    <FaTruck /> Your Orders
+  </Link>
+</li>
+
         </ul>
       </div>
     </aside>
