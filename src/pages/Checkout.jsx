@@ -1,4 +1,3 @@
-// src/pages/Checkout.jsx
 import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +16,17 @@ const Checkout = () => {
   const [locationError, setLocationError] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Example: assume currentUser object is fetched or passed from context/global state
+  // Must include _id (string), e.g. from user auth
+  const currentUser = {
+    _id: localStorage.getItem("userId") || "", // or from auth context
+    name,
+    phone: phoneNumber,
+    address,
+    lat: userLocation.lat,
+    lng: userLocation.lng,
+  };
 
   const totalPrice = getTotalPrice();
   const discountedPrice = totalPrice - (totalPrice * discount) / 100;
@@ -65,17 +75,16 @@ const Checkout = () => {
       return;
     }
 
+    if (!currentUser._id) {
+      setError("User ID missing. Please login.");
+      return;
+    }
+
     setError("");
     setLoading(true);
 
     const orderData = {
-      user: {
-        name,
-        phone: phoneNumber,
-        address,
-        lat: userLocation.lat,
-        lng: userLocation.lng,
-      },
+      user: currentUser, // include _id here!
       products: cartItems.map((item) => ({
         id: item.id,
         name: item.name,
@@ -102,148 +111,74 @@ const Checkout = () => {
         body: JSON.stringify(orderData),
       });
 
+      if (!res.ok) {
+        throw new Error("Failed to place order");
+      }
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to place order");
 
       clearCart();
 
-      // Save order ID to localStorage for sidebar access
-      localStorage.setItem("lastOrderId", data.orderId);
-
-      // Redirect to delivery status page with returned order ID
       navigate(`/user-delivery-status/${data.orderId}`);
     } catch (err) {
-      setError(err.message);
-    } finally {
+      setError(err.message || "Failed to place order");
       setLoading(false);
     }
   };
 
   return (
-    <div className="checkout-page">
+    <div className="checkout-container">
       <h1>Checkout</h1>
 
-      {cartItems.length === 0 ? (
+      <div className="user-info">
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Phone Number (e.g., 07XXXXXXXX)"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          required
+          maxLength={10}
+        />
+        <input
+          type="text"
+          placeholder="Delivery Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="promo-code">
+        <input
+          type="text"
+          placeholder="Enter promo code"
+          value={promoCode}
+          onChange={(e) => setPromoCode(e.target.value)}
+        />
+        <button onClick={handlePromoCode}>Apply</button>
+        {discount > 0 && <p>Promo code applied: {discount}% off</p>}
+      </div>
+
+      <div className="order-summary">
+        <p>Subtotal: KSh {totalPrice.toLocaleString()}</p>
         <p>
-          Your cart is empty. Go back to <strong>Home</strong> and add items.
+          Total after discount: KSh {discountedPrice.toLocaleString()}
         </p>
-      ) : (
-        <div className="checkout-container">
-          <div className="checkout-items">
-            <h2>Items in Cart</h2>
-            <ul>
-              {cartItems.map((item, index) => {
-                const imageUrl =
-                  item.image && !item.image.startsWith("http")
-                    ? `/assets/${item.image.replace(/^\//, "")}`
-                    : item.image || "/placeholder.png";
+      </div>
 
-                return (
-                  <li key={`${item.id}-${index}`} className="checkout-item">
-                    <img
-                      src={imageUrl}
-                      alt={item.name || "Product"}
-                      className="checkout-img"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/placeholder.png";
-                      }}
-                    />
-                    <div className="checkout-details">
-                      <p>
-                        <strong>{item.name || "Unnamed Product"}</strong>
-                      </p>
-                      <p>
-                        Price: KSh {parseInt(item.price || 0).toLocaleString()}
-                      </p>
-                      <p>Qty: {item.quantity || 1}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+      <button onClick={handlePayment} disabled={loading}>
+        {loading ? "Processing Payment..." : "Proceed to Pay"}
+      </button>
 
-          <div className="payment-form">
-            <h2>Delivery Details</h2>
-
-            <label htmlFor="name">Full Name:</label>
-            <input
-              type="text"
-              id="name"
-              placeholder="Your full name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-
-            <label htmlFor="address">Address:</label>
-            <textarea
-              id="address"
-              placeholder="Delivery address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-
-            <label>Your Location:</label>
-            {userLocation.lat && userLocation.lng ? (
-              <p>
-                Lat: {userLocation.lat?.toFixed(5)}, Lng:{" "}
-                {userLocation.lng?.toFixed(5)}
-              </p>
-            ) : (
-              <p>{locationError || "Fetching location..."}</p>
-            )}
-
-            <h2>Mpesa Payment</h2>
-
-            <label htmlFor="phone">Mpesa Number:</label>
-            <input
-              type="tel"
-              id="phone"
-              placeholder="07XXXXXXXX"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-            />
-
-            <label htmlFor="promo">Promo Code (optional):</label>
-            <div className="promo-row">
-              <input
-                type="text"
-                id="promo"
-                placeholder="Enter promo code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-              />
-              <button type="button" className="apply-btn" onClick={handlePromoCode}>
-                Apply
-              </button>
-            </div>
-
-            <div className="total-section">
-              <p>
-                Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong>
-              </p>
-              {discount > 0 && (
-                <p>
-                  Discount: <strong>{discount}%</strong>
-                </p>
-              )}
-              <p className="grand-total">
-                Total: <strong>KSh {discountedPrice.toLocaleString()}</strong>
-              </p>
-            </div>
-
-            {error && <div className="checkout-error">{error}</div>}
-
-            <button className="pay-btn" onClick={handlePayment} disabled={loading}>
-              {loading ? "Processing..." : "Pay Now with Mpesa"}
-            </button>
-          </div>
-        </div>
-      )}
+      {error && <p className="error">{error}</p>}
+      {locationError && <p className="error">{locationError}</p>}
     </div>
   );
 };
