@@ -38,24 +38,32 @@ const Checkout = () => {
     iconAnchor: [12, 41],
   });
 
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      setLocationError("Geolocation not supported by your browser.");
-      return;
+useEffect(() => {
+  if (!navigator.geolocation) {
+    setLocationError("Geolocation not supported by your browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const coords = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      };
+      console.log("📍 Got location:", coords);
+      setUserLocation(coords);
+    },
+    (error) => {
+      console.error("❌ Location error:", error);
+      setLocationError("Unable to retrieve your location. Please allow access.");
+    },
+    {
+      enableHighAccuracy: true, // ✅ Request best accuracy
+      timeout: 10000,
+      maximumAge: 0,
     }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const coords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        };
-        setUserLocation(coords);
-      },
-      () => {
-        setLocationError("Unable to retrieve your location. Please allow location access.");
-      }
-    );
-  }, []);
+  );
+}, []);
 
   // Reverse Geocode Address
   useEffect(() => {
