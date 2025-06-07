@@ -19,6 +19,7 @@ import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
 import AdminOrdersPage from "./pages/AdminOrders";
 import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
+import UserOrdersPage from "./pages/UserOrdersPage";
 
 // Styles
 import "./App.css";
