@@ -16,9 +16,7 @@ const UserOrdersPage = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch(
-          `https://backend-5za1.onrender.com/api/orders/user/${userId}`
-        );
+        const res = await fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`);
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         setOrders(data);
