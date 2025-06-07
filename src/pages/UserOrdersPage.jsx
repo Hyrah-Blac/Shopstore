@@ -6,20 +6,15 @@ const UserOrdersPage = () => {
   const [loading, setLoading] = useState(true);
 
   const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (!userId || !token) {
+    if (!userId) {
       setError('User not logged in.');
       setLoading(false);
       return;
     }
 
-    fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json();
@@ -30,10 +25,10 @@ const UserOrdersPage = () => {
       })
       .catch((err) => {
         console.error('Fetch user orders error:', err);
-        setError('Failed to load orders. Please try again later.');
+        setError('Failed to load orders.');
         setLoading(false);
       });
-  }, [userId, token]);
+  }, [userId]);
 
   return (
     <div className="p-6 min-h-screen bg-gray-900 text-white">
@@ -57,11 +52,11 @@ const UserOrdersPage = () => {
             </div>
             <div className="mb-2">
               <span className="font-semibold text-purple-400">Status:</span>{' '}
-              {order.status || 'Pending'}
+              {order.status}
             </div>
             <div className="mb-2">
               <span className="font-semibold text-purple-400">Total:</span> KSh{' '}
-              {order.totalAmount?.toLocaleString() || 0}
+              {order.totalAmount.toLocaleString()}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -72,12 +67,12 @@ const UserOrdersPage = () => {
                 >
                   <img
                     src={product.image || '/fallback.jpg'}
-                    alt={product.title || 'Product'}
+                    alt={product.title}
                     className="w-24 h-24 object-cover rounded mb-2"
                   />
                   <div className="text-center">
-                    <div className="font-semibold">{product.title || 'Untitled'}</div>
-                    <div>KSh {product.price?.toLocaleString() || '0'}</div>
+                    <div className="font-semibold">{product.title}</div>
+                    <div>KSh {product.price.toLocaleString()}</div>
                   </div>
                 </div>
               ))}
