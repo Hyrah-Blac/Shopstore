@@ -55,7 +55,7 @@ useEffect(() => {
     },
     (error) => {
       console.error("❌ Location error:", error);
-      setLocationError("Unable to retrieve your location. Please allow access.");
+     
     },
     {
       enableHighAccuracy: true, // ✅ Request best accuracy
