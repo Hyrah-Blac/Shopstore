@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const UserOrdersPage = () => {
+  const { userId: paramUserId } = useParams();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = localStorage.getItem('userId'); // Replace with actual user ID source
+  // Use userId from URL param if present, otherwise fallback to localStorage
+  const userId = paramUserId || localStorage.getItem('userId');
 
   useEffect(() => {
     if (!userId) {
