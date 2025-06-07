@@ -1,4 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { FaBoxOpen, FaTruck, FaCheckCircle, FaClock } from 'react-icons/fa';
+
+const statusIcon = (status) => {
+  switch ((status || '').toLowerCase()) {
+    case 'packaging':
+      return <FaBoxOpen className="status-icon packaging" />;
+    case 'shipped':
+      return <FaTruck className="status-icon shipped" />;
+    case 'delivered':
+      return <FaCheckCircle className="status-icon delivered" />;
+    default:
+      return <FaClock className="status-icon pending" />;
+  }
+};
 
 const UserOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -32,62 +46,65 @@ const UserOrdersPage = () => {
   }, [userId]);
 
   return (
-    <div className="p-6 min-h-screen bg-gray-900 text-white">
-      <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
+    <div className="uop-page p-6 min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white font-sans">
+      <h1 className="uop-title text-4xl font-extrabold mb-8 text-center tracking-wide text-teal-400 drop-shadow-lg">
+        Your Orders
+      </h1>
 
       {loading ? (
-        <p className="text-blue-400">Loading orders...</p>
+        <p className="uop-info text-teal-300 animate-pulse text-center">Loading orders...</p>
       ) : error ? (
-        <p className="text-red-400">{error}</p>
+        <p className="uop-error text-red-500 text-center font-semibold">{error}</p>
       ) : orders.length === 0 ? (
-        <p className="text-gray-400">You have not placed any orders yet.</p>
+        <p className="uop-info text-gray-400 text-center">You have not placed any orders yet.</p>
       ) : (
-        orders.map((order) => (
-          <div
-            key={order._id}
-            className="bg-gray-800 p-4 mb-6 rounded-lg border border-gray-700 shadow-md"
-          >
-            <div className="mb-2">
-              <span className="font-semibold text-purple-400">Order ID:</span>{' '}
-              {order._id}
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-purple-400">Status:</span>{' '}
-              <span
-                className={`${
-                  order.status === 'Delivered'
-                    ? 'text-green-400 font-bold'
-                    : 'text-yellow-400'
-                }`}
-              >
-                {order.status || 'Pending'}
-              </span>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-purple-400">Total:</span> KSh{' '}
-              {order.totalAmount?.toLocaleString()}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-              {order.products.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-gray-700 p-3 rounded shadow-md flex flex-col items-center"
-                >
-                  <img
-                    src={product.image || '/fallback.jpg'}
-                    alt={product.title || 'Product'}
-                    className="w-24 h-24 object-cover rounded mb-2"
-                  />
-                  <div className="text-center">
-                    <div className="font-semibold">{product.title || 'Unnamed Product'}</div>
-                    <div>KSh {product.price?.toLocaleString() || '0'}</div>
-                  </div>
+        <div className="uop-orders-list space-y-8 max-w-7xl mx-auto">
+          {orders.map((order) => (
+            <div
+              key={order._id}
+              className="uop-order-card bg-gray-850 bg-opacity-80 border border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-teal-600 transition-shadow duration-300"
+            >
+              <div className="uop-order-header flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <div className="uop-order-id font-semibold text-xl text-teal-400 tracking-wide break-words">
+                  Order ID: <span className="font-mono text-indigo-300">{order._id}</span>
                 </div>
-              ))}
+                <div className="uop-status flex items-center space-x-3 mt-3 md:mt-0 text-lg font-semibold">
+                  {statusIcon(order.status)}
+                  <span
+                    className={`uop-status-text capitalize ${
+                      order.status === 'Delivered' ? 'delivered' : 'pending'
+                    }`}
+                  >
+                    {order.status || 'Pending'}
+                  </span>
+                </div>
+                <div className="uop-total mt-3 md:mt-0 font-semibold text-teal-300 text-lg">
+                  Total: KSh {order.totalAmount?.toLocaleString()}
+                </div>
+              </div>
+
+              <div className="uop-products grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {order.products.map((product) => (
+                  <div
+                    key={product.id || product._id}
+                    className="uop-product-card bg-gray-800 rounded-xl p-4 flex flex-col items-center shadow-md hover:shadow-teal-500 transition-shadow duration-300"
+                  >
+                    <img
+                      src={product.image || '/fallback.jpg'}
+                      alt={product.title || 'Product'}
+                      className="uop-product-image w-28 h-28 object-cover rounded-lg mb-3 border border-gray-700"
+                    />
+                    <div className="text-center">
+                      <h3 className="font-semibold text-lg mb-1">{product.title || 'Unnamed Product'}</h3>
+                      <p className="text-indigo-300 font-mono mb-1">KSh {product.price?.toLocaleString() || '0'}</p>
+                      <p className="text-gray-400 text-sm">Qty: {product.quantity || 1}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

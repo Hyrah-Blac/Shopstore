@@ -1,0 +1,109 @@
+@layer utilities {
+  .bg-gray-850 {
+    background-color: #1a202c; /* Slightly darker gray for card background */
+  }
+}
+
+.uop-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #0f172a 0%, #01050b 100%);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.uop-title {
+  text-shadow:
+    0 0 10px rgba(8, 212, 197, 0.7),
+    0 0 20px rgba(8, 212, 197, 0.6);
+}
+
+.uop-info {
+  font-size: 1.2rem;
+  color: #38bdf8;
+}
+
+.uop-error {
+  font-size: 1.3rem;
+}
+
+.uop-orders-list {
+  max-width: 1200px;
+}
+
+.uop-order-card {
+  border: 1px solid #2c313a;
+  background: #121926dd;
+  transition: box-shadow 0.3s ease;
+}
+
+.uop-order-card:hover {
+  box-shadow:
+    0 0 10px #06b6d4aa,
+    0 0 30px #0ff 50%;
+}
+
+.uop-order-header > div {
+  margin-bottom: 0.3rem;
+}
+
+.uop-status-text.delivered {
+  color: #34d399; /* green */
+  text-shadow: 0 0 8px #34d399aa;
+}
+
+.uop-status-text.pending {
+  color: #facc15; /* yellow */
+  text-shadow: 0 0 8px #facc15aa;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 4px);
+}
+
+.status-icon.packaging {
+  color: #fbbf24; /* yellow */
+  filter: drop-shadow(0 0 8px #fbbf24);
+}
+
+.status-icon.shipped {
+  color: #3b82f6; /* blue */
+  filter: drop-shadow(0 0 8px #3b82f6);
+}
+
+.status-icon.delivered {
+  color: #34d399; /* green */
+  filter: drop-shadow(0 0 8px #34d399);
+}
+
+.status-icon.pending {
+  color: #9ca3af; /* gray */
+  filter: drop-shadow(0 0 6px #9ca3af);
+}
+
+.uop-products {
+  margin-top: 1rem;
+}
+
+.uop-product-card {
+  transition: box-shadow 0.3s ease;
+}
+
+.uop-product-card:hover {
+  box-shadow:
+    0 0 12px #06b6d4aa,
+    0 0 24px #06b6d4cc;
+}
+
+.uop-product-image {
+  border-radius: 0.75rem;
+  border: 1px solid #334155;
+}
+
+.uop-total {
+  font-family: 'Segoe UI Mono', monospace;
+  letter-spacing: 0.05em;
+  text-shadow:
+    0 0 6px #06b6d4aa,
+    0 0 10px #0ff;
+}
