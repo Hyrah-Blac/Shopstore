@@ -17,10 +17,8 @@ const Checkout = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Example: assume currentUser object is fetched or passed from context/global state
-  // Must include _id (string), e.g. from user auth
   const currentUser = {
-    _id: localStorage.getItem("userId") || "", // or from auth context
+    _id: localStorage.getItem("userId") || "",
     name,
     phone: phoneNumber,
     address,
@@ -84,14 +82,13 @@ const Checkout = () => {
     setLoading(true);
 
     const orderData = {
-      user: currentUser, // include _id here!
+      user: currentUser,
       products: cartItems.map((item) => ({
         id: item.id,
         name: item.name,
-        image:
-          item.image && !item.image.startsWith("http")
-            ? `/assets/${item.image.replace(/^\//, "")}`
-            : item.image || "/placeholder.png",
+        image: item.image?.startsWith("http")
+          ? item.image
+          : `/assets/${item.image?.replace(/^\//, "") || "placeholder.png"}`,
         price: Number(item.price),
         quantity: Number(item.quantity),
       })),
@@ -101,24 +98,17 @@ const Checkout = () => {
     };
 
     try {
-      alert(
-        `Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`
-      );
-
+      alert(`Simulated Mpesa payment of KSh ${discountedPrice.toLocaleString()} from ${phoneNumber}`);
       const res = await fetch("https://backend-5za1.onrender.com/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to place order");
-      }
+      if (!res.ok) throw new Error("Failed to place order");
 
       const data = await res.json();
-
       clearCart();
-
       navigate(`/user-delivery-status/${data.orderId}`);
     } catch (err) {
       setError(err.message || "Failed to place order");
@@ -131,49 +121,37 @@ const Checkout = () => {
       <h1>Checkout</h1>
 
       <div className="user-info">
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Phone Number (e.g., 07XXXXXXXX)"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-          maxLength={10}
-        />
-        <input
-          type="text"
-          placeholder="Delivery Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" placeholder="Phone Number (e.g., 07XXXXXXXX)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} maxLength={10} />
+        <input type="text" placeholder="Delivery Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+      </div>
+
+      <div className="cart-preview">
+        <h2>Your Items</h2>
+        {cartItems.map((item, index) => (
+          <div className="cart-item" key={index}>
+            <img src={item.image?.startsWith("http") ? item.image : `/assets/${item.image?.replace(/^\//, "")}`} alt={item.name} />
+            <div className="details">
+              <p><strong>{item.name}</strong></p>
+              <p>Price: KSh {item.price.toLocaleString()}</p>
+              <p>Quantity: {item.quantity}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="promo-code">
-        <input
-          type="text"
-          placeholder="Enter promo code"
-          value={promoCode}
-          onChange={(e) => setPromoCode(e.target.value)}
-        />
+        <input type="text" placeholder="Enter promo code" value={promoCode} onChange={(e) => setPromoCode(e.target.value)} />
         <button onClick={handlePromoCode}>Apply</button>
-        {discount > 0 && <p>Promo code applied: {discount}% off</p>}
+        {discount > 0 && <p className="success">Promo code applied: {discount}% off</p>}
       </div>
 
       <div className="order-summary">
-        <p>Subtotal: KSh {totalPrice.toLocaleString()}</p>
-        <p>
-          Total after discount: KSh {discountedPrice.toLocaleString()}
-        </p>
+        <p>Subtotal: <strong>KSh {totalPrice.toLocaleString()}</strong></p>
+        <p>Total after discount: <strong>KSh {discountedPrice.toLocaleString()}</strong></p>
       </div>
 
-      <button onClick={handlePayment} disabled={loading}>
+      <button className="pay-btn" onClick={handlePayment} disabled={loading}>
         {loading ? "Processing Payment..." : "Proceed to Pay"}
       </button>
 
