@@ -4,11 +4,10 @@ import { FaEnvelope, FaCogs, FaTruck, FaBoxOpen } from "react-icons/fa";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleSidebarClick = (e) => {
-    e.stopPropagation(); // Prevent closing when clicking inside
+    e.stopPropagation();
   };
 
-  // ✅ Get userId from localStorage (or wherever you're storing it after login)
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId") || "123"; // fallback for testing
 
   return (
     <aside
@@ -43,17 +42,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               <FaTruck /> Delivery Status
             </Link>
           </li>
-          {/* ✅ New My Orders link */}
-          {userId && (
-            <li>
-              <Link
-                to={`/user-orders/${userId}`}
-                className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
-              >
-                <FaBoxOpen /> My Orders
-              </Link>
-            </li>
-          )}
+          <li>
+            <Link
+              to={`/user-orders/${userId}`}
+              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
+            >
+              <FaBoxOpen /> My Orders
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>
