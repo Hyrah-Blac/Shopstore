@@ -5,16 +5,21 @@ const UserOrdersPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = localStorage.getItem('userId'); // Make sure userId is stored correctly on login
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !token) {
       setError('User not logged in.');
       setLoading(false);
       return;
     }
 
-    fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`)
+    fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json();
@@ -28,18 +33,18 @@ const UserOrdersPage = () => {
         setError('Failed to load orders.');
         setLoading(false);
       });
-  }, [userId]);
+  }, [userId, token]);
 
   return (
     <div className="p-6 min-h-screen bg-gray-900 text-white">
       <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
 
       {loading ? (
-        <p>Loading orders...</p>
+        <p className="text-blue-400">Loading orders...</p>
       ) : error ? (
         <p className="text-red-400">{error}</p>
       ) : orders.length === 0 ? (
-        <p>You have not placed any orders yet.</p>
+        <p className="text-gray-400">You have not placed any orders yet.</p>
       ) : (
         orders.map((order) => (
           <div
@@ -66,7 +71,7 @@ const UserOrdersPage = () => {
                   className="bg-gray-700 p-3 rounded shadow-md flex flex-col items-center"
                 >
                   <img
-                    src={product.image}
+                    src={product.image || '/fallback.jpg'}
                     alt={product.title}
                     className="w-24 h-24 object-cover rounded mb-2"
                   />
