@@ -18,6 +18,8 @@ import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
 import AdminOrdersPage from "./pages/AdminOrders";
+import UserOrdersPage from "./pages/UserOrdersPage";
+
 // Removed import UserDeliveryStatusPage
 
 // Styles
