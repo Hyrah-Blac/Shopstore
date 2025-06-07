@@ -18,8 +18,7 @@ import EditProductPrices from "./pages/EditProductPrices";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
 import AdminOrdersPage from "./pages/AdminOrders";
-import UserDeliveryStatusPage from "./pages/UserDeliveryStatusPage";
-import UserOrdersPage from "./pages/UserOrdersPage"; // adjust path if needed
+// Removed import UserDeliveryStatusPage
 
 // Styles
 import "./App.css";
@@ -102,24 +101,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* User delivery status */}
-          <Route
-            path="/user-delivery-status/:orderId"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/user-delivery-status"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
+          {/* Removed user-delivery-status routes */}
         </Route>
 
         {/* Public routes */}

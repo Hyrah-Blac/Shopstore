@@ -31,14 +31,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             <Link
               to="/checkout"
               className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
-            >
-              <FaCogs /> Checkout
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/user-delivery-status"
-              className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
+           
             >
               <FaTruck /> Delivery Status
             </Link>
