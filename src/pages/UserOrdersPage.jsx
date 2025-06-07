@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 const UserOrdersPage = () => {
-  const { userId: paramUserId } = useParams();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Use userId from URL param if present, otherwise fallback to localStorage
-  const userId = paramUserId || localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId'); // Make sure userId is stored correctly on login
 
   useEffect(() => {
     if (!userId) {
@@ -19,7 +16,7 @@ const UserOrdersPage = () => {
 
     fetch(`https://backend-5za1.onrender.com/api/orders/user/${userId}`)
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch orders');
+        if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json();
       })
       .then((data) => {
@@ -27,7 +24,7 @@ const UserOrdersPage = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error('Fetch user orders error:', err);
         setError('Failed to load orders.');
         setLoading(false);
       });
