@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaEnvelope, FaCogs, FaTruck } from "react-icons/fa";
+import { FaEnvelope, FaCogs, FaTruck,FaCashRegister } from "react-icons/fa";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleSidebarClick = (e) => {
@@ -33,11 +33,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded"
            
             >
-              <FaTruck /> Delivery Status
+             <FaCashRegister /> Checkout
+
             </Link>
           </li>
           <li>
-          <Link to={`/user-orders/${userId}`} className="...">Your Orders</Link>
+         <Link to={`/user-orders/${userId}`} className="...">
+  <FaTruck className="inline-block mr-2" /> Your Orders
+</Link>
 
           </li>
         </ul>
