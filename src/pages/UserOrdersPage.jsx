@@ -88,16 +88,16 @@ const UserOrdersPage = () => {
                 <div className="relative flex justify-between items-center max-w-xl mx-auto mb-8 px-4">
                   {STATUS_STEPS.map((step, idx) => (
                     <div key={step} className="flex flex-col items-center w-1/3 relative z-10">
-                      <AnimatePresence>
+                      <AnimatePresence mode="wait">
                         <motion.div
-                          key={order.status + idx}
+                          key={order._id + step}
                           initial={{ scale: 0.5, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                           className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-white ${
                             idx <= currentStep
-                              ? 'bg-[var(--neon-color)] border-[var(--neon-color)] shadow-[0_0_10px_var(--neon-color)]'
+                              ? 'bg-green-500 border-green-500 shadow-[0_0_10px_#22c55e]'
                               : 'bg-gray-600 border-gray-500'
                           }`}
                         >
@@ -106,7 +106,7 @@ const UserOrdersPage = () => {
                       </AnimatePresence>
                       <span
                         className={`mt-1 text-[10px] font-medium text-center ${
-                          idx <= currentStep ? 'text-[var(--neon-color)]' : 'text-gray-500'
+                          idx <= currentStep ? 'text-green-400' : 'text-gray-500'
                         }`}
                       >
                         {step}
@@ -115,7 +115,7 @@ const UserOrdersPage = () => {
                         <div
                           className={`absolute top-[12px] left-1/2 right-[-50%] h-1 ${
                             idx < currentStep
-                              ? 'bg-[var(--neon-color)] shadow-[0_0_6px_var(--neon-color)]'
+                              ? 'bg-green-500 shadow-[0_0_6px_#22c55e]'
                               : 'bg-gray-700'
                           }`}
                           style={{ width: '100%', transform: 'translateX(50%)' }}
