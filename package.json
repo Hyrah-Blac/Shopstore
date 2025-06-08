@@ -24,7 +24,8 @@
     "nodemailer": "^7.0.3",
     "path-to-regexp": "6.2.0",
     "react-confetti": "^6.4.0",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "react-use": "^17.6.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",

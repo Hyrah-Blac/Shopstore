@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBoxOpen, FaTruck, FaCheckCircle } from 'react-icons/fa';
 import Confetti from 'react-confetti';
-import useWindowSize from 'react-use/lib/useWindowSize';
+import { useWindowSize } from "react-use";
+
 
 const STATUS_STEPS = ['Packaging', 'In Transit', 'Delivered'];
 
