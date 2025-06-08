@@ -11,6 +11,7 @@ const Home = ({ searchTerm = "" }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch products from API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -29,6 +30,7 @@ const Home = ({ searchTerm = "" }) => {
     fetchProducts();
   }, []);
 
+  // Filter products based on search term
   useEffect(() => {
     if (!searchTerm) {
       setFilteredProducts(products);

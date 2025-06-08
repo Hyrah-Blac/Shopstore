@@ -42,8 +42,9 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Layout wraps all routes that share common UI (navbar, sidebar) */}
+        {/* Shared layout (navbar, sidebar) */}
         <Route element={<Layout onFilter={setSearchTerm} />}>
+          {/* Public + Authenticated Pages */}
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home searchTerm={searchTerm} />} />
           <Route path="/contacts" element={<Contacts />} />
@@ -53,7 +54,25 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/user-orders/:userId" element={<UserOrdersPage />} />
 
-          {/* Admin routes - protected */}
+          {/* Delivery Status (protected) */}
+          <Route
+            path="/user-delivery-status/:orderId"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-delivery-status"
+            element={
+              <ProtectedRoute>
+                <UserDeliveryStatusPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin-only Routes */}
           <Route
             path="/admin"
             element={
@@ -102,31 +121,13 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* User delivery status */}
-          <Route
-            path="/user-delivery-status/:orderId"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/user-delivery-status"
-            element={
-              <ProtectedRoute>
-                <UserDeliveryStatusPage />
-              </ProtectedRoute>
-            }
-          />
         </Route>
 
-        {/* Public routes */}
+        {/* Auth Pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Catch-all 404 */}
+        {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
