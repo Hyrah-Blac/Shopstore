@@ -19,6 +19,18 @@ const statusIcons = {
   Delivered: <FaCheckCircle className="text-xl" />,
 };
 
+const deliveredMessageVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: { 
+      type: 'spring', stiffness: 260, damping: 20 
+    }
+  },
+  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
+};
+
 const UserOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
@@ -69,6 +81,7 @@ const UserOrdersPage = () => {
         <div className="w-full max-w-6xl mx-auto space-y-10">
           {orders.map((order) => {
             const currentStep = getStatusIndex(order.status);
+            const isDelivered = normalize(order.status) === 'delivered';
 
             return (
               <section
@@ -83,6 +96,22 @@ const UserOrdersPage = () => {
                     Total: KSh {order.totalAmount?.toLocaleString()}
                   </p>
                 </header>
+
+                {/* Delivered Message */}
+                <AnimatePresence>
+                  {isDelivered && (
+                    <motion.div
+                      className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white shadow-lg shadow-green-600/50 flex items-center justify-center gap-4 text-center font-semibold text-lg neon-text"
+                      variants={deliveredMessageVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      <FaCheckCircle className="text-4xl" />
+                      <span>🎉 Congratulations! Your order has been <strong>delivered</strong>! Enjoy your purchase! 🎉</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Animated Progress Bar */}
                 <div className="relative flex justify-between items-center max-w-xl mx-auto mb-8 px-4">
