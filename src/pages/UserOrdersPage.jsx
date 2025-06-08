@@ -26,9 +26,7 @@ const deliveredMessageVariants = {
   visible: { 
     opacity: 1, 
     scale: 1,
-    transition: { 
-      type: 'spring', stiffness: 260, damping: 20 
-    }
+    transition: { type: 'spring', stiffness: 260, damping: 20 }
   },
   exit: { opacity: 0, scale: 0.8, transition: { duration: 0.5 } },
 };
@@ -37,11 +35,9 @@ const UserOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [confettiActiveOrders, setConfettiActiveOrders] = useState(new Set());
 
   const userId = localStorage.getItem('userId');
-
   const { width, height } = useWindowSize();
 
   useEffect(() => {
@@ -58,14 +54,12 @@ const UserOrdersPage = () => {
         const data = await res.json();
         setOrders(data);
 
-        const deliveredOrders = data.filter(
-          (o) => normalize(o.status) === 'delivered'
-        );
-        setConfettiActiveOrders(new Set(deliveredOrders.map((o) => o._id)));
+        const deliveredOrders = data.filter(o => normalize(o.status) === 'delivered');
+        setConfettiActiveOrders(new Set(deliveredOrders.map(o => o._id)));
 
-        deliveredOrders.forEach((order) => {
+        deliveredOrders.forEach(order => {
           setTimeout(() => {
-            setConfettiActiveOrders((prev) => {
+            setConfettiActiveOrders(prev => {
               const newSet = new Set(prev);
               newSet.delete(order._id);
               return newSet;
@@ -84,7 +78,7 @@ const UserOrdersPage = () => {
 
   return (
     <main className="main-content px-4 py-10 text-[var(--text-color-light)] font-poppins relative">
-      <h1 className="text-3xl font-bold mb-10 text-center text-[var(--neon-color)] neon-text">
+      <h1 className="text-3xl font-bold mb-10 text-center text-white neon-text">
         Your Orders
       </h1>
 
@@ -148,17 +142,16 @@ const UserOrdersPage = () => {
                   </p>
                 </header>
 
-                {/* Simplified Delivered Message */}
                 <AnimatePresence>
                   {isDelivered && (
                     <motion.div
-                      className="mb-6 px-4 py-2 rounded-lg bg-green-700 bg-opacity-90 text-green-100 shadow-md flex items-center justify-center gap-2 text-sm font-medium select-none"
+                      className="mb-6 px-4 py-2 rounded-lg bg-green-800 bg-opacity-90 text-green-100 shadow-md flex items-center justify-center gap-2 text-xs font-medium select-none"
                       variants={deliveredMessageVariants}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
                     >
-                      <FaCheckCircle className="text-lg" />
+                      <FaCheckCircle className="text-base" />
                       <span>Your order has been delivered. Thank you for your purchase!</span>
                     </motion.div>
                   )}
