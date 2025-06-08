@@ -10,8 +10,6 @@
   --card-bg: rgba(10, 10, 10, 0.6);
   --text-light: #e0e0e0;
   --glass-blur: blur(18px);
-  --highlight-purple: #ba68c8;
-  --shadow-purple: rgba(138, 43, 226, 0.5);
 }
 
 body {
@@ -54,7 +52,7 @@ body {
   width: fit-content;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  text-shadow: 0 0 8px var(--shadow-purple);
+  text-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
   backdrop-filter: var(--glass-blur);
   background: rgba(0, 0, 0, 0.4);
   border-radius: 8px;
@@ -82,7 +80,7 @@ body {
   padding: 20px;
   color: var(--text-light);
   text-align: center;
-  box-shadow: 0 8px 24px var(--shadow-purple);
+  box-shadow: 0 8px 24px rgba(138, 43, 226, 0.25);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   cursor: pointer;
   display: flex;
@@ -95,7 +93,7 @@ body {
 
 .product-card:hover {
   transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 14px 30px var(--shadow-purple);
+  box-shadow: 0 14px 30px rgba(138, 43, 226, 0.5);
 }
 
 /* ========================
@@ -112,7 +110,7 @@ body {
 }
 
 .product-card:hover .product-image {
-  filter: drop-shadow(0 4px 8px var(--shadow-purple));
+  filter: drop-shadow(0 4px 8px rgba(138, 43, 226, 0.7));
 }
 
 /* ========================
@@ -133,7 +131,7 @@ body {
 .product-price {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--highlight-purple);
+  color: #ba68c8;
   margin-bottom: 15px;
   letter-spacing: 0.05em;
 }
@@ -143,19 +141,19 @@ body {
 ======================== */
 .product-details-link {
   margin-top: auto;
-  background: linear-gradient(90deg, var(--primary-purple), #6200ea);
+  background: linear-gradient(90deg, #8a2be2, #6200ea);
   color: white;
   padding: 12px 24px;
   border-radius: 30px;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 12px var(--shadow-purple);
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.5);
   transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .product-details-link:hover {
-  background: linear-gradient(90deg, #6200ea, var(--primary-purple));
-  box-shadow: 0 8px 20px var(--shadow-purple);
+  background: linear-gradient(90deg, #6200ea, #8a2be2);
+  box-shadow: 0 8px 20px rgba(138, 43, 226, 0.8);
   transform: scale(1.05);
 }
 
