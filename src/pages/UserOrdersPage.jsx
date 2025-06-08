@@ -4,6 +4,7 @@ import { FaBoxOpen, FaTruck, FaCheckCircle } from 'react-icons/fa';
 import Confetti from 'react-confetti';
 import { useWindowSize } from "react-use";
 
+
 const STATUS_STEPS = ['Packaging', 'In Transit', 'Delivered'];
 
 const normalize = (text) => text?.toLowerCase().replace(/\s+/g, '').trim();
