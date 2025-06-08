@@ -1,84 +1,256 @@
-.uds-progress-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  padding: 1rem 0;
-  margin: 2rem 0;
+:root {
+  --neon-color: #22c55e; /* neon green */
+  --text-color-light: #d1d5db; /* light gray */
+  --glass-bg: rgba(34, 197, 94, 0.1);
+  --glass-border: rgba(34, 197, 94, 0.3);
 }
 
-.uds-progress-step {
+/* Main page container */
+.main-content {
+  background-color: #121212;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color-light);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+/* Neon glowing text */
+.neon-text {
+  text-shadow:
+    0 0 5px var(--neon-color),
+    0 0 10px var(--neon-color),
+    0 0 20px var(--neon-color),
+    0 0 30px var(--neon-color);
+}
+
+/* Pulsing neon effect */
+.neon-pulse {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px var(--neon-color),
+      0 0 10px var(--neon-color),
+      0 0 20px var(--neon-color),
+      0 0 30px var(--neon-color);
+    color: var(--neon-color);
+  }
+  50% {
+    text-shadow:
+      0 0 8px var(--neon-color),
+      0 0 16px var(--neon-color),
+      0 0 32px var(--neon-color),
+      0 0 48px var(--neon-color);
+    color: #a7f3d0; /* lighter green */
+  }
+}
+
+/* Order card container */
+section {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+section:hover {
+  box-shadow: 0 0 30px var(--neon-color);
+}
+
+/* Header inside each order */
+section > header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  section > header {
+    flex-direction: row;
+  }
+}
+
+section > header p {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--neon-color);
+  word-break: break-all;
+}
+
+section > header p span {
+  font-family: monospace;
+  color: #818cf8; /* indigo-400 */
+}
+
+/* Delivered message */
+section > div.mb-6 {
+  background: linear-gradient(
+    90deg,
+    #16a34a,
+    #22c55e,
+    #4ade80
+  );
+  color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px #22c55e;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  user-select: none;
+  text-align: center;
+}
+
+/* Progress bar container */
+section > div.relative {
+  display: flex;
+  justify-content: space-between;
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative;
+}
+
+/* Each status step container */
+section > div.relative > div {
+  flex: 1 1 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  flex: 1;
-  z-index: 2;
+  z-index: 10;
 }
 
-.uds-circle {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: #1f1f1f;
-  border: 2px solid #555;
-  transition: all 0.4s ease-in-out;
-  z-index: 3;
-  position: relative;
+/* Circles for steps */
+section > div.relative > div > div {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid #4b5563; /* gray-600 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.25rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.uds-circle.active {
-  background-color: var(--neon-color);
-  border-color: var(--neon-color);
-  box-shadow:
-    0 0 8px var(--neon-color),
-    0 0 16px var(--neon-color),
-    0 0 24px var(--neon-color),
-    0 0 36px var(--neon-color);
+/* Completed or active step */
+section > div.relative > div:nth-child(-n + 3) > div.bg-green-500,
+section > div.relative > div:nth-child(-n + 3) > div.border-green-500 {
+  background-color: #22c55e; /* green-500 */
+  border-color: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
 }
 
-.uds-label {
-  font-size: 0.8rem;
-  color: #aaa;
-  margin-top: 0.5rem;
-  text-align: center;
+/* Step label */
+section > div.relative > div > span {
+  margin-top: 0.25rem;
   font-weight: 500;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 4px #000;
+  font-size: 0.625rem;
+  color: #6b7280; /* gray-500 */
+  text-align: center;
 }
 
-.uds-label.active {
-  color: #ffffff;
-  text-shadow:
-    0 0 6px var(--neon-color),
-    0 0 12px var(--neon-color);
+section > div.relative > div > span.text-green-400 {
+  color: #4ade80; /* green-400 */
 }
 
-.uds-line {
+/* Connecting bars between steps */
+section > div.relative > div > div + div {
   position: absolute;
-  top: 13px;
+  top: 0.625rem; /* center of circle vertically */
   left: 50%;
+  right: -50%;
+  height: 0.125rem;
+  background-color: #374151; /* gray-700 */
+  z-index: 5;
+  transform: translateX(50%);
+  border-radius: 9999px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+section > div.relative > div:nth-child(1) > div + div,
+section > div.relative > div:nth-child(2) > div + div {
+  background-color: #22c55e; /* green-500 */
+  box-shadow: 0 0 6px #22c55e;
+}
+
+/* Product cards grid */
+section > div.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Each product card */
+.product-card {
+  background: rgba(255 255 255 / 0.07);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: default;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 0 15px var(--neon-color);
+}
+
+.product-image {
   width: 100%;
-  height: 3px;
-  background-color: #444;
-  transform: translateX(0%);
-  z-index: 1;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-.uds-line.active {
-  background: linear-gradient(to right, var(--neon-color), #00ffcc);
-  box-shadow:
-    0 0 8px var(--neon-color),
-    0 0 16px #00ffcc;
+/* Product title */
+.product-card h3 {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-color-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.neon-text {
-  text-shadow:
-    0 0 6px var(--neon-color),
-    0 0 12px var(--neon-color),
-    0 0 24px var(--neon-color);
+/* Product price */
+.product-card p {
+  font-family: monospace;
+  color: #818cf8; /* indigo-400 */
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
 }
 
-.font-poppins {
-  font-family: 'Poppins', 'Segoe UI', 'Helvetica', sans-serif;
+/* User address */
+address {
+  margin-top: 1.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  white-space: pre-line;
+  line-height: 1.3;
+  color: var(--text-color-light);
+  user-select: text;
 }
