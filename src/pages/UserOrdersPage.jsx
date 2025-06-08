@@ -38,7 +38,6 @@ const UserOrdersPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Track which order IDs should show confetti
   const [confettiActiveOrders, setConfettiActiveOrders] = useState(new Set());
 
   const userId = localStorage.getItem('userId');
@@ -59,13 +58,11 @@ const UserOrdersPage = () => {
         const data = await res.json();
         setOrders(data);
 
-        // Initialize confetti for delivered orders
         const deliveredOrders = data.filter(
           (o) => normalize(o.status) === 'delivered'
         );
         setConfettiActiveOrders(new Set(deliveredOrders.map((o) => o._id)));
 
-        // Automatically stop confetti after 8 seconds per delivered order
         deliveredOrders.forEach((order) => {
           setTimeout(() => {
             setConfettiActiveOrders((prev) => {
@@ -113,7 +110,6 @@ const UserOrdersPage = () => {
                 key={order._id}
                 className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-2xl p-6 backdrop-blur-lg shadow-lg hover:shadow-[0_0_30px_var(--neon-color)] transition-shadow duration-300 relative"
               >
-                {/* Confetti only when active */}
                 <AnimatePresence>
                   {confettiActive && (
                     <motion.div
@@ -152,23 +148,22 @@ const UserOrdersPage = () => {
                   </p>
                 </header>
 
-                {/* Delivered Message with fade-out */}
+                {/* Simplified Delivered Message */}
                 <AnimatePresence>
                   {isDelivered && (
                     <motion.div
-                      className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white shadow-lg shadow-green-600/50 flex items-center justify-center gap-4 text-center font-semibold text-lg neon-text select-none"
+                      className="mb-6 px-4 py-2 rounded-lg bg-green-700 bg-opacity-90 text-green-100 shadow-md flex items-center justify-center gap-2 text-sm font-medium select-none"
                       variants={deliveredMessageVariants}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
                     >
-                      <FaCheckCircle className="text-4xl" />
-                      <span>🎉 Congratulations! Your order has been <strong>delivered</strong>! Enjoy your purchase! 🎉</span>
+                      <FaCheckCircle className="text-lg" />
+                      <span>Your order has been delivered. Thank you for your purchase!</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                {/* Animated Progress Bar */}
                 <div className="relative flex justify-between items-center max-w-xl mx-auto mb-8 px-4">
                   {STATUS_STEPS.map((step, idx) => (
                     <div key={step} className="flex flex-col items-center w-1/3 relative z-10">
@@ -209,7 +204,6 @@ const UserOrdersPage = () => {
                   ))}
                 </div>
 
-                {/* Products */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {order.products.map((product) => (
                     <div
