@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBoxOpen, FaTruck, FaCheckCircle } from 'react-icons/fa';
-import Confetti from 'react-confetti';
-import { useWindowSize } from "react-use";
-
 
 const STATUS_STEPS = ['Packaging', 'In Transit', 'Delivered'];
 
@@ -31,7 +28,7 @@ const deliveredMessageVariants = {
       type: 'spring', stiffness: 260, damping: 20 
     }
   },
-  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.5 } },
+  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
 };
 
 const UserOrdersPage = () => {
@@ -39,12 +36,7 @@ const UserOrdersPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Track which order IDs should show confetti
-  const [confettiActiveOrders, setConfettiActiveOrders] = useState(new Set());
-
   const userId = localStorage.getItem('userId');
-
-  const { width, height } = useWindowSize();
 
   useEffect(() => {
     if (!userId) {
@@ -59,23 +51,6 @@ const UserOrdersPage = () => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         setOrders(data);
-
-        // Initialize confetti for delivered orders
-        const deliveredOrders = data.filter(
-          (o) => normalize(o.status) === 'delivered'
-        );
-        setConfettiActiveOrders(new Set(deliveredOrders.map((o) => o._id)));
-
-        // Automatically stop confetti after 8 seconds per delivered order
-        deliveredOrders.forEach((order) => {
-          setTimeout(() => {
-            setConfettiActiveOrders((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(order._id);
-              return newSet;
-            });
-          }, 8000);
-        });
       } catch (err) {
         setError('You currently have no orders.');
       } finally {
@@ -87,7 +62,7 @@ const UserOrdersPage = () => {
   }, [userId]);
 
   return (
-    <main className="main-content px-4 py-10 text-[var(--text-color-light)] font-poppins relative">
+    <main className="main-content px-4 py-10 text-[var(--text-color-light)] font-poppins">
       <h1 className="text-3xl font-bold mb-10 text-center text-[var(--neon-color)] neon-text">
         Your Orders
       </h1>
@@ -107,43 +82,12 @@ const UserOrdersPage = () => {
           {orders.map((order) => {
             const currentStep = getStatusIndex(order.status);
             const isDelivered = normalize(order.status) === 'delivered';
-            const confettiActive = confettiActiveOrders.has(order._id);
 
             return (
               <section
                 key={order._id}
-                className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-2xl p-6 backdrop-blur-lg shadow-lg hover:shadow-[0_0_30px_var(--neon-color)] transition-shadow duration-300 relative"
+                className="bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-2xl p-6 backdrop-blur-lg shadow-lg hover:shadow-[0_0_30px_var(--neon-color)] transition-shadow duration-300"
               >
-                {/* Confetti only when active */}
-                <AnimatePresence>
-                  {confettiActive && (
-                    <motion.div
-                      key="confetti"
-                      initial={{ opacity: 1 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0, transition: { duration: 1 } }}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        pointerEvents: 'none',
-                        zIndex: 50,
-                      }}
-                    >
-                      <Confetti
-                        width={width}
-                        height={height}
-                        recycle={true}
-                        numberOfPieces={150}
-                        gravity={0.3}
-                        colors={['#22c55e', '#10b981', '#059669', '#047857']}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
                 <header className="flex flex-col md:flex-row justify-between items-center mb-6 gap-2">
                   <p className="font-semibold text-sm text-[var(--neon-color)] tracking-wide break-all">
                     Order ID: <span className="font-mono text-indigo-400">{order._id}</span>
@@ -153,11 +97,11 @@ const UserOrdersPage = () => {
                   </p>
                 </header>
 
-                {/* Delivered Message with fade-out */}
+                {/* Delivered Message */}
                 <AnimatePresence>
                   {isDelivered && (
                     <motion.div
-                      className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white shadow-lg shadow-green-600/50 flex items-center justify-center gap-4 text-center font-semibold text-lg neon-text select-none"
+                      className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white shadow-lg shadow-green-600/50 flex items-center justify-center gap-4 text-center font-semibold text-lg neon-text"
                       variants={deliveredMessageVariants}
                       initial="hidden"
                       animate="visible"
@@ -226,17 +170,13 @@ const UserOrdersPage = () => {
                       <div className="p-2 text-center">
                         <h3 className="font-semibold text-sm truncate">{product.title || 'Product'}</h3>
                         <p className="font-mono text-indigo-400 text-xs">
-                          KSh {product.price?.toLocaleString() || 'N/A'}
+                          KSh {product.price?.toLocaleString() || '0'}
                         </p>
+                        <p className="text-gray-400 text-xs">Qty: {product.quantity || 1}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-
-                {/* User address */}
-                <address className="mt-6 p-4 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl text-xs font-mono leading-relaxed whitespace-pre-line select-text">
-                  {order.address || 'No address provided'}
-                </address>
               </section>
             );
           })}
