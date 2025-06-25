@@ -1,22 +1,22 @@
-/* Login.css - dark themed and styled to match global site look */
+/* Login.css - pure black dark theme */
 
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #3a0ca3 0%, #7209b7 100%);
+  background-color: #000;
   font-family: 'Poppins', sans-serif;
   color: #f0eaff;
   padding: 20px;
 }
 
 .login-form {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #111;
   backdrop-filter: blur(10px);
   padding: 40px 30px;
   border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 360px;
   text-align: center;
@@ -26,7 +26,7 @@
 
 .login-form:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(144, 0, 255, 0.5);
+  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.05);
 }
 
 .login-form h2 {
@@ -38,7 +38,7 @@
 }
 
 .login-form p {
-  color: #ccc;
+  color: #aaa;
   font-size: 13px;
   margin-bottom: 24px;
 }
@@ -52,15 +52,15 @@
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  color: #e0d5ff;
+  color: #ccc;
   font-size: 12px;
 }
 
 .input-group input {
   width: 100%;
   padding: 12px 16px;
-  font-size: 12px;
-  border: 1px solid #555;
+  font-size: 13px;
+  border: 1px solid #333;
   background-color: #1c1c1c;
   color: #fff;
   border-radius: 10px;
@@ -68,45 +68,46 @@
 }
 
 .input-group input:focus {
-  border-color: #8a2be2;
-  box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+  border-color: #444;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
   outline: none;
 }
 
 .btn {
-  background-color: #8a2be2;
+  background-color: #000;
   color: white;
-  border: none;
+  border: 1px solid #333;
   padding: 14px;
   width: 100%;
   border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 8px 15px rgba(138, 43, 226, 0.3);
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
 }
 
 .btn:hover {
-  background-color: #9d40ff;
-  box-shadow: 0 12px 24px rgba(138, 43, 226, 0.5);
+  background-color: #111;
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.05);
 }
 
 .signup-link p {
   margin-top: 20px;
   font-size: 12px;
-  color: #aaa;
+  color: #888;
 }
 
 .signup-link a {
-  color: #b084f7;
+  color: #fff;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
 }
 
 .signup-link a:hover {
-  color: #d1aaff;
+  color: #ccc;
   text-decoration: underline;
 }
 
