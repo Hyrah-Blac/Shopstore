@@ -20,6 +20,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
+            title="Instagram"
           >
             <FaInstagram />
           </a>
@@ -28,6 +29,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Pinterest"
+            title="Pinterest"
           >
             <FaPinterest />
           </a>
@@ -36,13 +38,14 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"
+            title="Twitter"
           >
             <FaTwitter />
           </a>
         </div>
 
         <p className="footer-copy">
-          &copy; {year} Dressin. All rights reserved.
+          &copy; {year} <strong>Dressin</strong>. All rights reserved.
         </p>
       </div>
     </footer>
