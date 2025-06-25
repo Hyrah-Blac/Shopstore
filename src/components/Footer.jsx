@@ -1,11 +1,50 @@
 // src/components/Footer.jsx
 import React from "react";
+import { FaInstagram, FaPinterest, FaTwitter } from "react-icons/fa";
 import "./Footer.module.css";
 
 const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="footer" role="contentinfo">
-      <p>&copy; {new Date().getFullYear()} Dressin. All rights reserved.</p>
+      <div className="footer-container">
+        <div className="footer-logo">
+          <h3>Dressin</h3>
+          <p>Elevating your fashion game</p>
+        </div>
+
+        <div className="footer-socials">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <FaInstagram />
+          </a>
+          <a
+            href="https://pinterest.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Pinterest"
+          >
+            <FaPinterest />
+          </a>
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <FaTwitter />
+          </a>
+        </div>
+
+        <p className="footer-copy">
+          &copy; {year} Dressin. All rights reserved.
+        </p>
+      </div>
     </footer>
   );
 };
