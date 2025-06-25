@@ -4,15 +4,15 @@
 
 /* Root Variables */
 :root {
-  --primary-color: #8e2de2;
-  --secondary-color: #4a00e0;
-  --background-color: #121212;
-  --dark-surface: #1c1c1c;
-  --hover-background: #272727;
+  --primary-color: #1a1a1a;
+  --secondary-color: #2a2a2a;
+  --background-color: #000000;
+  --dark-surface: #0f0f0f;
+  --hover-background: #1c1c1c;
   --text-color-light: #f5f5f5;
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --neon-color: #8e2de2;
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --neon-color: #222; /* muted glow, more gray than color */
   --font-family: 'Poppins', 'Segoe UI', 'Helvetica', sans-serif;
 }
 
@@ -33,7 +33,7 @@ html, body {
   width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
+  background: #444;
   border-radius: 4px;
 }
 
@@ -42,23 +42,22 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-color-light);
   text-align: center;
   text-shadow:
-    0 0 5px var(--neon-color),
-    0 0 15px var(--neon-color),
-    0 0 30px var(--neon-color);
+    0 0 4px var(--neon-color),
+    0 0 6px var(--neon-color);
   margin-bottom: 1rem;
 }
 
 /* Links */
 a {
-  color: var(--primary-color);
+  color: #aaa;
   text-decoration: none;
   transition: 0.3s ease-in-out;
 }
 a:hover {
-  color: var(--secondary-color);
+  color: #fff;
   text-shadow:
-    0 0 6px var(--secondary-color),
-    0 0 16px var(--secondary-color);
+    0 0 4px #555,
+    0 0 8px #777;
 }
 
 /* Button Styles */
@@ -72,13 +71,13 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s ease;
-  text-shadow: 0 0 6px var(--primary-color);
-  box-shadow: 0 0 12px var(--primary-color);
+  text-shadow: 0 0 4px #222;
+  box-shadow: 0 0 10px #111;
 }
 button:hover {
   box-shadow:
-    0 0 15px var(--primary-color),
-    0 0 30px var(--primary-color);
+    0 0 10px #333,
+    0 0 20px #111;
   transform: scale(1.03);
 }
 button.primary {
@@ -100,15 +99,15 @@ button.primary {
   border-radius: 16px;
   border: 1px solid var(--glass-border);
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
   transition: 0.3s ease;
   backdrop-filter: blur(14px);
 }
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow:
-    0 0 18px var(--neon-color),
-    0 0 35px var(--neon-color);
+    0 0 10px #222,
+    0 0 20px #111;
 }
 
 /* Product Image */
@@ -140,13 +139,13 @@ button.primary {
 @keyframes neonPulse {
   0%, 100% {
     text-shadow:
-      0 0 8px var(--neon-color),
-      0 0 16px var(--neon-color);
+      0 0 4px var(--neon-color),
+      0 0 8px var(--neon-color);
   }
   50% {
     text-shadow:
-      0 0 12px var(--neon-color),
-      0 0 24px var(--neon-color);
+      0 0 6px var(--neon-color),
+      0 0 12px var(--neon-color);
   }
 }
 
