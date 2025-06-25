@@ -5,7 +5,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
 :root {
-  --primary-black: #000000;
   --dark-bg: #000000;
   --card-bg: rgba(10, 10, 10, 0.7);
   --text-light: #e0e0e0;
@@ -110,7 +109,7 @@ body {
 }
 
 .product-card:hover .product-image {
-  filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.08));
+  filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.05));
 }
 
 /* ========================
